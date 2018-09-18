@@ -1,10 +1,10 @@
 language: elixir
 elixir:
-  - 1.4.5
+  - 1.7.3
 otp_release:
-  - '20.0'
+  - '21.0'
 addons:
-  postgresql: '9.4'
+  postgresql: '9.6'
 
 install:
   - mix local.rebar --force
@@ -26,4 +26,7 @@ before_script:
   - cd $TEST_FOLDER
   - mix ecto.migrate
 script:
-  - mix test.cover
+  - mix compile --warnings-as-errors
+  - mix test
+  - mix format --check-formatted --dry-run
+
