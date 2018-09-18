@@ -17,7 +17,7 @@ env:
     - DATABASE_NAME=travis_ci_test
     - SECRET_KEY_BASE=tn0eZZr56FsC1BdBmQt8y5UzmUFDd2aQx0/ZnY/NgPW0ZZiboK6bDJK0GUOujslH
   matrix:
-    - TEST_FOLDER=.
+    - TEST_FOLDER=. FORMAT=1
     - TEST_FOLDER=./apps/golgotha
     - TEST_FOLDER=./apps/golgotha_web
 
@@ -28,5 +28,5 @@ before_script:
   - mix ecto.migrate
 script:
   - mix test
-  - mix format --check-formatted --dry-run
+  - if [ -z "$FORMAT" ]; then echo "Format check skipped"; mix format --check-formatted --dry-run; fi
 
