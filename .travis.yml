@@ -24,9 +24,9 @@ env:
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
   - cd $TEST_FOLDER
+  - mix compile --warnings-as-errors
   - mix ecto.migrate
 script:
-  - mix compile --warnings-as-errors
   - mix test
   - mix format --check-formatted --dry-run
 

@@ -18,6 +18,8 @@ defmodule GolgothaWeb.Router do
     pipe_through(:browser)
 
     get("/", PageController, :index)
+
+    resources "/people", PersonController, except: [:show]
   end
 
   # Other scopes may use custom stacks.
