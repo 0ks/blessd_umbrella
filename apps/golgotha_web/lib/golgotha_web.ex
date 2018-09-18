@@ -28,8 +28,9 @@ defmodule GolgothaWeb do
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/golgotha_web/templates",
-                        namespace: GolgothaWeb
+      use Phoenix.View,
+        root: "lib/golgotha_web/templates",
+        namespace: GolgothaWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 2, view_module: 1]

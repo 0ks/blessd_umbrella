@@ -25,13 +25,13 @@ defmodule GolgothaWeb.ChannelCase do
     end
   end
 
-
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Golgotha.Repo)
+
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Golgotha.Repo, {:shared, self()})
     end
+
     :ok
   end
-
 end

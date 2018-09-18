@@ -7,7 +7,7 @@ defmodule GolgothaWeb.Application do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the endpoint when the application starts
-      supervisor(GolgothaWeb.Endpoint, []),
+      supervisor(GolgothaWeb.Endpoint, [])
       # Start your own worker by calling: GolgothaWeb.Worker.start_link(arg1, arg2, arg3)
       # worker(GolgothaWeb.Worker, [arg1, arg2, arg3]),
     ]
