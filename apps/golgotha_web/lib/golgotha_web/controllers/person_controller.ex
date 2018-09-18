@@ -16,7 +16,7 @@ defmodule GolgothaWeb.PersonController do
 
   def create(conn, %{"person" => person_params}) do
     case Memberships.create_person(person_params) do
-      {:ok, person} ->
+      {:ok, _person} ->
         conn
         |> put_flash(:info, "Person created successfully.")
         |> redirect(to: person_path(conn, :index))
@@ -36,7 +36,7 @@ defmodule GolgothaWeb.PersonController do
     person = Memberships.get_person!(id)
 
     case Memberships.update_person(person, person_params) do
-      {:ok, person} ->
+      {:ok, _person} ->
         conn
         |> put_flash(:info, "Person updated successfully.")
         |> redirect(to: person_path(conn, :index))
