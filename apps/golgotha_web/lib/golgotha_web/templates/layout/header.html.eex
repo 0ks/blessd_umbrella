@@ -13,12 +13,8 @@
   </div>
   <div id="navMenu" class="navbar-menu">
     <div class="navbar-start">
-      <%= link gettext("Users"),
-        to: "#",
-        class: "navbar-item",
-        tabindex: -1 %>
       <%= link gettext("People"),
-        to: "#",
+        to: person_path(@conn, :index),
         class: "navbar-item",
         tabindex: -1 %>
     </div>
