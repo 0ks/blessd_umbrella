@@ -20,6 +20,7 @@ defmodule GolgothaWeb.PersonController do
         conn
         |> put_flash(:info, "Person created successfully.")
         |> redirect(to: person_path(conn, :index))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -39,6 +40,7 @@ defmodule GolgothaWeb.PersonController do
         conn
         |> put_flash(:info, "Person updated successfully.")
         |> redirect(to: person_path(conn, :index))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", person: person, changeset: changeset)
     end

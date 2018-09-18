@@ -17,14 +17,13 @@ config :golgotha_web, GolgothaWeb.Endpoint,
   load_from_system_env: true,
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
   url: [
-        scheme: "https",
-        host: System.get_env("HEROKU_HOST"),
-        port: 443
-      ],
+    scheme: "https",
+    host: System.get_env("HEROKU_HOST"),
+    port: 443
+  ],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json",
   load_from_system_env: true
-
 
 # ## SSL Support
 #

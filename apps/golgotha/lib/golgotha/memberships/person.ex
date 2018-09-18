@@ -2,10 +2,9 @@ defmodule Golgotha.Memberships.Person do
   use Ecto.Schema
   import Ecto.Changeset
 
-
   schema "people" do
-    field :email, :string
-    field :name, :string
+    field(:email, :string)
+    field(:name, :string)
 
     timestamps()
   end

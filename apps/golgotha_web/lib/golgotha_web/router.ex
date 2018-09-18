@@ -19,7 +19,7 @@ defmodule GolgothaWeb.Router do
 
     get("/", PageController, :index)
 
-    resources "/people", PersonController, except: [:show]
+    resources("/people", PersonController, except: [:show])
   end
 
   # Other scopes may use custom stacks.
