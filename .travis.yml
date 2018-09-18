@@ -28,5 +28,5 @@ before_script:
   - mix ecto.migrate
 script:
   - mix test
-  - if [ -z "$FORMAT" ]; then echo "Format check skipped"; mix format --check-formatted --dry-run; fi
+  - if [ -z "$FORMAT" ]; then echo "Format check skipped"; else mix format --check-formatted --dry-run; fi
 
