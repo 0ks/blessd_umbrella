@@ -18,8 +18,8 @@ env:
     - SECRET_KEY_BASE=tn0eZZr56FsC1BdBmQt8y5UzmUFDd2aQx0/ZnY/NgPW0ZZiboK6bDJK0GUOujslH
   matrix:
     - TEST_FOLDER=. FORMAT=1
-    - TEST_FOLDER=./apps/golgotha
-    - TEST_FOLDER=./apps/golgotha_web
+    - TEST_FOLDER=./apps/blessd
+    - TEST_FOLDER=./apps/blessd_web
 
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres

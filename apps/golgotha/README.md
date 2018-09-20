@@ -1,3 +1,0 @@
-# Golgotha
-
-**TODO: Add description**

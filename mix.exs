@@ -1,4 +1,4 @@
-defmodule Golgotha.Umbrella.Mixfile do
+defmodule Blessd.Umbrella.Mixfile do
   use Mix.Project
 
   def project do
@@ -22,6 +22,8 @@ defmodule Golgotha.Umbrella.Mixfile do
   # Dependencies listed here are available only for this project
   # and cannot be accessed from applications inside the apps folder
   defp deps do
-    []
+    [
+      {:rename, ">= 0.0.1"}
+    ]
   end
 end
