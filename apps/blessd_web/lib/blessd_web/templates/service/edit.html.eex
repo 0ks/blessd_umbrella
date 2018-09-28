@@ -1,0 +1,7 @@
+<h1 class="title has-text-centered"><%= gettext("Edit Service") %></h1>
+
+<%= render "form.html",
+  conn: @conn,
+  changeset: @changeset,
+  attendants: @attendants,
+  action: service_path(@conn, :update, @changeset.data) %>

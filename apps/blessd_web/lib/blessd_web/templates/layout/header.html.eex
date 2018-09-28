@@ -17,6 +17,11 @@
         to: person_path(@conn, :index),
         class: "navbar-item",
         tabindex: -1 %>
+
+      <%= link gettext("Services"),
+        to: service_path(@conn, :index),
+        class: "navbar-item",
+        tabindex: -1 %>
     </div>
   </div>
 </nav>

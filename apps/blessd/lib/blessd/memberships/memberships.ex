@@ -3,7 +3,6 @@ defmodule Blessd.Memberships do
   The Memberships context.
   """
 
-  import Ecto.Query, warn: false
   alias Blessd.Repo
 
   alias Blessd.Memberships.Person

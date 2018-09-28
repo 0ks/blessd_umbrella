@@ -20,6 +20,8 @@ defmodule BlessdWeb.Router do
     get("/", PageController, :index)
 
     resources("/people", PersonController, except: [:show])
+    resources("/services", ServiceController, except: [:show])
+    resources("/attendance", AttendanceController, only: [:index])
   end
 
   # Other scopes may use custom stacks.

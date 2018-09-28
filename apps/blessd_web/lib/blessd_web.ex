@@ -36,10 +36,15 @@ defmodule BlessdWeb do
       import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
 
       # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML
+      import Phoenix.HTML
+      import Phoenix.HTML.Form, except: [humanize: 1]
+      import Phoenix.HTML.Link
+      import Phoenix.HTML.Tag
+      import Phoenix.HTML.Format
 
       import BlessdWeb.Router.Helpers
       import BlessdWeb.ErrorHelpers
+      import BlessdWeb.StringHelpers
       import BlessdWeb.Gettext
     end
   end

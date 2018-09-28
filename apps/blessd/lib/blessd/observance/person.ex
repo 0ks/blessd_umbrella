@@ -1,4 +1,4 @@
-defmodule Blessd.Memberships.Person do
+defmodule Blessd.Observance.Person do
   use Ecto.Schema
 
   import Ecto.Changeset

@@ -23,6 +23,16 @@
     <%= error_tag f, :email %>
   </div>
 
+  <div class="field">
+    <div class="control">
+      <%= label f, :is_member, class: "checkbox" do %>
+        <%= checkbox f, :is_member %>
+        <%= gettext("This is a church member") %>
+      <% end %>
+    </div>
+    <%= error_tag f, :is_member %>
+  </div>
+
   <div class="field is-grouped">
     <div class="control">
       <%= submit gettext("Submit"), class: "button is-primary" %>

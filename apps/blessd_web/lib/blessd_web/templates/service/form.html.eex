@@ -1,0 +1,60 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p><%= gettext("""
+      Oops, something went wrong! Please check the errors below.
+      """) %></p>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= label f, :name, class: "label" %>
+    <div class="control">
+      <%= text_input f, :name, class: "input" %>
+    </div>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="field">
+    <%= label f, :date, class: "label" %>
+    <div class="control">
+      <%= date_input f, :date, class: "input js-date", readonly: true %>
+    </div>
+    <%= error_tag f, :date %> </div>
+
+  <h1 class="title has-text-centered"><%= gettext("Attendance") %></h1>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th><%= gettext("Present") %></th>
+        <th><%= gettext("Name") %></th>
+        <th><%= gettext("Email") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%# TODO - this will lose all the user data if he publishes and %>
+      <%# there is an error somewhere, we should have a way to %>
+      <%# consider what's in `changeset.changes` %>
+      <%= for attendant <- @attendants do %>
+        <tr>
+          <td>
+            <input name="attendants[<%= attendant.person_id %>]" type="checkbox" <%= if attendant.is_present, do: "checked" %>></input>
+          </td>
+          <td><%= attendant.person.name %></td>
+          <td><%= attendant.person.email %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="field is-grouped">
+    <div class="control">
+      <%= submit gettext("Submit"), class: "button is-primary" %>
+    </div>
+    <div class="control">
+      <%= link gettext("Back"), to: service_path(@conn, :index), class: "button" %>
+    </div>
+  </div>
+<% end %>
+
