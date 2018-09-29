@@ -19,6 +19,7 @@ defmodule Blessd.Observance.Service do
   def changeset(service, attrs) do
     service
     |> cast(attrs, [:name, :date])
+    |> cast_assoc(:attendants, update: :replace)
     |> Validations.basic()
   end
 end

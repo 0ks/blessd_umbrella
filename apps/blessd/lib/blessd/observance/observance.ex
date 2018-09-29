@@ -9,6 +9,7 @@ defmodule Blessd.Observance do
   alias Blessd.Observance.Person
   alias Blessd.Observance.Service
   alias Blessd.Observance.ServiceAttendant
+  alias Blessd.ServiceAttendant.Queries, as: ServiceAttendantQueries
   alias Ecto.Multi
 
   @doc """
@@ -39,13 +40,21 @@ defmodule Blessd.Observance do
 
   """
   def get_service!(id) do
+    attendants_query =
+      ServiceAttendant
+      |> ServiceAttendantQueries.preload()
+      |> ServiceAttendantQueries.order_preloaded()
+
     Service
+    |> preload(attendants: ^attendants_query)
     |> Repo.get!(id)
-    |> Repo.preload(attendants: [:person])
   end
 
   @doc """
   Creates a service.
+
+  This function also create a ServiceAttendant for each Person
+  on the database in the moment of its creation.
 
   ## Examples
 
@@ -56,22 +65,37 @@ defmodule Blessd.Observance do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_service(attrs, attendant_ids \\ []) do
-    # TODO - decide what to do on attendants insertion errors, or document
-    # it if we are not doing anything
+  def create_service(attrs) do
+    # TODO - a better way to guarantee the consistence of
+    # attendants creation would be on db-level
     Multi.new()
     |> Multi.insert(:service, Service.changeset(%Service{}, attrs))
     |> Multi.run(:attendants, fn %{service: service} ->
-      create_attendants(service, attendant_ids)
+      create_attendants(service)
     end)
     |> Repo.transaction()
     |> case do
-      {:ok, map} ->
-        {:ok, map}
-
-      {:error, :service, changeset, _} ->
-        {:error, %{service: changeset, attendants: list_attendants(attendant_ids)}}
+      {:ok, %{service: service}} -> {:ok, service}
+      {:error, :service, changeset, _} -> {:error, changeset}
     end
+  end
+
+  defp create_attendants(%Service{id: service_id}) do
+    Person
+    |> select([p], p.id)
+    |> Repo.all()
+    |> Enum.reduce(Multi.new(), fn person_id, multi ->
+      Multi.insert(
+        multi,
+        :"attendant#{person_id}",
+        ServiceAttendant.changeset(%ServiceAttendant{}, %{
+          service_id: service_id,
+          person_id: person_id,
+          is_present: false
+        })
+      )
+    end)
+    |> Repo.transaction()
   end
 
   @doc """
@@ -86,22 +110,10 @@ defmodule Blessd.Observance do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_service(%Service{} = service, attrs, attendant_ids \\ []) do
-    # TODO - decide what to do on attendants insertion errors, or document
-    # it if we are not doing anything
-    Multi.new()
-    |> Multi.update(:service, Service.changeset(service, attrs))
-    |> Multi.run(:attendants, fn %{service: service} ->
-      update_attendants(service, attendant_ids)
-    end)
-    |> Repo.transaction()
-    |> case do
-      {:ok, map} ->
-        {:ok, map}
-
-      {:error, :service, changeset, _} ->
-        {:error, %{service: changeset, attendants: list_attendants(attendant_ids)}}
-    end
+  def update_service(%Service{} = service, attrs) do
+    service
+    |> Service.changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """
@@ -131,76 +143,5 @@ defmodule Blessd.Observance do
   """
   def change_service(%Service{} = service) do
     Service.changeset(service, %{})
-  end
-
-  @doc """
-  Returns the list of attendants for the given service or list of people attending to it.
-
-  ## Examples
-
-      iex> list_attendants(service)
-      [%ServiceAttendant{}, ...]
-
-  """
-  def list_attendants(service_or_people_ids \\ [])
-
-  def list_attendants(%Service{attendants: attendants}), do: attendants
-
-  def list_attendants(people_ids) when is_list(people_ids) do
-    Person
-    |> Repo.all()
-    |> Enum.map(fn person ->
-      %ServiceAttendant{
-        person: person,
-        person_id: person.id,
-        is_present: person.id in people_ids
-      }
-    end)
-  end
-
-  def create_attendants(%Service{} = service, attendant_ids) do
-    Person
-    |> select([p], p.id)
-    |> Repo.all()
-    |> Enum.reduce(Multi.new(), fn person_id, multi ->
-      Multi.insert(
-        multi,
-        :"attendant#{person_id}",
-        ServiceAttendant.changeset(%ServiceAttendant{}, %{
-          service_id: service.id,
-          person_id: person_id,
-          is_present: person_id in attendant_ids
-        })
-      )
-    end)
-    |> Repo.transaction()
-    |> case do
-      {:ok, map} ->
-        {:ok, Map.values(map)}
-
-      {:error, _, _, _} ->
-        {:error, list_attendants(attendant_ids)}
-    end
-  end
-
-  def update_attendants(%Service{} = service, attendant_ids) do
-    service.attendants
-    |> Enum.reduce(Multi.new(), fn attendant, multi ->
-      Multi.update(
-        multi,
-        :"attendant#{attendant.person_id}",
-        ServiceAttendant.changeset(attendant, %{
-          is_present: attendant.person_id in attendant_ids
-        })
-      )
-    end)
-    |> Repo.transaction()
-    |> case do
-      {:ok, map} ->
-        {:ok, Map.values(map)}
-
-      {:error, _, _, _} ->
-        {:error, list_attendants(attendant_ids)}
-    end
   end
 end

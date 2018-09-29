@@ -45,6 +45,7 @@ defmodule BlessdWeb do
       import BlessdWeb.Router.Helpers
       import BlessdWeb.ErrorHelpers
       import BlessdWeb.StringHelpers
+      import BlessdWeb.FormHelpers
       import BlessdWeb.Gettext
     end
   end

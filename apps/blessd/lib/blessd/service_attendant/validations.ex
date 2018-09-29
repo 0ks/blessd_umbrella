@@ -1,4 +1,4 @@
-defmodule Blessd.ServiceAttendant.Validations do
+defmodule Blessd.Service.Validations do
   @moduledoc """
   Validations for services
   """
@@ -7,6 +7,6 @@ defmodule Blessd.ServiceAttendant.Validations do
 
   @doc false
   def basic(changeset) do
-    validate_required(changeset, [:service_id, :person_id, :is_present])
+    validate_required(changeset, [:name, :date])
   end
 end

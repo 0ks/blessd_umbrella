@@ -11,8 +11,7 @@ defmodule BlessdWeb.ServiceController do
 
   def new(conn, _params) do
     changeset = Observance.change_service(%Service{})
-    attendants = Observance.list_attendants()
-    render(conn, "new.html", changeset: changeset, attendants: attendants)
+    render(conn, "new.html", changeset: changeset)
   end
 
   defp attendant_ids_from_param(params) do
@@ -23,39 +22,38 @@ defmodule BlessdWeb.ServiceController do
     |> Enum.map(&String.to_integer/1)
   end
 
-  def create(conn, %{"service" => service_params} = params) do
-    attendant_ids = attendant_ids_from_param(params)
-
-    case Observance.create_service(service_params, attendant_ids) do
-      {:ok, %{service: service}} ->
+  def create(conn, %{"service" => service_params}) do
+    case Observance.create_service(service_params) do
+      {:ok, service} ->
         conn
         |> put_flash(:info, "Service created successfully.")
         |> redirect(to: service_path(conn, :edit, service))
 
-      {:error, %{service: %Ecto.Changeset{} = changeset, attendants: attendants}} ->
-        render(conn, "new.html", changeset: changeset, attendants: attendants)
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "new.html", changeset: changeset)
     end
   end
 
   def edit(conn, %{"id" => id}) do
-    service = Observance.get_service!(id)
-    changeset = Observance.change_service(service)
-    attendants = Observance.list_attendants(service)
-    render(conn, "edit.html", changeset: changeset, attendants: attendants)
+    changeset =
+      id
+      |> Observance.get_service!()
+      |> Observance.change_service()
+
+    render(conn, "edit.html", changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "service" => service_params} = params) do
+  def update(conn, %{"id" => id, "service" => service_params}) do
     service = Observance.get_service!(id)
-    attendant_ids = attendant_ids_from_param(params)
 
-    case Observance.update_service(service, service_params, attendant_ids) do
-      {:ok, %{service: service}} ->
+    case Observance.update_service(service, service_params) do
+      {:ok, service} ->
         conn
         |> put_flash(:info, "Service updated successfully.")
         |> redirect(to: service_path(conn, :edit, service))
 
-      {:error, %{service: %Ecto.Changeset{} = changeset, attendants: attendants}} ->
-        render(conn, "edit.html", changeset: changeset, attendants: attendants)
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "edit.html", changeset: changeset)
     end
   end
 

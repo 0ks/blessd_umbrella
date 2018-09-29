@@ -3,8 +3,8 @@ defmodule Blessd.Repo.Migrations.CreateServiceAttendants do
 
   def change do
     create table(:service_attendants) do
-      add(:service_id, references(:services))
-      add(:person_id, references(:people))
+      add(:service_id, references(:services, on_delete: :delete_all))
+      add(:person_id, references(:people, on_delete: :delete_all))
       add(:is_present, :boolean)
 
       timestamps()

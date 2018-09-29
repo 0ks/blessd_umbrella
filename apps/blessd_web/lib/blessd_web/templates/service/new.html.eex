@@ -3,5 +3,4 @@
 <%= render "form.html",
   conn: @conn,
   changeset: @changeset,
-  attendants: @attendants,
-  action: service_path(@conn, :create) %>
+  action: :create %>

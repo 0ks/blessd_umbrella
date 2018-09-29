@@ -1,4 +1,4 @@
-<%= form_for @changeset, @action, fn f -> %>
+<%= form_for @changeset, form_action(@action, @changeset, &service_path(@conn, &1, &2)), fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
       <p><%= gettext("""
@@ -22,31 +22,33 @@
     </div>
     <%= error_tag f, :date %> </div>
 
-  <h1 class="title has-text-centered"><%= gettext("Attendance") %></h1>
+  <%= if @action == :update do %>
+    <h1 class="title has-text-centered"><%= gettext("Attendance") %></h1>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th><%= gettext("Present") %></th>
-        <th><%= gettext("Name") %></th>
-        <th><%= gettext("Email") %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <%# TODO - this will lose all the user data if he publishes and %>
-      <%# there is an error somewhere, we should have a way to %>
-      <%# consider what's in `changeset.changes` %>
-      <%= for attendant <- @attendants do %>
+    <table class="table">
+      <thead>
         <tr>
-          <td>
-            <input name="attendants[<%= attendant.person_id %>]" type="checkbox" <%= if attendant.is_present, do: "checked" %>></input>
-          </td>
-          <td><%= attendant.person.name %></td>
-          <td><%= attendant.person.email %></td>
+          <th><%= gettext("Present") %></th>
+          <th><%= gettext("Name") %></th>
+          <th><%= gettext("Email") %></th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <%# TODO - this will lose all the user data if he publishes and %>
+        <%# there is an error somewhere, we should have a way to %>
+        <%# consider what's in `changeset.changes` %>
+        <%= inputs_for f, :attendants, fn ff -> %>
+          <tr>
+            <td>
+              <%= checkbox ff, :is_present %>
+            </td>
+            <td><%= ff.source.data.person.name %></td>
+            <td><%= ff.source.data.person.email %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 
   <div class="field is-grouped">
     <div class="control">
