@@ -3,4 +3,4 @@
 <%= render "form.html",
   conn: @conn,
   changeset: @changeset,
-  action: person_path(@conn, :create) %>
+  action: :create %>

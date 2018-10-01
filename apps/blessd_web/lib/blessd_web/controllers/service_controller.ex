@@ -24,10 +24,10 @@ defmodule BlessdWeb.ServiceController do
 
   def create(conn, %{"service" => service_params}) do
     case Observance.create_service(service_params) do
-      {:ok, service} ->
+      {:ok, _service} ->
         conn
         |> put_flash(:info, "Service created successfully.")
-        |> redirect(to: service_path(conn, :edit, service))
+        |> redirect(to: service_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -47,10 +47,10 @@ defmodule BlessdWeb.ServiceController do
     service = Observance.get_service!(id)
 
     case Observance.update_service(service, service_params) do
-      {:ok, service} ->
+      {:ok, _service} ->
         conn
         |> put_flash(:info, "Service updated successfully.")
-        |> redirect(to: service_path(conn, :edit, service))
+        |> redirect(to: service_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", changeset: changeset)

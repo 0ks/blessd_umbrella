@@ -37,10 +37,18 @@ defmodule BlessdWeb do
 
       # Use all HTML functionality (forms, tags, etc)
       import Phoenix.HTML
-      import Phoenix.HTML.Form, except: [humanize: 1]
       import Phoenix.HTML.Link
       import Phoenix.HTML.Tag
       import Phoenix.HTML.Format
+
+      import Phoenix.HTML.Form,
+        except: [
+          humanize: 1,
+          text_input: 2,
+          text_input: 3,
+          date_input: 2,
+          date_input: 3
+        ]
 
       import BlessdWeb.Router.Helpers
       import BlessdWeb.ErrorHelpers

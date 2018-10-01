@@ -66,36 +66,9 @@ defmodule Blessd.Observance do
 
   """
   def create_service(attrs) do
-    # TODO - a better way to guarantee the consistence of
-    # attendants creation would be on db-level
-    Multi.new()
-    |> Multi.insert(:service, Service.changeset(%Service{}, attrs))
-    |> Multi.run(:attendants, fn %{service: service} ->
-      create_attendants(service)
-    end)
-    |> Repo.transaction()
-    |> case do
-      {:ok, %{service: service}} -> {:ok, service}
-      {:error, :service, changeset, _} -> {:error, changeset}
-    end
-  end
-
-  defp create_attendants(%Service{id: service_id}) do
-    Person
-    |> select([p], p.id)
-    |> Repo.all()
-    |> Enum.reduce(Multi.new(), fn person_id, multi ->
-      Multi.insert(
-        multi,
-        :"attendant#{person_id}",
-        ServiceAttendant.changeset(%ServiceAttendant{}, %{
-          service_id: service_id,
-          person_id: person_id,
-          is_present: false
-        })
-      )
-    end)
-    |> Repo.transaction()
+    %Service{}
+    |> Service.changeset(attrs)
+    |> Repo.insert()
   end
 
   @doc """
@@ -143,5 +116,64 @@ defmodule Blessd.Observance do
   """
   def change_service(%Service{} = service) do
     Service.changeset(service, %{})
+  end
+
+  def list_attendants(%Service{attendants: []} = service) do
+    service
+    |> create_attendants()
+    |> case do
+      {:ok, _attendants} ->
+        ServiceAttendant
+        |> ServiceAttendantQueries.by_service(service.id)
+        |> ServiceAttendantQueries.preload()
+        |> ServiceAttendantQueries.order_preloaded()
+        |> Repo.all()
+
+      {:error, changeset} ->
+        raise "Error creating first attendants"
+    end
+  end
+
+  def list_attendants(%Service{attendants: attendants}) do
+    attendants
+  end
+
+  def search_attendants(service_id, query) do
+    ServiceAttendant
+    |> ServiceAttendantQueries.by_service(service_id)
+    |> ServiceAttendantQueries.preload()
+    |> ServiceAttendantQueries.search(query)
+    |> ServiceAttendantQueries.order_preloaded()
+    |> Repo.all()
+  end
+
+  def get_attendant!(attendant_id), do: Repo.get!(ServiceAttendant, attendant_id)
+
+  def update_attendant(%ServiceAttendant{} = attendant, attrs) do
+    attendant
+    |> ServiceAttendant.update_changeset(attrs)
+    |> Repo.update()
+  end
+
+  defp create_attendants(%Service{id: service_id}) do
+    Person
+    |> select([p], p.id)
+    |> Repo.all()
+    |> Enum.reduce(Multi.new(), fn person_id, multi ->
+      Multi.insert(
+        multi,
+        :"attendant#{person_id}",
+        ServiceAttendant.insert_changeset(%ServiceAttendant{}, %{
+          service_id: service_id,
+          person_id: person_id,
+          is_present: false
+        })
+      )
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, map} -> {:ok, Map.values(map)}
+      {:error, _, changeset, _} -> {:error, changeset}
+    end
   end
 end

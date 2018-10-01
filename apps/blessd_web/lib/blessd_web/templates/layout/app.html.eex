@@ -22,6 +22,15 @@
 
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
     <script>
+      <% template_name = @view_template |> String.split(".") |> List.first() %>
+      document.addEventListener('DOMContentLoaded', function() {
+        window.currentView = window.views.<%= @view_module %>;
+        if (window.currentView) {
+          window.currentTemplateFunc = window.currentView.<%= template_name %> ||
+            window.currentView.any;
+          if (window.currentTemplateFunc) window.currentTemplateFunc()
+        }
+      });
     </script>
   </body>
 </html>

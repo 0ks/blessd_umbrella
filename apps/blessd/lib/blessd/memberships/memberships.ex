@@ -53,36 +53,9 @@ defmodule Blessd.Memberships do
 
   """
   def create_person(attrs \\ %{}) do
-    # TODO - a better way to guarantee the consistence of
-    # attendants creation would be on db-level
-    Multi.new()
-    |> Multi.insert(:person, Person.changeset(%Person{}, attrs))
-    |> Multi.run(:attendants, fn %{person: person} ->
-      create_attendants(person)
-    end)
-    |> Repo.transaction()
-    |> case do
-      {:ok, %{person: person}} -> {:ok, person}
-      {:error, :person, changeset, _} -> {:error, changeset}
-    end
-  end
-
-  defp create_attendants(%Person{id: person_id}) do
-    Service
-    |> select([s], s.id)
-    |> Repo.all()
-    |> Enum.reduce(Multi.new(), fn service_id, multi ->
-      Multi.insert(
-        multi,
-        :"attendant#{service_id}",
-        ServiceAttendant.changeset(%ServiceAttendant{}, %{
-          service_id: service_id,
-          person_id: person_id,
-          is_present: false
-        })
-      )
-    end)
-    |> Repo.transaction()
+    %Person{}
+    |> Person.changeset(attrs)
+    |> Repo.insert()
   end
 
   @doc """

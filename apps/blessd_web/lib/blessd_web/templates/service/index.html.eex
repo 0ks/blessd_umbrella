@@ -17,6 +17,11 @@
       <td>
         <div class="field has-addons is-pulled-right">
           <div class="control">
+            <%= link gettext("Attendance"),
+              to: service_attendance_path(@conn, :index, service),
+              class: "button is-small" %>
+          </div>
+          <div class="control">
             <%= link gettext("Edit"),
               to: service_path(@conn, :edit, service),
               class: "button is-small" %>

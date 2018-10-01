@@ -16,9 +16,15 @@ defmodule Blessd.Observance.ServiceAttendant do
   end
 
   @doc false
-  def changeset(attendant, attrs) do
+  def insert_changeset(attendant, attrs) do
     attendant
     |> cast(attrs, [:service_id, :person_id, :is_present])
+    |> Validations.basic()
+  end
+
+  def update_changeset(attendant, attrs) do
+    attendant
+    |> cast(attrs, [:is_present])
     |> Validations.basic()
   end
 end

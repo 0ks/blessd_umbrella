@@ -1,0 +1,27 @@
+<h1 class="title has-text-centered"><%= gettext("Attendance") %></h1>
+
+<div class="field">
+  <label class="label" for="service_name">Search</label>
+  <div class="control">
+    <input class="input js-search" type="text">
+  </div>
+</div>
+
+<table class="table js-attendants">
+  <thead>
+    <tr>
+      <th><%= gettext("Present") %></th>
+      <th><%= gettext("Name") %></th>
+      <th><%= gettext("Email") %></th>
+    </tr>
+  </thead>
+  <tbody class="js-attendants-body" data-service-id="<%= @service.id %>">
+    <%= render "table_body.html", attendants: @attendants %>
+  </tbody>
+</table>
+
+<div class="field is-grouped">
+  <div class="control">
+    <%= link gettext("Back"), to: service_path(@conn, :index), class: "button" %>
+  </div>
+</div>
