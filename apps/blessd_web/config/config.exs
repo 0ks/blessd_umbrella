@@ -24,8 +24,6 @@ config :logger, :console,
 
 config :blessd_web, :generators, context_app: :blessd
 
-config :blessd_web, BlessdWeb.Gettext, default_locale: "pt_br"
-
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

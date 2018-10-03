@@ -155,7 +155,7 @@ defmodule Blessd.Observance do
     |> Repo.update()
   end
 
-  defp create_attendants(%Service{id: service_id}) do
+  def create_attendants(%Service{id: service_id}) do
     Person
     |> select([p], p.id)
     |> Repo.all()

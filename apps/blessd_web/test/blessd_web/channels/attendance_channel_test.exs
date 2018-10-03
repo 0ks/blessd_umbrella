@@ -3,26 +3,52 @@ defmodule BlessdWeb.AttendanceChannelTest do
 
   alias BlessdWeb.AttendanceChannel
 
+  alias Blessd.Memberships
+  alias Blessd.Observance
+  alias Blessd.Repo
+
   setup do
     {:ok, _, socket} =
       socket("user_id", %{some: :assign})
       |> subscribe_and_join(AttendanceChannel, "attendance:lobby")
 
-    {:ok, socket: socket}
+    {:ok, _person} = Memberships.create_person(%{name: "person 1", is_member: true})
+    {:ok, _person} = Memberships.create_person(%{name: "person 2", is_member: false})
+
+    {:ok, service} = Observance.create_service(%{
+       name: "some name",
+       date: ~D[2005-09-23]
+    })
+
+    {:ok, _attendants} =
+      service
+      |> Repo.preload(:attendants)
+      |> Observance.create_attendants()
+
+    {:ok, socket: socket, service: Repo.preload(service, :attendants)}
   end
 
-  test "ping replies with status ok", %{socket: socket} do
-    ref = push socket, "ping", %{"hello" => "there"}
-    assert_reply ref, :ok, %{"hello" => "there"}
+  test "search replies with html", %{socket: socket, service: service} do
+    ref = push socket, "search", %{"service_id" => service.id, "query" => "bla"}
+    assert_reply ref, :ok, %{table_body: ""}
+
+    ref = push socket, "search", %{"service_id" => service.id, "query" => "1"}
+    assert_reply ref, :ok, %{table_body: body}
+    assert String.contains?(body, "person 1")
+    refute String.contains?(body, "person 2")
   end
 
-  test "shout broadcasts to attendance:lobby", %{socket: socket} do
-    push socket, "shout", %{"hello" => "all"}
-    assert_broadcast "shout", %{"hello" => "all"}
-  end
+  test "update replies with ok", %{socket: socket, service: service} do
+    attendant = List.first(service.attendants)
+    assert attendant.is_present == false
+    ref = push socket, "update", %{"id" => attendant.id, "attendant" => %{"is_present" => true}}
+    assert_reply ref, :ok
 
-  test "broadcasts are pushed to the client", %{socket: socket} do
-    broadcast_from! socket, "broadcast", %{"some" => "data"}
-    assert_push "broadcast", %{"some" => "data"}
+    attendant =
+      service.id
+      |> Observance.get_service!()
+      |> Map.get(:attendants)
+      |> List.first()
+    assert attendant.is_present == true
   end
 end
