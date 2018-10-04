@@ -6,9 +6,9 @@ defmodule Blessd.ObservanceTest do
   describe "services" do
     alias Blessd.Observance.Service
 
-    @valid_attrs %{name: "some name", date: ~D[2018-10-10]}
-    @update_attrs %{name: "some updated name", date: ~D[2000-01-01]}
-    @invalid_attrs %{name: nil, date: nil}
+    @valid_attrs %{date: ~D[2018-10-10]}
+    @update_attrs %{date: ~D[2000-01-01]}
+    @invalid_attrs %{date: nil}
 
     def service_fixture(attrs \\ %{}) do
       {:ok, service} =
@@ -23,7 +23,6 @@ defmodule Blessd.ObservanceTest do
       service = service_fixture()
       assert [found] = Observance.list_services()
 
-      assert found.name == service.name
       assert found.date == service.date
     end
 
@@ -31,13 +30,11 @@ defmodule Blessd.ObservanceTest do
       service = service_fixture()
       assert found = Observance.get_service!(service.id)
 
-      assert found.name == service.name
       assert found.date == service.date
     end
 
     test "create_service/1 with valid data creates a service" do
       assert {:ok, %Service{} = service} = Observance.create_service(@valid_attrs)
-      assert service.name == "some name"
       assert service.date == ~D[2018-10-10]
     end
 
@@ -49,7 +46,6 @@ defmodule Blessd.ObservanceTest do
       service = service_fixture()
       assert {:ok, service} = Observance.update_service(service, @update_attrs)
       assert %Service{} = service
-      assert service.name == "some updated name"
       assert service.date == ~D[2000-01-01]
     end
 
@@ -58,7 +54,6 @@ defmodule Blessd.ObservanceTest do
       assert {:error, %Ecto.Changeset{}} = Observance.update_service(service, @invalid_attrs)
       assert found = Observance.get_service!(service.id)
 
-      assert found.name == service.name
       assert found.date == service.date
     end
 

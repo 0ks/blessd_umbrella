@@ -24,11 +24,26 @@ defmodule BlessdWeb.ErrorHelpers do
         """)
 
       content_tag :div, class: "message is-danger" do
-        content_tag(
-          :div,
-          error_message,
-          class: "message-body"
-        )
+        content_tag :div, class: "message-body" do
+          [
+            content_tag(:p, error_message),
+            content_tag(:button, "", class: "delete", "aria-label": "delete")
+          ]
+        end
+      end
+    end
+  end
+
+  def list_errors(%Ecto.Changeset{errors: errors}) do
+    for {field, error} <- errors do
+      case field do
+        :base ->
+          error
+          |> translate_error()
+          |> String.capitalize()
+
+        field ->
+          String.capitalize("#{humanize(field)} #{translate_error(error)}")
       end
     end
   end

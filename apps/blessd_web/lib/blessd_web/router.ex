@@ -15,6 +15,7 @@ defmodule BlessdWeb.Router do
 
     get("/", PageController, :index)
 
+    resources("/import", ImportController, only: [:create])
     resources("/people", PersonController, except: [:show])
 
     resources "/services", ServiceController, except: [:show] do

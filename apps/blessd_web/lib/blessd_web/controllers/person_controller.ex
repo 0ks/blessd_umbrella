@@ -18,7 +18,7 @@ defmodule BlessdWeb.PersonController do
     case Memberships.create_person(person_params) do
       {:ok, _person} ->
         conn
-        |> put_flash(:info, "Person created successfully.")
+        |> put_flash(:info, gettext("Person created successfully."))
         |> redirect(to: person_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -41,7 +41,7 @@ defmodule BlessdWeb.PersonController do
     case Memberships.update_person(person, person_params) do
       {:ok, _person} ->
         conn
-        |> put_flash(:info, "Person updated successfully.")
+        |> put_flash(:info, gettext("Person updated successfully."))
         |> redirect(to: person_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -54,7 +54,7 @@ defmodule BlessdWeb.PersonController do
     {:ok, _person} = Memberships.delete_person(person)
 
     conn
-    |> put_flash(:info, "Person deleted successfully.")
+    |> put_flash(:info, gettext("Person deleted successfully."))
     |> redirect(to: person_path(conn, :index))
   end
 end

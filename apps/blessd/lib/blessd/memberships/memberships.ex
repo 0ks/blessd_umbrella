@@ -3,8 +3,11 @@ defmodule Blessd.Memberships do
   The Memberships context.
   """
 
+  import Ecto.Query
+
   alias Blessd.Repo
   alias Blessd.Memberships.Person
+  alias Ecto.Multi
 
   @doc """
   Returns the list of people.
@@ -16,7 +19,9 @@ defmodule Blessd.Memberships do
 
   """
   def list_people do
-    Repo.all(Person)
+    Person
+    |> order_by([p], p.name)
+    |> Repo.all()
   end
 
   @doc """
@@ -51,6 +56,35 @@ defmodule Blessd.Memberships do
     %Person{}
     |> Person.changeset(attrs)
     |> Repo.insert()
+  end
+
+  @doc """
+  Imports a list of people from a file.
+  """
+  def import_people(stream) do
+    stream
+    |> CSV.decode!(headers: true)
+    |> create_people()
+    |> case do
+      {:ok, people} -> {:ok, people}
+      {:error, index, changeset} -> {:error, index + 2, changeset}
+    end
+  end
+
+  @doc """
+  Creates people in batches.
+  """
+  def create_people(enum) do
+    enum
+    |> Stream.with_index()
+    |> Enum.reduce(Multi.new(), fn {row, index}, multi ->
+      Multi.insert(multi, index, Person.changeset(%Person{}, row))
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, map} -> {:ok, Map.values(map)}
+      {:error, index, changeset, _} -> {:error, index, changeset}
+    end
   end
 
   @doc """

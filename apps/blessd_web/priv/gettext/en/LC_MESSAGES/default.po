@@ -13,152 +13,274 @@ msgstr ""
 
 #, elixir-format
 #: lib/blessd_web/templates/person/index.html.eex:30
-#: lib/blessd_web/templates/service/index.html.eex:28
+#: lib/blessd_web/templates/person/index.html.eex:30
+#: lib/blessd_web/templates/service/index.html.eex:33
+#: lib/blessd_web/templates/service/index.html.eex:33
 msgid "Are you sure?"
 msgstr ""
 
 #, elixir-format
 #: lib/blessd_web/templates/attendance/index.html.eex:1
-#: lib/blessd_web/templates/layout/header.html.eex:22
+#: lib/blessd_web/templates/attendance/index.html.eex:1
+#: lib/blessd_web/templates/service/index.html.eex:20
+#: lib/blessd_web/templates/service/index.html.eex:20
 msgid "Attendance"
 msgstr ""
 
 #, elixir-format
-#: lib/blessd_web/templates/person/form.html.eex:41
-#: lib/blessd_web/templates/service/form.html.eex:31
+#: lib/blessd_web/templates/attendance/index.html.eex:25
+#: lib/blessd_web/templates/attendance/index.html.eex:25
+#: lib/blessd_web/templates/person/file_modal.html.eex:28
+#: lib/blessd_web/templates/person/file_modal.html.eex:28
+#: lib/blessd_web/templates/person/form.html.eex:32
+#: lib/blessd_web/templates/person/form.html.eex:32
+#: lib/blessd_web/templates/service/form.html.eex:22
+#: lib/blessd_web/templates/service/form.html.eex:22
 msgid "Back"
 msgstr ""
 
 #, elixir-format
 #: lib/blessd_web/templates/person/index.html.eex:27
-#: lib/blessd_web/templates/service/index.html.eex:25
+#: lib/blessd_web/templates/person/index.html.eex:27
+#: lib/blessd_web/templates/service/index.html.eex:30
+#: lib/blessd_web/templates/service/index.html.eex:30
 msgid "Delete"
 msgstr ""
 
 #, elixir-format
 #: lib/blessd_web/templates/person/index.html.eex:22
-#: lib/blessd_web/templates/service/index.html.eex:20
+#: lib/blessd_web/templates/person/index.html.eex:22
+#: lib/blessd_web/templates/service/index.html.eex:25
+#: lib/blessd_web/templates/service/index.html.eex:25
 msgid "Edit"
 msgstr ""
 
 #, elixir-format
 #: lib/blessd_web/templates/person/edit.html.eex:1
+#: lib/blessd_web/templates/person/edit.html.eex:1
 msgid "Edit Person"
 msgstr ""
 
 #, elixir-format
-#: lib/blessd_web/templates/attendance/index.html.eex:8
+#: lib/blessd_web/templates/attendance/index.html.eex:15
+#: lib/blessd_web/templates/attendance/index.html.eex:15
+#: lib/blessd_web/templates/person/index.html.eex:7
 #: lib/blessd_web/templates/person/index.html.eex:7
 msgid "Email"
 msgstr ""
 
 #, elixir-format
 #: lib/blessd_web/templates/person/index.html.eex:8
+#: lib/blessd_web/templates/person/index.html.eex:8
 msgid "Is member"
 msgstr ""
 
 #, elixir-format
+#: lib/blessd_web/templates/person/index.html.eex:1
 #: lib/blessd_web/templates/person/index.html.eex:1
 msgid "Listing People"
 msgstr ""
 
 #, elixir-format
 #: lib/blessd_web/templates/page/index.html.eex:9
+#: lib/blessd_web/templates/page/index.html.eex:9
 msgid "Manage your church to focus in the kingdom."
 msgstr ""
 
 #, elixir-format
-#: lib/blessd_web/templates/attendance/index.html.eex:7
+#: lib/blessd_web/templates/attendance/index.html.eex:14
+#: lib/blessd_web/templates/attendance/index.html.eex:14
 #: lib/blessd_web/templates/person/index.html.eex:6
+#: lib/blessd_web/templates/person/index.html.eex:6
+#: lib/blessd_web/templates/service/index.html.eex:6
 #: lib/blessd_web/templates/service/index.html.eex:6
 msgid "Name"
 msgstr ""
 
 #, elixir-format
-#: lib/blessd_web/templates/person/index.html.eex:40
+#: lib/blessd_web/templates/person/index.html.eex:41
+#: lib/blessd_web/templates/person/index.html.eex:41
+#: lib/blessd_web/templates/person/new.html.eex:1
 #: lib/blessd_web/templates/person/new.html.eex:1
 msgid "New Person"
 msgstr ""
 
 #, elixir-format
 #: lib/blessd_web/views/string_helpers.ex:8
+#: lib/blessd_web/views/string_helpers.ex:8
 msgid "No"
 msgstr ""
 
 #, elixir-format
-#: lib/blessd_web/templates/person/form.html.eex:4
-#: lib/blessd_web/templates/service/form.html.eex:4
+#: lib/blessd_web/views/error_helpers.ex:22
+#: lib/blessd_web/views/error_helpers.ex:22
 msgid "Oops, something went wrong! Please check the errors below.\n"
 msgstr ""
 
 #, elixir-format
 #: lib/blessd_web/templates/layout/header.html.eex:16
+#: lib/blessd_web/templates/layout/header.html.eex:16
 msgid "People"
 msgstr ""
 
 #, elixir-format
-#: lib/blessd_web/templates/attendance/index.html.eex:6
+#: lib/blessd_web/templates/attendance/index.html.eex:13
+#: lib/blessd_web/templates/attendance/index.html.eex:13
 msgid "Present"
 msgstr ""
 
 #, elixir-format
-#: lib/blessd_web/templates/person/form.html.eex:38
-#: lib/blessd_web/templates/service/form.html.eex:28
+#: lib/blessd_web/templates/person/file_modal.html.eex:27
+#: lib/blessd_web/templates/person/file_modal.html.eex:27
+#: lib/blessd_web/templates/person/form.html.eex:31
+#: lib/blessd_web/templates/person/form.html.eex:31
+#: lib/blessd_web/templates/service/form.html.eex:21
+#: lib/blessd_web/templates/service/form.html.eex:21
 msgid "Submit"
 msgstr ""
 
 #, elixir-format
-#: lib/blessd_web/templates/person/form.html.eex:30
+#: lib/blessd_web/templates/person/form.html.eex:24
+#: lib/blessd_web/templates/person/form.html.eex:24
 msgid "This is a church member"
 msgstr ""
 
 #, elixir-format
+#: lib/blessd_web/views/string_helpers.ex:7
 #: lib/blessd_web/views/string_helpers.ex:7
 msgid "Yes"
 msgstr ""
 
 #, elixir-format
 #: lib/blessd_web/templates/service/index.html.eex:7
+#: lib/blessd_web/templates/service/index.html.eex:7
 msgid "Date"
 msgstr ""
 
 #, elixir-format
+#: lib/blessd_web/templates/service/edit.html.eex:1
 #: lib/blessd_web/templates/service/edit.html.eex:1
 msgid "Edit Service"
 msgstr ""
 
 #, elixir-format
 #: lib/blessd_web/templates/service/index.html.eex:1
+#: lib/blessd_web/templates/service/index.html.eex:1
 msgid "Listing Services"
 msgstr ""
 
 #, elixir-format
-#: lib/blessd_web/templates/service/index.html.eex:38
+#: lib/blessd_web/templates/service/index.html.eex:43
+#: lib/blessd_web/templates/service/index.html.eex:43
+#: lib/blessd_web/templates/service/new.html.eex:1
 #: lib/blessd_web/templates/service/new.html.eex:1
 msgid "New Service"
 msgstr ""
 
 #, elixir-format
-#: lib/blessd_web/templates/layout/header.html.eex:28
-msgid "Observance"
-msgstr ""
-
-#, elixir-format
-#: lib/blessd_web/templates/layout/header.html.eex:30
+#: lib/blessd_web/templates/layout/header.html.eex:21
+#: lib/blessd_web/templates/layout/header.html.eex:21
 msgid "Services"
 msgstr ""
 
 #, elixir-format
+#: lib/blessd_web/views/string_helpers.ex:6
 #: lib/blessd_web/views/string_helpers.ex:6
 msgid "{0M}/{0D}/{YYYY}"
 msgstr ""
 
 #, elixir-format
 #: lib/blessd_web/templates/page/index.html.eex:5
+#: lib/blessd_web/templates/page/index.html.eex:5
 msgid "Be Blessd!"
 msgstr ""
 
 #, elixir-format
 #: lib/blessd_web/templates/page/index.html.eex:8
+#: lib/blessd_web/templates/page/index.html.eex:8
 msgid "Simplify your community."
+msgstr ""
+
+#, elixir-format
+#: lib/blessd_web/templates/person/file_modal.html.eex:15
+#: lib/blessd_web/templates/person/file_modal.html.eex:15
+msgid "Choose a file..."
+msgstr ""
+
+#, elixir-format
+#: lib/blessd_web/controllers/import_controller.ex:38
+#: lib/blessd_web/controllers/import_controller.ex:38
+msgid "Here is the list of errors:"
+msgstr ""
+
+#, elixir-format
+#: lib/blessd_web/templates/person/index.html.eex:42
+#: lib/blessd_web/templates/person/index.html.eex:42
+msgid "Import CSV"
+msgstr ""
+
+#, elixir-format
+#: lib/blessd_web/templates/person/file_modal.html.eex:19
+#: lib/blessd_web/templates/person/file_modal.html.eex:19
+msgid "None"
+msgstr ""
+
+#, elixir-format
+#: lib/blessd_web/controllers/import_controller.ex:16
+#: lib/blessd_web/controllers/import_controller.ex:16
+msgid "People imported successfully."
+msgstr ""
+
+#, elixir-format
+#: lib/blessd_web/controllers/person_controller.ex:21
+#: lib/blessd_web/controllers/person_controller.ex:21
+msgid "Person created successfully."
+msgstr ""
+
+#, elixir-format
+#: lib/blessd_web/controllers/person_controller.ex:57
+#: lib/blessd_web/controllers/person_controller.ex:57
+msgid "Person deleted successfully."
+msgstr ""
+
+#, elixir-format
+#: lib/blessd_web/controllers/person_controller.ex:44
+#: lib/blessd_web/controllers/person_controller.ex:44
+msgid "Person updated successfully."
+msgstr ""
+
+#, elixir-format
+#: lib/blessd_web/controllers/service_controller.ex:21
+#: lib/blessd_web/controllers/service_controller.ex:21
+msgid "Service created successfully."
+msgstr ""
+
+#, elixir-format
+#: lib/blessd_web/controllers/service_controller.ex:57
+#: lib/blessd_web/controllers/service_controller.ex:57
+msgid "Service deleted successfully."
+msgstr ""
+
+#, elixir-format
+#: lib/blessd_web/controllers/service_controller.ex:44
+#: lib/blessd_web/controllers/service_controller.ex:44
+msgid "Service updated successfully."
+msgstr ""
+
+#, elixir-format
+#: lib/blessd_web/controllers/import_controller.ex:21
+#: lib/blessd_web/controllers/import_controller.ex:21
+msgid "Sorry! The file provided could not be imported."
+msgstr ""
+
+#, elixir-format
+#: lib/blessd_web/controllers/import_controller.ex:36
+#: lib/blessd_web/controllers/import_controller.ex:36
+msgid "The person of the line #%{line} could not be imported."
+msgstr ""
+
+#, elixir-format, fuzzy
+#: lib/blessd_web/templates/person/file_modal.html.eex:5
+#: lib/blessd_web/templates/person/file_modal.html.eex:5
+msgid "Import people from CSV"
 msgstr ""

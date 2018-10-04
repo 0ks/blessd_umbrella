@@ -14,13 +14,15 @@
 import "phoenix_html"
 
 import "./datepicker"
+import "./file"
+import "./modal"
 
 import AttendanceView from "./views/attendance"
 
 window.views = {
   Elixir: {
     BlessdWeb: {
-      AttendanceView: AttendanceView
+      AttendanceView: AttendanceView,
     }
   }
 }

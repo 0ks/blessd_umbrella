@@ -3,9 +3,9 @@ defmodule BlessdWeb.ServiceControllerTest do
 
   alias Blessd.Observance
 
-  @create_attrs %{name: "some name", date: ~D[2018-10-10]}
-  @update_attrs %{name: "some updated name", date: ~D[2000-01-01]}
-  @invalid_attrs %{name: nil, date: nil}
+  @create_attrs %{date: ~D[2018-10-10]}
+  @update_attrs %{date: ~D[2000-01-01]}
+  @invalid_attrs %{date: nil}
 
   def fixture(:service) do
     {:ok, service} = Observance.create_service(@create_attrs)
@@ -55,7 +55,7 @@ defmodule BlessdWeb.ServiceControllerTest do
       assert redirected_to(conn) == service_path(conn, :index)
 
       conn = get(conn, service_path(conn, :index))
-      assert html_response(conn, 200) =~ "some updated name"
+      assert html_response(conn, 200) =~ "01/01/2000"
     end
 
     test "renders errors when data is invalid", %{conn: conn, service: service} do

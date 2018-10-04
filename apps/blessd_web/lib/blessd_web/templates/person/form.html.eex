@@ -27,13 +27,9 @@
     <%= error_tag f, :is_member %>
   </div>
 
-  <div class="field is-grouped">
-    <div class="control">
-      <%= submit gettext("Submit"), class: "button is-primary" %>
-    </div>
-    <div class="control">
-      <%= link gettext("Back"), to: person_path(@conn, :index), class: "button" %>
-    </div>
+  <div class="buttons">
+    <%= submit gettext("Submit"), class: "button is-primary" %>
+    <%= link gettext("Back"), to: person_path(@conn, :index), class: "button" %>
   </div>
 <% end %>
 

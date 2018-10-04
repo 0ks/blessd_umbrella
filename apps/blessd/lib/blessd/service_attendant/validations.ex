@@ -7,6 +7,6 @@ defmodule Blessd.Service.Validations do
 
   @doc false
   def basic(changeset) do
-    validate_required(changeset, [:name, :date])
+    validate_required(changeset, [:date])
   end
 end

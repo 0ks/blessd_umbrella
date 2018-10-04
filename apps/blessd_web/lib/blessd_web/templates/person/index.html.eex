@@ -37,4 +37,9 @@
   </tbody>
 </table>
 
-<%= link gettext("New Person"), to: person_path(@conn, :new), class: "button is-primary" %>
+<div class="buttons">
+  <%= link gettext("New Person"), to: person_path(@conn, :new), class: "button is-primary" %>
+  <%= link gettext("Import CSV"), to: "#", class: "button js-modal-button" %>
+  <%= render "file_modal.html", conn: @conn %>
+</div>
+
