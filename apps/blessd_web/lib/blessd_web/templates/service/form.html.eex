@@ -17,13 +17,9 @@
     <%= error_tag f, :date %>
   </div>
 
-  <div class="field is-grouped">
-    <div class="control">
-      <%= submit gettext("Submit"), class: "button is-primary" %>
-    </div>
-    <div class="control">
-      <%= link gettext("Back"), to: service_path(@conn, :index), class: "button" %>
-    </div>
+  <div class="buttons">
+    <%= submit gettext("Submit"), class: "button is-primary" %>
+    <%= link gettext("Back"), to: service_path(@conn, :index), class: "button" %>
   </div>
 <% end %>
 

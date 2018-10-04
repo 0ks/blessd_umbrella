@@ -1,0 +1,36 @@
+<div class="modal js-modal">
+  <div class="modal-background js-close-modal"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Import people form CSV</p>
+    </header>
+    <%= form_for @conn, import_path(@conn, :create), [as: :import, multipart: true], fn f -> %>
+      <section class="modal-card-body">
+        <div class="field">
+          <div class="file is-fullwidth is-right has-name">
+            <label class="file-label">
+              <%= file_input f, :people, class: "file-input", accept: ".csv" %>
+              <span class="file-cta">
+                <span class="file-label">
+                  Choose a file...
+                </span>
+              </span>
+              <span class="file-name">
+                None
+              </span>
+            </label>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <div class="buttons">
+          <%= submit gettext("Submit"), class: "button is-primary" %>
+          <%= link gettext("Back"),
+            to: person_path(@conn, :index),
+            class: "button js-close-modal" %>
+        </div>
+      </footer>
+    <% end %>
+  </div>
+  <button class="modal-close is-large js-close-modal" aria-label="close"></button>
+</div>

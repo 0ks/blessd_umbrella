@@ -5,6 +5,7 @@ defmodule Blessd.Memberships do
 
   alias Blessd.Repo
   alias Blessd.Memberships.Person
+  alias Ecto.Multi
 
   @doc """
   Returns the list of people.
@@ -51,6 +52,32 @@ defmodule Blessd.Memberships do
     %Person{}
     |> Person.changeset(attrs)
     |> Repo.insert()
+  end
+
+  @doc """
+  Creates people in batches.
+
+  ## Examples
+
+      iex> create_person(%{field: value})
+      {:ok, [%Person{}]}
+
+      iex> create_person(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_people(%File.Stream{} = stream) do
+    stream
+    |> CSV.decode!(headers: true)
+    |> Stream.with_index()
+    |> Enum.reduce(Multi.new(), fn {row, index}, multi ->
+      Multi.insert(multi, index + 2, Person.changeset(%Person{}, row))
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, map} -> {:ok, Map.values(map)}
+      {:error, line, changeset, _} -> {:error, line, changeset}
+    end
   end
 
   @doc """

@@ -13,9 +13,22 @@
   </div>
 <% end %>
 <%= if msg = get_flash(@conn, :error) do %>
-  <div class="message is-danger">
-    <div class="message-body">
-      <%= msg %>
+  <%= if msg_details = get_flash(@conn, :error_details) do %>
+    <div class="message is-danger">
+      <div class="message-header">
+        <p><%= msg %></p>
+        <button class="delete" aria-label="delete"></button>
+      </div>
+      <div class="message-body content">
+        <%= msg_details %>
+      </div>
     </div>
-  </div>
+  <% else %>
+    <div class="message is-danger">
+      <div class="message-body">
+        <p><%= msg %></p>
+        <button class="delete" aria-label="delete"></button>
+      </div>
+    </div>
+  <% end %>
 <% end %>
