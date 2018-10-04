@@ -3,7 +3,6 @@
 <table class="table">
   <thead>
     <tr>
-      <th><%= gettext("Name") %></th>
       <th><%= gettext("Date") %></th>
       <th></th>
     </tr>
@@ -11,7 +10,6 @@
   <tbody>
 <%= for service <- @services do %>
     <tr>
-      <td><%= service.name %></td>
       <td><%= humanize(service.date) %></td>
 
       <td>

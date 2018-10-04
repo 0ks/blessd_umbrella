@@ -3,8 +3,8 @@ defmodule BlessdWeb.PersonControllerTest do
 
   alias Blessd.Memberships
 
-  @create_attrs %{email: "some email", name: "some name", is_member: true}
-  @update_attrs %{email: "some updated email", name: "some updated name", is_member: false}
+  @create_attrs %{email: "some@email.com", name: "some name", is_member: true}
+  @update_attrs %{email: "updated@email.com", name: "some updated name", is_member: false}
   @invalid_attrs %{email: nil, name: nil, is_member: nil}
 
   def fixture(:person) do
@@ -55,7 +55,7 @@ defmodule BlessdWeb.PersonControllerTest do
       assert redirected_to(conn) == person_path(conn, :index)
 
       conn = get(conn, person_path(conn, :index))
-      assert html_response(conn, 200) =~ "some updated email"
+      assert html_response(conn, 200) =~ "updated@email.com"
     end
 
     test "renders errors when data is invalid", %{conn: conn, person: person} do

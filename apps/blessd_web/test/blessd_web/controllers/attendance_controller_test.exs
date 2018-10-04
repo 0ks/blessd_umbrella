@@ -3,7 +3,7 @@ defmodule BlessdWeb.AttendanceControllerTest do
 
   alias Blessd.Observance
 
-  @create_attrs %{name: "some name", date: ~D[2018-10-10]}
+  @create_attrs %{date: ~D[2018-10-10]}
 
   def fixture(:service) do
     {:ok, service} = Observance.create_service(@create_attrs)

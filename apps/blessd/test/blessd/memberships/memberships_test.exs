@@ -6,8 +6,8 @@ defmodule Blessd.MembershipsTest do
   describe "people" do
     alias Blessd.Memberships.Person
 
-    @valid_attrs %{email: "some email", name: "some name", is_member: true}
-    @update_attrs %{email: "some updated email", name: "some updated name", is_member: false}
+    @valid_attrs %{email: "some@email.com", name: "some name", is_member: true}
+    @update_attrs %{email: "updated@email.com", name: "some updated name", is_member: false}
     @invalid_attrs %{email: nil, name: nil, is_member: nil}
 
     def person_fixture(attrs \\ %{}) do
@@ -31,7 +31,7 @@ defmodule Blessd.MembershipsTest do
 
     test "create_person/1 with valid data creates a person" do
       assert {:ok, %Person{} = person} = Memberships.create_person(@valid_attrs)
-      assert person.email == "some email"
+      assert person.email == "some@email.com"
       assert person.name == "some name"
     end
 
@@ -43,11 +43,11 @@ defmodule Blessd.MembershipsTest do
       assert {:ok, people} = Memberships.create_people([@valid_attrs, @update_attrs])
       assert [%Person{} = p1, %Person{} = p2] = people
 
-      assert p1.email == "some email"
+      assert p1.email == "some@email.com"
       assert p1.name == "some name"
       assert p1.is_member == true
 
-      assert p2.email == "some updated email"
+      assert p2.email == "updated@email.com"
       assert p2.name == "some updated name"
       assert p2.is_member == false
     end
@@ -69,11 +69,11 @@ defmodule Blessd.MembershipsTest do
 
       assert [%Person{} = p1, %Person{} = p2] = people
 
-      assert p1.email == "some email"
+      assert p1.email == "some@email.com"
       assert p1.name == "some name"
       assert p1.is_member == true
 
-      assert p2.email == "some updated email"
+      assert p2.email == "updated@email.com"
       assert p2.name == "some updated name"
       assert p2.is_member == false
     end
@@ -93,7 +93,7 @@ defmodule Blessd.MembershipsTest do
       person = person_fixture()
       assert {:ok, person} = Memberships.update_person(person, @update_attrs)
       assert %Person{} = person
-      assert person.email == "some updated email"
+      assert person.email == "updated@email.com"
       assert person.name == "some updated name"
     end
 

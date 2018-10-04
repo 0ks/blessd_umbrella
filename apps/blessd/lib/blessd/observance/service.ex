@@ -7,7 +7,6 @@ defmodule Blessd.Observance.Service do
   alias Blessd.Service.Validations
 
   schema "services" do
-    field(:name, :string)
     field(:date, :date)
 
     has_many(:attendants, ServiceAttendant)
@@ -18,8 +17,7 @@ defmodule Blessd.Observance.Service do
   @doc false
   def changeset(service, attrs) do
     service
-    |> cast(attrs, [:name, :date])
-    |> cast_assoc(:attendants, update: :replace)
+    |> cast(attrs, [:date])
     |> Validations.basic()
   end
 end
