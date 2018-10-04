@@ -14,14 +14,6 @@ defmodule BlessdWeb.ServiceController do
     render(conn, "new.html", changeset: changeset)
   end
 
-  defp attendant_ids_from_param(params) do
-    params
-    |> Map.get("attendants", [])
-    |> Stream.filter(&(elem(&1, 1) == "on"))
-    |> Stream.map(&elem(&1, 0))
-    |> Enum.map(&String.to_integer/1)
-  end
-
   def create(conn, %{"service" => service_params}) do
     case Observance.create_service(service_params) do
       {:ok, _service} ->

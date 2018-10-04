@@ -3,13 +3,8 @@ defmodule Blessd.Memberships do
   The Memberships context.
   """
 
-  import Ecto.Query
-
   alias Blessd.Repo
   alias Blessd.Memberships.Person
-  alias Blessd.Memberships.Service
-  alias Blessd.Memberships.ServiceAttendant
-  alias Ecto.Multi
 
   @doc """
   Returns the list of people.

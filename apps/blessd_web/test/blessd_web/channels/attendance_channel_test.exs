@@ -44,11 +44,14 @@ defmodule BlessdWeb.AttendanceChannelTest do
     ref = push socket, "update", %{"id" => attendant.id, "attendant" => %{"is_present" => true}}
     assert_reply ref, :ok
 
-    attendant =
-      service.id
-      |> Observance.get_service!()
-      |> Map.get(:attendants)
-      |> List.first()
-    assert attendant.is_present == true
+    ref = push socket, "search", %{"service_id" => service.id, "query" => "1"}
+    assert_reply ref, :ok, %{table_body: body}
+    assert String.contains?(body, "person 1")
+    assert String.contains?(body, "checked")
+
+    ref = push socket, "search", %{"service_id" => service.id, "query" => "2"}
+    assert_reply ref, :ok, %{table_body: body}
+    assert String.contains?(body, "person 2")
+    refute String.contains?(body, "checked")
   end
 end

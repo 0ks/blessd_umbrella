@@ -129,7 +129,7 @@ defmodule Blessd.Observance do
         |> ServiceAttendantQueries.order_preloaded()
         |> Repo.all()
 
-      {:error, changeset} ->
+      {:error, _changeset} ->
         raise "Error creating first attendants"
     end
   end
