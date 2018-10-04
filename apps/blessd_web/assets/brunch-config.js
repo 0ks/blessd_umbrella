@@ -50,7 +50,10 @@ exports.config = {
     },
     sass: {
       options: {
-        includePaths: ["node_modules/bulma/sass"]
+        includePaths: [
+          "node_modules/bulma/sass",
+          "node_modules/pikaday/scss"
+        ]
       }
     }
   },

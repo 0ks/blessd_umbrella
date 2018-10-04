@@ -27,9 +27,12 @@ defmodule BlessdWeb.PersonController do
   end
 
   def edit(conn, %{"id" => id}) do
-    person = Memberships.get_person!(id)
-    changeset = Memberships.change_person(person)
-    render(conn, "edit.html", person: person, changeset: changeset)
+    changeset =
+      id
+      |> Memberships.get_person!()
+      |> Memberships.change_person()
+
+    render(conn, "edit.html", changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "person" => person_params}) do
@@ -42,7 +45,7 @@ defmodule BlessdWeb.PersonController do
         |> redirect(to: person_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", person: person, changeset: changeset)
+        render(conn, "edit.html", changeset: changeset)
     end
   end
 

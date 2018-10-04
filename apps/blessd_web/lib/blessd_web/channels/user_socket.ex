@@ -3,6 +3,7 @@ defmodule BlessdWeb.UserSocket do
 
   ## Channels
   # channel "room:*", BlessdWeb.RoomChannel
+  channel("attendance:*", BlessdWeb.AttendanceChannel)
 
   ## Transports
   transport(:websocket, Phoenix.Transports.WebSocket)

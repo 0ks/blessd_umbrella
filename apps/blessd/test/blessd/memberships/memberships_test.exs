@@ -6,9 +6,9 @@ defmodule Blessd.MembershipsTest do
   describe "people" do
     alias Blessd.Memberships.Person
 
-    @valid_attrs %{email: "some email", name: "some name"}
-    @update_attrs %{email: "some updated email", name: "some updated name"}
-    @invalid_attrs %{email: nil, name: nil}
+    @valid_attrs %{email: "some email", name: "some name", is_member: true}
+    @update_attrs %{email: "some updated email", name: "some updated name", is_member: false}
+    @invalid_attrs %{email: nil, name: nil, is_member: nil}
 
     def person_fixture(attrs \\ %{}) do
       {:ok, person} =

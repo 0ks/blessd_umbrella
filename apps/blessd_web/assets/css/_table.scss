@@ -1,0 +1,8 @@
+.table tbody tr.nav-focus {
+  background: $light;
+  cursor: pointer;
+
+  input[type=checkbox] {
+    cursor: pointer;
+  }
+}

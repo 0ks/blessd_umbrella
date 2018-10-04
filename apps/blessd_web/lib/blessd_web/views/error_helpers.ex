@@ -5,13 +5,40 @@ defmodule BlessdWeb.ErrorHelpers do
 
   use Phoenix.HTML
 
+  require BlessdWeb.Gettext
+
   @doc """
-  Generates tag for inlined form input errors.
+  Generates tag for form input errors.
   """
   def error_tag(form, field) do
     Enum.map(Keyword.get_values(form.errors, field), fn error ->
-      content_tag(:span, translate_error(error), class: "help-block")
+      content_tag(:p, translate_error(error), class: "help is-danger")
     end)
+  end
+
+  def error_alert(form) do
+    if has_errors?(form) do
+      error_message =
+        BlessdWeb.Gettext.gettext("""
+        Oops, something went wrong! Please check the errors below.
+        """)
+
+      content_tag :div, class: "message is-danger" do
+        content_tag(
+          :div,
+          error_message,
+          class: "message-body"
+        )
+      end
+    end
+  end
+
+  def has_errors?(form) do
+    form.errors != []
+  end
+
+  def has_errors?(form, field) do
+    Keyword.get_values(form.errors, field) != []
   end
 
   @doc """

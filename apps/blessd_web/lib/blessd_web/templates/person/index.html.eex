@@ -5,6 +5,7 @@
     <tr>
       <th><%= gettext("Name") %></th>
       <th><%= gettext("Email") %></th>
+      <th><%= gettext("Is member") %></th>
       <th></th>
     </tr>
   </thead>
@@ -13,6 +14,7 @@
     <tr>
       <td><%= person.name %></td>
       <td><%= person.email %></td>
+      <td><%= humanize(person.is_member) %></td>
 
       <td>
         <div class="field has-addons is-pulled-right">

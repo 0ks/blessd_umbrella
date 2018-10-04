@@ -3,9 +3,9 @@ defmodule BlessdWeb.PersonControllerTest do
 
   alias Blessd.Memberships
 
-  @create_attrs %{email: "some email", name: "some name"}
-  @update_attrs %{email: "some updated email", name: "some updated name"}
-  @invalid_attrs %{email: nil, name: nil}
+  @create_attrs %{email: "some email", name: "some name", is_member: true}
+  @update_attrs %{email: "some updated email", name: "some updated name", is_member: false}
+  @invalid_attrs %{email: nil, name: nil, is_member: nil}
 
   def fixture(:person) do
     {:ok, person} = Memberships.create_person(@create_attrs)

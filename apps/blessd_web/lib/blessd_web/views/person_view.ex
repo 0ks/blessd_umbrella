@@ -1,3 +1,3 @@
-defmodule BlessdWeb.PersonView do
+defmodule BlessdWeb.ServiceView do
   use BlessdWeb, :view
 end

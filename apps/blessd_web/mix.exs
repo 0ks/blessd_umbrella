@@ -44,6 +44,7 @@ defmodule BlessdWeb.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:blessd, in_umbrella: true},
+      {:timex, "~> 3.4"},
       {:cowboy, "~> 1.0"}
     ]
   end
