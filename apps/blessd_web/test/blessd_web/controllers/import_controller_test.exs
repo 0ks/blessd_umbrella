@@ -32,7 +32,7 @@ defmodule BlessdWeb.ImportControllerTest do
         |> Phoenix.HTML.html_escape()
         |> Phoenix.HTML.safe_to_string()
 
-      assert details =~ "The person of the line #3 could not be imported."
+      assert details =~ "The person of the line #3 could not be created."
     end
   end
 end

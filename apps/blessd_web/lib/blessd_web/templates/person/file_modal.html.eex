@@ -2,7 +2,7 @@
   <div class="modal-background js-close-modal"></div>
   <div class="modal-card">
     <header class="modal-card-head">
-      <p class="modal-card-title">Import people form CSV</p>
+      <p class="modal-card-title"><%= gettext("Import people from CSV") %></p>
     </header>
     <%= form_for @conn, import_path(@conn, :create), [as: :import, multipart: true], fn f -> %>
       <section class="modal-card-body">
@@ -12,11 +12,11 @@
               <%= file_input f, :people, class: "file-input", accept: ".csv" %>
               <span class="file-cta">
                 <span class="file-label">
-                  Choose a file...
+                  <%= gettext("Choose a file...") %>
                 </span>
               </span>
               <span class="file-name">
-                None
+                <%= gettext("None") %>
               </span>
             </label>
           </div>

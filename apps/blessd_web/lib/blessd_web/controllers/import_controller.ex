@@ -13,12 +13,12 @@ defmodule BlessdWeb.ImportController do
     |> case do
       {:ok, _people} ->
         conn
-        |> put_flash(:info, "People imported successfully.")
+        |> put_flash(:info, gettext("People imported successfully."))
         |> redirect(to: person_path(conn, :index))
 
       {:error, line, changeset} ->
         conn
-        |> put_flash(:error, "Sorry! The file provided could not be imported.")
+        |> put_flash(:error, gettext("Sorry! The file provided could not be imported."))
         |> put_flash(:error_details, create_error_details(line, changeset))
         |> redirect(to: person_path(conn, :index))
     end
@@ -31,8 +31,11 @@ defmodule BlessdWeb.ImportController do
       |> Enum.map(&content_tag(:li, &1))
 
     [
-      content_tag(:p, "The person of the line ##{line} could not be imported."),
-      content_tag(:p, "Here is the list of errors:"),
+      content_tag(
+        :p,
+        gettext("The person of the line #%{line} could not be created.", line: line)
+      ),
+      content_tag(:p, gettext("Here is the list of errors:")),
       content_tag(:ul, error_tags)
     ]
   end
