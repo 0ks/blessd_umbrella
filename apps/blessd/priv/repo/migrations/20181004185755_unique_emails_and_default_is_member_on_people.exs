@@ -3,21 +3,21 @@ defmodule Blessd.Repo.Migrations.UniqueEmailsAndDefaultIsMemberOnPeople do
 
   def up do
     alter table(:people) do
-      modify :is_member, :boolean, default: false
+      modify(:is_member, :boolean, default: false)
     end
 
     alter table(:services) do
-      remove :name
+      remove(:name)
     end
   end
 
   def down do
     alter table(:people) do
-      modify :is_member, :boolean
+      modify(:is_member, :boolean)
     end
 
     alter table(:services) do
-      add :name, :string
+      add(:name, :string)
     end
   end
 end
