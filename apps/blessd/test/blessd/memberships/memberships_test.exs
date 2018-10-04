@@ -39,6 +39,56 @@ defmodule Blessd.MembershipsTest do
       assert {:error, %Ecto.Changeset{}} = Memberships.create_person(@invalid_attrs)
     end
 
+    test "create_people/1 with valid data creates a lot of people" do
+      assert {:ok, people} = Memberships.create_people([@valid_attrs, @update_attrs])
+      assert [%Person{} = p1, %Person{} = p2] = people
+
+      assert p1.email == "some email"
+      assert p1.name == "some name"
+      assert p1.is_member == true
+
+      assert p2.email == "some updated email"
+      assert p2.name == "some updated name"
+      assert p2.is_member == false
+    end
+
+    test "create_people/1 with invalid data returns error changeset" do
+      assert {:error, 1, %Ecto.Changeset{}} =
+               Memberships.create_people([@valid_attrs, @invalid_attrs])
+    end
+
+    test "import_people/1 with valid data creates a lot of people" do
+      assert {:ok, people} =
+               [
+                 Map.keys(@valid_attrs),
+                 Map.values(@valid_attrs),
+                 Map.values(@update_attrs)
+               ]
+               |> Stream.map(&Enum.join(&1, ","))
+               |> Memberships.import_people()
+
+      assert [%Person{} = p1, %Person{} = p2] = people
+
+      assert p1.email == "some email"
+      assert p1.name == "some name"
+      assert p1.is_member == true
+
+      assert p2.email == "some updated email"
+      assert p2.name == "some updated name"
+      assert p2.is_member == false
+    end
+
+    test "import_people/1 with invalid data returns error changeset" do
+      assert {:error, 3, %Ecto.Changeset{}} =
+               [
+                 Map.keys(@valid_attrs),
+                 Map.values(@valid_attrs),
+                 Map.values(@invalid_attrs)
+               ]
+               |> Stream.map(&Enum.join(&1, ","))
+               |> Memberships.import_people()
+    end
+
     test "update_person/2 with valid data updates the person" do
       person = person_fixture()
       assert {:ok, person} = Memberships.update_person(person, @update_attrs)

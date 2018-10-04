@@ -55,28 +55,31 @@ defmodule Blessd.Memberships do
   end
 
   @doc """
-  Creates people in batches.
-
-  ## Examples
-
-      iex> create_person(%{field: value})
-      {:ok, [%Person{}]}
-
-      iex> create_person(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
+  Imports a list of people from a file.
   """
-  def create_people(%File.Stream{} = stream) do
+  def import_people(stream) do
     stream
     |> CSV.decode!(headers: true)
+    |> create_people()
+    |> case do
+      {:ok, people} -> {:ok, people}
+      {:error, index, changeset} -> {:error, index + 2, changeset}
+    end
+  end
+
+  @doc """
+  Creates people in batches.
+  """
+  def create_people(enum) do
+    enum
     |> Stream.with_index()
     |> Enum.reduce(Multi.new(), fn {row, index}, multi ->
-      Multi.insert(multi, index + 2, Person.changeset(%Person{}, row))
+      Multi.insert(multi, index, Person.changeset(%Person{}, row))
     end)
     |> Repo.transaction()
     |> case do
       {:ok, map} -> {:ok, Map.values(map)}
-      {:error, line, changeset, _} -> {:error, line, changeset}
+      {:error, index, changeset, _} -> {:error, index, changeset}
     end
   end
 

@@ -9,7 +9,7 @@ defmodule BlessdWeb.ImportController do
   def create(conn, %{"import" => %{"people" => file}}) do
     file.path
     |> File.stream!()
-    |> Memberships.create_people()
+    |> Memberships.import_people()
     |> case do
       {:ok, _people} ->
         conn
