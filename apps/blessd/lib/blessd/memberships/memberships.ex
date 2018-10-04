@@ -3,6 +3,8 @@ defmodule Blessd.Memberships do
   The Memberships context.
   """
 
+  import Ecto.Query
+
   alias Blessd.Repo
   alias Blessd.Memberships.Person
   alias Ecto.Multi
@@ -17,7 +19,9 @@ defmodule Blessd.Memberships do
 
   """
   def list_people do
-    Repo.all(Person)
+    Person
+    |> order_by([p], p.name)
+    |> Repo.all()
   end
 
   @doc """
