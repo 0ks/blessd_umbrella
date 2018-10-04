@@ -1,0 +1,30 @@
+defmodule BlessdWeb.ImportControllerTest do
+  use BlessdWeb.ConnCase
+
+  @create_attrs %{
+    people: %Plug.Upload{
+      path: Path.expand("test/fixtures/valid_import_people.csv"),
+      filename: "valid_import_people.csv"
+    }
+  }
+  @invalid_attrs %{
+    people: %Plug.Upload{
+      path: Path.expand("test/fixtures/invalid_import_people.csv"),
+      filename: "invalid_import_people.csv"
+    }
+  }
+
+  describe "import people" do
+    test "redirects to index when data is valid", %{conn: conn} do
+      conn = post(conn, import_path(conn, :create), import: @create_attrs)
+      assert redirected_to(conn) == person_path(conn, :index)
+      assert get_flash(conn, :info) == "People imported successfully."
+    end
+
+    test "renders errors when data is invalid", %{conn: conn} do
+      conn = post(conn, import_path(conn, :create), import: @invalid_attrs)
+      assert redirected_to(conn) == person_path(conn, :index)
+      assert get_flash(conn, :error) == "Sorry! The file provided could not be imported."
+    end
+  end
+end
