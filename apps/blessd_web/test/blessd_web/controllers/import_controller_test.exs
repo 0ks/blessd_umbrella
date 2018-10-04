@@ -25,6 +25,14 @@ defmodule BlessdWeb.ImportControllerTest do
       conn = post(conn, import_path(conn, :create), import: @invalid_attrs)
       assert redirected_to(conn) == person_path(conn, :index)
       assert get_flash(conn, :error) == "Sorry! The file provided could not be imported."
+
+      details =
+        conn
+        |> get_flash(:error_details)
+        |> Phoenix.HTML.html_escape()
+        |> Phoenix.HTML.safe_to_string()
+
+      assert details =~ "The person of the line #3 could not be imported."
     end
   end
 end
