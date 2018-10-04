@@ -26,8 +26,7 @@
   <% else %>
     <div class="message is-danger">
       <div class="message-body">
-        <p><%= msg %></p>
-        <button class="delete" aria-label="delete"></button>
+        <%= msg %>
       </div>
     </div>
   <% end %>
