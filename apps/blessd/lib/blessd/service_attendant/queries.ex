@@ -17,6 +17,7 @@ defmodule Blessd.ServiceAttendant.Queries do
 
   def search(query, query_str) do
     query_str = "%#{query_str}%"
+
     where(
       query,
       [a, p],
