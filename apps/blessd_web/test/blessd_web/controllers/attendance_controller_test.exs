@@ -5,22 +5,17 @@ defmodule BlessdWeb.AttendanceControllerTest do
 
   @create_attrs %{date: ~D[2018-10-10]}
 
-  def fixture(:service) do
-    {:ok, service} = Observance.create_service(@create_attrs)
+  def fixture(:service, church) do
+    {:ok, service} = Observance.create_service(@create_attrs, church)
     service
   end
 
   describe "index" do
-    setup [:create_service]
-
-    test "lists all attendants", %{conn: conn, service: service} do
-      conn = get(conn, service_attendance_path(conn, :index, service))
+    test "lists all attendants", %{conn: conn} do
+      church = auth_church()
+      service = fixture(:service, church)
+      conn = get(conn, service_attendance_path(conn, :index, church.identifier, service))
       assert html_response(conn, 200) =~ "Attendance"
     end
-  end
-
-  defp create_service(_) do
-    service = fixture(:service)
-    {:ok, service: service}
   end
 end

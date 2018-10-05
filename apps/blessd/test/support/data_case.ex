@@ -14,6 +14,9 @@ defmodule Blessd.DataCase do
 
   use ExUnit.CaseTemplate
 
+  alias Blessd.Accounts
+  alias Blessd.Auth.Church
+
   using do
     quote do
       alias Blessd.Repo
@@ -49,5 +52,21 @@ defmodule Blessd.DataCase do
         String.replace(acc, "%{#{key}}", to_string(value))
       end)
     end)
+  end
+
+  @church_attrs %{name: "Test Church", identifier: "test_church"}
+
+  def auth_church(attrs \\ %{}) do
+    {:ok, church} =
+      attrs
+      |> Enum.into(@church_attrs)
+      |> Accounts.create_church()
+
+    church_map =
+      church
+      |> Map.from_struct()
+      |> Map.take(Map.keys(%Church{}))
+
+    struct!(Church, church_map)
   end
 end

@@ -7,20 +7,22 @@ defmodule BlessdWeb.ImportController do
   alias BlessdWeb.ErrorHelpers
 
   def create(conn, %{"import" => %{"people" => file}}) do
+    church = conn.assigns.current_church
+
     file.path
     |> File.stream!()
-    |> Memberships.import_people()
+    |> Memberships.import_people(church)
     |> case do
       {:ok, _people} ->
         conn
         |> put_flash(:info, gettext("People imported successfully."))
-        |> redirect(to: person_path(conn, :index))
+        |> redirect(to: person_path(conn, :index, church.identifier))
 
       {:error, line, changeset} ->
         conn
         |> put_flash(:error, gettext("Sorry! The file provided could not be imported."))
         |> put_flash(:error_details, create_error_details(line, changeset))
-        |> redirect(to: person_path(conn, :index))
+        |> redirect(to: person_path(conn, :index, church.identifier))
     end
   end
 

@@ -4,8 +4,9 @@ defmodule BlessdWeb.AttendanceController do
   alias Blessd.Observance
 
   def index(conn, %{"service_id" => service_id}) do
-    service = Observance.get_service!(service_id)
-    attendants = Observance.list_attendants(service)
+    church = conn.assigns.current_church
+    service = Observance.get_service!(service_id, church)
+    attendants = Observance.list_attendants(service, church)
 
     render(conn, "index.html", service: service, attendants: attendants)
   end
