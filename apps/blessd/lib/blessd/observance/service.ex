@@ -4,7 +4,7 @@ defmodule Blessd.Observance.Service do
   import Ecto.Changeset
 
   alias Blessd.Observance.ServiceAttendant
-  alias Blessd.Service.Validations
+  alias Blessd.Observance.Service.Validations
 
   schema "services" do
     field(:date, :date)

@@ -5,7 +5,7 @@ defmodule Blessd.Observance.ServiceAttendant do
 
   alias Blessd.Observance.Person
   alias Blessd.Observance.Service
-  alias Blessd.ServiceAttendant.Validations
+  alias Blessd.Observance.ServiceAttendant.Validations
 
   schema "service_attendants" do
     belongs_to(:service, Service)

@@ -1,4 +1,4 @@
-defmodule Blessd.ServiceAttendant.Queries do
+defmodule Blessd.Observance.ServiceAttendant.Queries do
   import Ecto.Query
 
   def order_preloaded(query) do

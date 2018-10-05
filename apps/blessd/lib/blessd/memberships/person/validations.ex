@@ -1,7 +1,5 @@
-defmodule Blessd.Person.Validations do
-  @moduledoc """
-  Validations for people
-  """
+defmodule Blessd.Memberships.Person.Validations do
+  @moduledoc false
 
   import Ecto.Changeset
 

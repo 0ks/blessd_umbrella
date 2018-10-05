@@ -1,4 +1,4 @@
-defmodule Blessd.ServiceAttendant.Validations do
+defmodule Blessd.Observance.ServiceAttendant.Validations do
   @moduledoc """
   Validations for services
   """

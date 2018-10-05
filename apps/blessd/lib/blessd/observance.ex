@@ -9,35 +9,22 @@ defmodule Blessd.Observance do
   alias Blessd.Observance.Person
   alias Blessd.Observance.Service
   alias Blessd.Observance.ServiceAttendant
-  alias Blessd.ServiceAttendant.Queries, as: ServiceAttendantQueries
+  alias Blessd.Observance.ServiceAttendant.Queries, as: ServiceAttendantQueries
   alias Ecto.Multi
 
   @doc """
   Returns the list of services.
-
-  ## Examples
-
-      iex> list_services()
-      [%Service{}, ...]
-
   """
   def list_services do
-    Repo.all(Service)
+    Service
+    |> order_by([s], desc: s.date)
+    |> Repo.all()
   end
 
   @doc """
   Gets a single service.
 
   Raises `Ecto.NoResultsError` if the Service does not exist.
-
-  ## Examples
-
-      iex> get_service!(123)
-      %Service{}
-
-      iex> get_service!(456)
-      ** (Ecto.NoResultsError)
-
   """
   def get_service!(id) do
     attendants_query =
@@ -52,18 +39,6 @@ defmodule Blessd.Observance do
 
   @doc """
   Creates a service.
-
-  This function also create a ServiceAttendant for each Person
-  on the database in the moment of its creation.
-
-  ## Examples
-
-      iex> create_service(%{field: value})
-      {:ok, %Service{}}
-
-      iex> create_service(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
   """
   def create_service(attrs) do
     %Service{}
@@ -73,15 +48,6 @@ defmodule Blessd.Observance do
 
   @doc """
   Updates a service.
-
-  ## Examples
-
-      iex> update_service(service, %{field: new_value})
-      {:ok, %Service{}}
-
-      iex> update_service(service, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
   """
   def update_service(%Service{} = service, attrs) do
     service
@@ -91,15 +57,6 @@ defmodule Blessd.Observance do
 
   @doc """
   Deletes a Service.
-
-  ## Examples
-
-      iex> delete_service(service)
-      {:ok, %Service{}}
-
-      iex> delete_service(service)
-      {:error, %Ecto.Changeset{}}
-
   """
   def delete_service(%Service{} = service) do
     Repo.delete(service)
@@ -107,21 +64,19 @@ defmodule Blessd.Observance do
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking service changes.
-
-  ## Examples
-
-      iex> change_service(service)
-      %Ecto.Changeset{source: %Service{}}
-
   """
   def change_service(%Service{} = service) do
     Service.changeset(service, %{})
   end
 
+  @doc """
+  Returns the list of service attendants.
+
+  If the service has no attendant, it calls `create_attendants/1`
+  for the given service.
+  """
   def list_attendants(%Service{attendants: []} = service) do
-    service
-    |> create_attendants()
-    |> case do
+    case create_attendants(service) do
       {:ok, _attendants} ->
         ServiceAttendant
         |> ServiceAttendantQueries.by_service(service.id)
@@ -138,6 +93,9 @@ defmodule Blessd.Observance do
     attendants
   end
 
+  @doc """
+  Search for attendants.
+  """
   def search_attendants(service_id, query) do
     ServiceAttendant
     |> ServiceAttendantQueries.by_service(service_id)
@@ -147,14 +105,25 @@ defmodule Blessd.Observance do
     |> Repo.all()
   end
 
+  @doc """
+  Gets a single attendant.
+
+  Raises `Ecto.NoResultsError` if the Service does not exist.
+  """
   def get_attendant!(attendant_id), do: Repo.get!(ServiceAttendant, attendant_id)
 
+  @doc """
+  Updates an attendant.
+  """
   def update_attendant(%ServiceAttendant{} = attendant, attrs) do
     attendant
     |> ServiceAttendant.update_changeset(attrs)
     |> Repo.update()
   end
 
+  @doc """
+  Create initial attendants for the given service.
+  """
   def create_attendants(%Service{id: service_id}) do
     Person
     |> select([p], p.id)

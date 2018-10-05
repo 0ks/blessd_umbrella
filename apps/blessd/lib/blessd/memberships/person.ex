@@ -3,7 +3,7 @@ defmodule Blessd.Memberships.Person do
 
   import Ecto.Changeset
 
-  alias Blessd.Person.Validations
+  alias Blessd.Memberships.Person.Validations
 
   schema "people" do
     field(:email, :string)
