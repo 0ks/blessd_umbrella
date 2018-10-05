@@ -55,7 +55,10 @@ defmodule BlessdWeb.ServiceControllerTest do
     test "redirects when data is valid", %{conn: conn} do
       church = auth_church()
       service = fixture(:service, church)
-      conn = put(conn, service_path(conn, :update, church.identifier, service), service: @update_attrs)
+
+      conn =
+        put(conn, service_path(conn, :update, church.identifier, service), service: @update_attrs)
+
       assert redirected_to(conn) == service_path(conn, :index, church.identifier)
 
       conn = get(conn, service_path(conn, :index, church.identifier))
@@ -65,7 +68,10 @@ defmodule BlessdWeb.ServiceControllerTest do
     test "renders errors when data is invalid", %{conn: conn} do
       church = auth_church()
       service = fixture(:service, church)
-      conn = put(conn, service_path(conn, :update, church.identifier, service), service: @invalid_attrs)
+
+      conn =
+        put(conn, service_path(conn, :update, church.identifier, service), service: @invalid_attrs)
+
       assert html_response(conn, 200) =~ "Edit Service"
     end
   end

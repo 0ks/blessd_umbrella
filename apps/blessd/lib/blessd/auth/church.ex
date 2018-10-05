@@ -6,4 +6,3 @@ defmodule Blessd.Auth.Church do
     field(:identifier, :string)
   end
 end
-

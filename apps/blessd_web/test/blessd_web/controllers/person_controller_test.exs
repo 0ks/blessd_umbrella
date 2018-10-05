@@ -56,7 +56,9 @@ defmodule BlessdWeb.PersonControllerTest do
       church = auth_church()
       person = fixture(:person, church)
 
-      conn = put(conn, person_path(conn, :update, church.identifier, person), person: @update_attrs)
+      conn =
+        put(conn, person_path(conn, :update, church.identifier, person), person: @update_attrs)
+
       assert redirected_to(conn) == person_path(conn, :index, church.identifier)
 
       conn = get(conn, person_path(conn, :index, church.identifier))
@@ -67,7 +69,9 @@ defmodule BlessdWeb.PersonControllerTest do
       church = auth_church()
       person = fixture(:person, church)
 
-      conn = put(conn, person_path(conn, :update, church.identifier, person), person: @invalid_attrs)
+      conn =
+        put(conn, person_path(conn, :update, church.identifier, person), person: @invalid_attrs)
+
       assert html_response(conn, 200) =~ "Edit Person"
     end
   end
