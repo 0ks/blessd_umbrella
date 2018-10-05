@@ -4,7 +4,7 @@
     <header class="modal-card-head">
       <p class="modal-card-title"><%= gettext("Import people from CSV") %></p>
     </header>
-    <%= form_for @conn, import_path(@conn, :create), [as: :import, multipart: true], fn f -> %>
+    <%= form_for @conn, import_path(@conn, :create, @current_church), [as: :import, multipart: true], fn f -> %>
       <section class="modal-card-body">
         <div class="field">
           <div class="file is-fullwidth is-right has-name">
@@ -26,7 +26,7 @@
         <div class="buttons">
           <%= submit gettext("Submit"), class: "button is-primary" %>
           <%= link gettext("Back"),
-            to: person_path(@conn, :index),
+            to: person_path(@conn, :index, @current_church),
             class: "button js-close-modal" %>
         </div>
       </footer>

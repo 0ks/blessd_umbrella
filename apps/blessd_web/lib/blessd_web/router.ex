@@ -9,11 +9,22 @@ defmodule BlessdWeb.Router do
     plug(:put_secure_browser_headers)
   end
 
+  pipeline :load_church do
+    plug(BlessdWeb.ChurchPlug)
+  end
+
   scope "/", BlessdWeb do
-    # Use the default browser stack
     pipe_through(:browser)
 
     get("/", PageController, :index)
+
+    resources("/churches", ChurchController, only: [:new, :create])
+  end
+
+  scope "/:church_identifier", BlessdWeb do
+    pipe_through([:browser, :load_church])
+
+    resources("/churches", ChurchController, only: [:edit, :update, :delete], singleton: true)
 
     resources("/import", ImportController, only: [:create])
     resources("/people", PersonController, except: [:show])

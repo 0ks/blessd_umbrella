@@ -4,12 +4,12 @@ defmodule Blessd.Repo.Migrations.CreateChurches do
   def change do
     create table(:churches) do
       add(:name, :string)
-      add(:subdomain, :string)
+      add(:identifier, :string)
 
       timestamps()
     end
 
-    create(unique_index(:churches, [:subdomain]))
+    create(unique_index(:churches, [:identifier]))
 
     alter table(:people) do
       add(:church_id, references(:churches, on_delete: :delete_all))

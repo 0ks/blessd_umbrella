@@ -6,9 +6,9 @@ defmodule Blessd.AccountsTest do
   describe "churches" do
     alias Blessd.Accounts.Church
 
-    @valid_attrs %{name: "some name", subdomain: "some_subdomain"}
-    @update_attrs %{name: "some updated name", subdomain: "some_updated_subdomain"}
-    @invalid_attrs %{name: nil, subdomain: nil}
+    @valid_attrs %{name: "some name", identifier: "some_identifier"}
+    @update_attrs %{name: "some updated name", identifier: "some_updated_identifier"}
+    @invalid_attrs %{name: nil, identifier: nil}
 
     def church_fixture(attrs \\ %{}) do
       {:ok, church} =
@@ -24,18 +24,18 @@ defmodule Blessd.AccountsTest do
       assert found = Accounts.get_church!(church.id)
 
       assert found.name == church.name
-      assert found.subdomain == church.subdomain
+      assert found.identifier == church.identifier
 
-      assert found = Accounts.get_church!(church.subdomain)
+      assert found = Accounts.get_church!(church.identifier)
 
       assert found.name == church.name
-      assert found.subdomain == church.subdomain
+      assert found.identifier == church.identifier
     end
 
     test "create_church/1 with valid data creates a church" do
       assert {:ok, %Church{} = church} = Accounts.create_church(@valid_attrs)
       assert church.name == "some name"
-      assert church.subdomain == "some_subdomain"
+      assert church.identifier == "some_identifier"
     end
 
     test "create_church/1 with invalid data returns error changeset" do
@@ -47,7 +47,7 @@ defmodule Blessd.AccountsTest do
       assert {:ok, church} = Accounts.update_church(church, @update_attrs)
       assert %Church{} = church
       assert church.name == "some updated name"
-      assert church.subdomain == "some_updated_subdomain"
+      assert church.identifier == "some_updated_identifier"
     end
 
     test "update_church/2 with invalid data returns error changeset" do
@@ -56,7 +56,7 @@ defmodule Blessd.AccountsTest do
       assert found = Accounts.get_church!(church.id)
 
       assert found.name == church.name
-      assert found.subdomain == church.subdomain
+      assert found.identifier == church.identifier
     end
 
     test "delete_church/1 deletes the church" do

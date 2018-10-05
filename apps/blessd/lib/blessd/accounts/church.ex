@@ -5,7 +5,7 @@ defmodule Blessd.Accounts.Church do
 
   schema "churches" do
     field(:name, :string)
-    field(:subdomain, :string)
+    field(:identifier, :string)
 
     timestamps()
   end
@@ -13,9 +13,9 @@ defmodule Blessd.Accounts.Church do
   @doc false
   def changeset(church, attrs) do
     church
-    |> cast(attrs, [:name, :subdomain])
-    |> validate_required([:name, :subdomain])
-    |> validate_format(:subdomain, ~r/^[a-z][a-z0-9_-]+$/)
-    |> unique_constraint(:subdomain)
+    |> cast(attrs, [:name, :identifier])
+    |> validate_required([:name, :identifier])
+    |> validate_format(:identifier, ~r/^[a-z0-9_-]+$/)
+    |> unique_constraint(:identifier)
   end
 end

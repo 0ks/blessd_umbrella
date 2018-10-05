@@ -10,62 +10,73 @@ defmodule Blessd.ObservanceTest do
     @update_attrs %{date: ~D[2000-01-01]}
     @invalid_attrs %{date: nil}
 
-    def service_fixture(attrs \\ %{}) do
+    def service_fixture(attrs \\ %{}, church) do
       {:ok, service} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> Observance.create_service()
+        |> Observance.create_service(church)
 
       service
     end
 
     test "list_services/0 returns all services" do
-      service = service_fixture()
-      assert [found] = Observance.list_services()
+      church = auth_church()
+      service = service_fixture(church)
+      assert [found] = Observance.list_services(church)
 
       assert found.date == service.date
     end
 
     test "get_service!/1 returns the service with given id" do
-      service = service_fixture()
-      assert found = Observance.get_service!(service.id)
+      church = auth_church()
+      service = service_fixture(church)
+      assert found = Observance.get_service!(service.id, church)
 
       assert found.date == service.date
     end
 
     test "create_service/1 with valid data creates a service" do
-      assert {:ok, %Service{} = service} = Observance.create_service(@valid_attrs)
+      church = auth_church()
+      assert {:ok, %Service{} = service} = Observance.create_service(@valid_attrs, church)
       assert service.date == ~D[2018-10-10]
     end
 
     test "create_service/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Observance.create_service(@invalid_attrs)
+      church = auth_church()
+      assert {:error, %Ecto.Changeset{}} = Observance.create_service(@invalid_attrs, church)
     end
 
     test "update_service/2 with valid data updates the service" do
-      service = service_fixture()
-      assert {:ok, service} = Observance.update_service(service, @update_attrs)
+      church = auth_church()
+      service = service_fixture(church)
+      assert {:ok, service} = Observance.update_service(service, @update_attrs, church)
       assert %Service{} = service
       assert service.date == ~D[2000-01-01]
     end
 
     test "update_service/2 with invalid data returns error changeset" do
-      service = service_fixture()
-      assert {:error, %Ecto.Changeset{}} = Observance.update_service(service, @invalid_attrs)
-      assert found = Observance.get_service!(service.id)
+      church = auth_church()
+      service = service_fixture(church)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Observance.update_service(service, @invalid_attrs, church)
+
+      assert found = Observance.get_service!(service.id, church)
 
       assert found.date == service.date
     end
 
     test "delete_service/1 deletes the service" do
-      service = service_fixture()
-      assert {:ok, %Service{}} = Observance.delete_service(service)
-      assert_raise Ecto.NoResultsError, fn -> Observance.get_service!(service.id) end
+      church = auth_church()
+      service = service_fixture(church)
+      assert {:ok, %Service{}} = Observance.delete_service(service, church)
+      assert_raise Ecto.NoResultsError, fn -> Observance.get_service!(service.id, church) end
     end
 
     test "change_service/1 returns a service changeset" do
-      service = service_fixture()
-      assert %Ecto.Changeset{} = Observance.change_service(service)
+      church = auth_church()
+      service = service_fixture(church)
+      assert %Ecto.Changeset{} = Observance.change_service(service, church)
     end
   end
 end

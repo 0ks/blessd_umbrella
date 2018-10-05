@@ -3,21 +3,20 @@ defmodule Blessd.Observance do
   The Observance context.
   """
 
-  import Ecto.Query
-
-  alias Blessd.Repo
+  alias Blessd.Auth
   alias Blessd.Observance.Person
   alias Blessd.Observance.Service
   alias Blessd.Observance.ServiceAttendant
-  alias Blessd.Observance.ServiceAttendant.Queries, as: ServiceAttendantQueries
+  alias Blessd.Repo
   alias Ecto.Multi
 
   @doc """
   Returns the list of services.
   """
-  def list_services do
+  def list_services(church) do
     Service
-    |> order_by([s], desc: s.date)
+    |> Auth.check!(church)
+    |> Service.order()
     |> Repo.all()
   end
 
@@ -26,22 +25,20 @@ defmodule Blessd.Observance do
 
   Raises `Ecto.NoResultsError` if the Service does not exist.
   """
-  def get_service!(id) do
-    attendants_query =
-      ServiceAttendant
-      |> ServiceAttendantQueries.preload()
-      |> ServiceAttendantQueries.order_preloaded()
-
+  def get_service!(id, church) do
     Service
-    |> preload(attendants: ^attendants_query)
+    |> Auth.check!(church)
+    |> Service.order()
+    |> Service.preload()
     |> Repo.get!(id)
   end
 
   @doc """
   Creates a service.
   """
-  def create_service(attrs) do
-    %Service{}
+  def create_service(attrs, church) do
+    church
+    |> new_service()
     |> Service.changeset(attrs)
     |> Repo.insert()
   end
@@ -49,8 +46,9 @@ defmodule Blessd.Observance do
   @doc """
   Updates a service.
   """
-  def update_service(%Service{} = service, attrs) do
+  def update_service(%Service{} = service, attrs, church) do
     service
+    |> Auth.check!(church)
     |> Service.changeset(attrs)
     |> Repo.update()
   end
@@ -58,15 +56,26 @@ defmodule Blessd.Observance do
   @doc """
   Deletes a Service.
   """
-  def delete_service(%Service{} = service) do
-    Repo.delete(service)
+  def delete_service(%Service{} = service, church) do
+    service
+    |> Auth.check!(church)
+    |> Repo.delete()
+  end
+
+  @doc """
+  Builds a service to insert.
+  """
+  def new_service(church) do
+    Auth.check!(%Service{church_id: church.id}, church)
   end
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking service changes.
   """
-  def change_service(%Service{} = service) do
-    Service.changeset(service, %{})
+  def change_service(%Service{} = service, church) do
+    service
+    |> Auth.check!(church)
+    |> Service.changeset(%{})
   end
 
   @doc """
@@ -75,13 +84,14 @@ defmodule Blessd.Observance do
   If the service has no attendant, it calls `create_attendants/1`
   for the given service.
   """
-  def list_attendants(%Service{attendants: []} = service) do
-    case create_attendants(service) do
+  def list_attendants(%Service{attendants: []} = service, church) do
+    case create_attendants(service, church) do
       {:ok, _attendants} ->
         ServiceAttendant
-        |> ServiceAttendantQueries.by_service(service.id)
-        |> ServiceAttendantQueries.preload()
-        |> ServiceAttendantQueries.order_preloaded()
+        |> Auth.check!(church)
+        |> ServiceAttendant.by_service(service)
+        |> ServiceAttendant.preload()
+        |> ServiceAttendant.order_preloaded()
         |> Repo.all()
 
       {:error, _changeset} ->
@@ -89,19 +99,21 @@ defmodule Blessd.Observance do
     end
   end
 
-  def list_attendants(%Service{attendants: attendants}) do
+  def list_attendants(%Service{attendants: attendants} = service, church) do
+    Auth.check!(service, church)
     attendants
   end
 
   @doc """
   Search for attendants.
   """
-  def search_attendants(service_id, query) do
+  def search_attendants(%Service{} = service, query, church) do
     ServiceAttendant
-    |> ServiceAttendantQueries.by_service(service_id)
-    |> ServiceAttendantQueries.preload()
-    |> ServiceAttendantQueries.search(query)
-    |> ServiceAttendantQueries.order_preloaded()
+    |> Auth.check!(church)
+    |> ServiceAttendant.by_service(service)
+    |> ServiceAttendant.preload()
+    |> ServiceAttendant.order_preloaded()
+    |> ServiceAttendant.search(query)
     |> Repo.all()
   end
 
@@ -110,34 +122,50 @@ defmodule Blessd.Observance do
 
   Raises `Ecto.NoResultsError` if the Service does not exist.
   """
-  def get_attendant!(attendant_id), do: Repo.get!(ServiceAttendant, attendant_id)
+  def get_attendant!(attendant_id, church) do
+    ServiceAttendant
+    |> Auth.check!(church)
+    |> Repo.get!(attendant_id)
+  end
 
   @doc """
   Updates an attendant.
   """
-  def update_attendant(%ServiceAttendant{} = attendant, attrs) do
+  def update_attendant(%ServiceAttendant{} = attendant, attrs, church) do
     attendant
+    |> Auth.check!(church)
     |> ServiceAttendant.update_changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
+  Builds an attendant to insert.
+  """
+  def new_attendant(church) do
+    Auth.check!(%ServiceAttendant{church_id: church.id}, church)
+  end
+
+  @doc """
   Create initial attendants for the given service.
   """
-  def create_attendants(%Service{id: service_id}) do
+  def create_attendants(%Service{id: service_id} = service, church) do
+    Auth.check!(service, church)
+
     Person
-    |> select([p], p.id)
+    |> Auth.check!(church)
+    |> Person.select_ids()
     |> Repo.all()
     |> Enum.reduce(Multi.new(), fn person_id, multi ->
-      Multi.insert(
-        multi,
-        :"attendant#{person_id}",
-        ServiceAttendant.insert_changeset(%ServiceAttendant{}, %{
+      changeset =
+        church
+        |> new_attendant()
+        |> ServiceAttendant.insert_changeset(%{
           service_id: service_id,
           person_id: person_id,
           is_present: false
         })
-      )
+
+      Multi.insert(multi, :"attendant#{person_id}", changeset)
     end)
     |> Repo.transaction()
     |> case do

@@ -1,6 +1,12 @@
+<% current_church = @conn.assigns[:current_church] %>
 <nav class="navbar">
   <div class="navbar-brand">
-    <%= link to: page_path(@conn, :index),
+    <% home_path = if current_church do
+      person_path(@conn, :index, current_church)
+    else
+      page_path(@conn, :index)
+    end %>
+    <%= link to: home_path,
       class: "navbar-item",
       tabindex: -1 do %>
       <img src="<%= static_url(@conn, "/images/cross.png") %>"></img>
@@ -12,16 +18,31 @@
     </div>
   </div>
   <div id="navMenu" class="navbar-menu">
-    <div class="navbar-start">
-      <%= link gettext("People"),
-        to: person_path(@conn, :index),
-        class: "navbar-item",
-        tabindex: -1 %>
+    <%= if current_church do %>
+      <div class="navbar-start">
+        <%= link gettext("People"),
+          to: person_path(@conn, :index, current_church),
+          class: "navbar-item",
+          tabindex: -1 %>
 
-      <%= link gettext("Services"),
-        to: service_path(@conn, :index),
-        class: "navbar-item",
-        tabindex: -1 %>
-    </div>
+        <%= link gettext("Services"),
+          to: service_path(@conn, :index, current_church),
+          class: "navbar-item",
+          tabindex: -1 %>
+      </div>
+      <div class="navbar-end">
+        <%= link gettext("Config"),
+          to: church_path(@conn, :edit, current_church),
+          class: "navbar-item",
+          tabindex: -1 %>
+      </div>
+    <% else %>
+      <div class="navbar-end">
+        <%= link gettext("Signup"),
+          to: church_path(@conn, :new),
+          class: "navbar-item",
+          tabindex: -1 %>
+      </div>
+    <% end %>
   </div>
 </nav>

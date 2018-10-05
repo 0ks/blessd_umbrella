@@ -7,14 +7,14 @@ defmodule Blessd.Accounts do
   alias Blessd.Accounts.Church
 
   @doc """
-  Gets a single church by id or subdomain.
+  Gets a single church by id or identifier.
 
   Raises `Ecto.NoResultsError` if the Church does not exist.
   """
-  def get_church!(subdomain) when is_binary(subdomain) do
-    case Integer.parse(subdomain) do
+  def get_church!(identifier) when is_binary(identifier) do
+    case Integer.parse(identifier) do
       {id, _} -> get_church!(id)
-      :error -> Repo.get_by!(Church, subdomain: subdomain)
+      :error -> Repo.get_by!(Church, identifier: identifier)
     end
   end
 
