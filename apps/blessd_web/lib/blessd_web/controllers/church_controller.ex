@@ -14,7 +14,7 @@ defmodule BlessdWeb.ChurchController do
       {:ok, church} ->
         conn
         |> put_flash(:info, gettext("Church created successfully."))
-        |> redirect(to: person_path(conn, :index, church))
+        |> redirect(to: person_path(conn, :index, church.identifier))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -22,16 +22,23 @@ defmodule BlessdWeb.ChurchController do
   end
 
   def edit(conn, _params) do
-    changeset = Accounts.change_church(conn.assigns.current_church)
+    changeset =
+      conn.assigns.current_church.id
+      |> Accounts.get_church!()
+      |> Accounts.change_church()
+
     render(conn, "edit.html", changeset: changeset)
   end
 
   def update(conn, %{"church" => church_params}) do
-    case Accounts.update_church(conn.assigns.current_church, church_params) do
+    conn.assigns.current_church.id
+    |> Accounts.get_church!()
+    |> Accounts.update_church(church_params)
+    |> case do
       {:ok, church} ->
         conn
         |> put_flash(:info, gettext("Church updated successfully."))
-        |> redirect(to: person_path(conn, :index, church))
+        |> redirect(to: person_path(conn, :index, church.identifier))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", changeset: changeset)
@@ -39,7 +46,10 @@ defmodule BlessdWeb.ChurchController do
   end
 
   def delete(conn, _params) do
-    {:ok, _church} = Accounts.delete_church(conn.assigns.current_church)
+    {:ok, _church} =
+      conn.assigns.current_church.id
+      |> Accounts.get_church!()
+      |> Accounts.delete_church()
 
     conn
     |> put_flash(:info, gettext("Church deleted successfully."))

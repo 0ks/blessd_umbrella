@@ -17,15 +17,15 @@ defmodule BlessdWeb.ImportControllerTest do
   describe "import people" do
     test "redirects to index when data is valid", %{conn: conn} do
       church = auth_church()
-      conn = post(conn, import_path(conn, :create, church), import: @create_attrs)
-      assert redirected_to(conn) == person_path(conn, :index, church)
+      conn = post(conn, import_path(conn, :create, church.identifier), import: @create_attrs)
+      assert redirected_to(conn) == person_path(conn, :index, church.identifier)
       assert get_flash(conn, :info) == "People imported successfully."
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
       church = auth_church()
-      conn = post(conn, import_path(conn, :create, church), import: @invalid_attrs)
-      assert redirected_to(conn) == person_path(conn, :index, church)
+      conn = post(conn, import_path(conn, :create, church.identifier), import: @invalid_attrs)
+      assert redirected_to(conn) == person_path(conn, :index, church.identifier)
       assert get_flash(conn, :error) == "Sorry! The file provided could not be imported."
 
       details =

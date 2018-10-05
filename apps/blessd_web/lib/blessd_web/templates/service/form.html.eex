@@ -1,4 +1,4 @@
-<% path_func = &service_path(@conn, &1, @current_church, &2) %>
+<% path_func = &service_path(@conn, &1, @current_church.identifier, &2) %>
 <%= form_for @changeset, form_action(@action, @changeset, path_func), fn f -> %>
   <%= error_alert(f) %>
 
@@ -12,7 +12,7 @@
 
   <div class="buttons">
     <%= submit gettext("Submit"), class: "button is-primary" %>
-    <%= link gettext("Back"), to: service_path(@conn, :index, @current_church), class: "button" %>
+    <%= link gettext("Back"), to: service_path(@conn, :index, @current_church.identifier), class: "button" %>
   </div>
 <% end %>
 

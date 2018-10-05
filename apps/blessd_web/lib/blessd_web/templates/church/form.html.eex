@@ -1,4 +1,4 @@
-<% path_func = fn(action, _) -> church_path(@conn, action) end %>
+<% path_func = &church_path(@conn, &1, &2) %>
 <%= form_for @changeset, form_action(@action, @changeset, path_func), fn f -> %>
   <%= error_alert(f) %>
 

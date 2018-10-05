@@ -2,7 +2,7 @@
 <nav class="navbar">
   <div class="navbar-brand">
     <% home_path = if current_church do
-      person_path(@conn, :index, current_church)
+      person_path(@conn, :index, current_church.identifier)
     else
       page_path(@conn, :index)
     end %>
@@ -21,18 +21,18 @@
     <%= if current_church do %>
       <div class="navbar-start">
         <%= link gettext("People"),
-          to: person_path(@conn, :index, current_church),
+          to: person_path(@conn, :index, current_church.identifier),
           class: "navbar-item",
           tabindex: -1 %>
 
         <%= link gettext("Services"),
-          to: service_path(@conn, :index, current_church),
+          to: service_path(@conn, :index, current_church.identifier),
           class: "navbar-item",
           tabindex: -1 %>
       </div>
       <div class="navbar-end">
         <%= link gettext("Config"),
-          to: church_path(@conn, :edit, current_church),
+          to: church_path(@conn, :edit, current_church.identifier),
           class: "navbar-item",
           tabindex: -1 %>
       </div>

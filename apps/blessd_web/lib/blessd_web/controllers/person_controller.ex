@@ -26,7 +26,7 @@ defmodule BlessdWeb.PersonController do
       {:ok, _person} ->
         conn
         |> put_flash(:info, gettext("Person created successfully."))
-        |> redirect(to: person_path(conn, :index, church))
+        |> redirect(to: person_path(conn, :index, church.identifier))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -52,7 +52,7 @@ defmodule BlessdWeb.PersonController do
       {:ok, _person} ->
         conn
         |> put_flash(:info, gettext("Person updated successfully."))
-        |> redirect(to: person_path(conn, :index, church))
+        |> redirect(to: person_path(conn, :index, church.identifier))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", changeset: changeset)
@@ -66,6 +66,6 @@ defmodule BlessdWeb.PersonController do
 
     conn
     |> put_flash(:info, gettext("Person deleted successfully."))
-    |> redirect(to: person_path(conn, :index, church))
+    |> redirect(to: person_path(conn, :index, church.identifier))
   end
 end
