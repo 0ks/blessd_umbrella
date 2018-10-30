@@ -23,16 +23,20 @@ defmodule Blessd.Auth do
     Repo.get!(Church, id)
   end
 
+  @doc """
+  Check if the given module, query or resource is from the
+  given church.
+  """
   def check!(module, church) when is_atom(module) do
     module
     |> Queryable.to_query()
     |> check!(church)
   end
 
-  def check!(%Query{} = query, %Church{id: church_id}) do
+  def check!(%Query{} = query, %{id: church_id}) do
     where(query, [t], t.church_id == ^church_id)
   end
 
-  def check!(%{church_id: church_id} = resource, %Church{id: church_id}), do: resource
-  def check!(_, %Church{}), do: raise(NotAuthorizedError)
+  def check!(%{church_id: church_id} = resource, %{id: church_id}), do: resource
+  def check!(_, %{}), do: raise(NotAuthorizedError)
 end

@@ -29,6 +29,11 @@
           to: service_path(@conn, :index, current_church.identifier),
           class: "navbar-item",
           tabindex: -1 %>
+
+        <%= link gettext("Users"),
+          to: user_path(@conn, :index, current_church.identifier),
+          class: "navbar-item",
+          tabindex: -1 %>
       </div>
       <div class="navbar-end">
         <%= link gettext("Config"),
@@ -39,7 +44,7 @@
     <% else %>
       <div class="navbar-end">
         <%= link gettext("Signup"),
-          to: church_path(@conn, :new),
+          to: signup_path(@conn, :new),
           class: "navbar-item",
           tabindex: -1 %>
       </div>

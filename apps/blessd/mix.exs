@@ -36,9 +36,11 @@ defmodule Blessd.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:postgrex, ">= 0.0.0"},
+      {:bcrypt_elixir, "~> 1.0"},
+      {:comeonin, "~> 4.1"},
+      {:csv, "~> 2.1"},
       {:ecto, "~> 2.1"},
-      {:csv, "~> 2.1"}
+      {:postgrex, ">= 0.0.0"}
     ]
   end
 

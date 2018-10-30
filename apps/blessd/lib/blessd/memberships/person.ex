@@ -5,6 +5,7 @@ defmodule Blessd.Memberships.Person do
   import Ecto.Query
 
   alias Blessd.Auth.Church
+  alias Blessd.Changeset.Email
   alias Blessd.Memberships.Person
 
   schema "people" do
@@ -21,21 +22,10 @@ defmodule Blessd.Memberships.Person do
   def changeset(%Person{} = person, attrs) do
     person
     |> cast(attrs, [:name, :email, :is_member])
-    |> normalize_email()
+    |> Email.normalize()
     |> validate_required([:church_id, :name, :is_member])
-    |> validate_format(:email, ~r/@/)
+    |> Email.validate()
   end
-
-  defp normalize_email(%Ecto.Changeset{changes: %{email: email}} = changeset) when email != nil do
-    new_email =
-      email
-      |> String.downcase()
-      |> String.trim()
-
-    put_change(changeset, :email, new_email)
-  end
-
-  defp normalize_email(changeset), do: changeset
 
   def order(query), do: order_by(query, [p], p.name)
 end

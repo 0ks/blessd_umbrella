@@ -3,20 +3,11 @@ defmodule BlessdWeb.AttendanceChannelTest do
 
   alias BlessdWeb.AttendanceChannel
 
-  alias Blessd.Accounts
-  alias Blessd.Auth.Church
   alias Blessd.Memberships
   alias Blessd.Observance
 
   setup do
-    {:ok, church_account} = Accounts.create_church(%{name: "church 1", identifier: "church1"})
-
-    church_attrs =
-      church_account
-      |> Map.from_struct()
-      |> Map.take(Map.keys(%Church{}))
-
-    church = struct!(Church, church_attrs)
+    %{church: church} = signup()
 
     {:ok, _person} = Memberships.create_person(%{name: "person 1", is_member: true}, church)
     {:ok, _person} = Memberships.create_person(%{name: "person 2", is_member: false}, church)

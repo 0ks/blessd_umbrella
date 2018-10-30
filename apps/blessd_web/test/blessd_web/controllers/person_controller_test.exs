@@ -14,7 +14,7 @@ defmodule BlessdWeb.PersonControllerTest do
 
   describe "index" do
     test "lists all people", %{conn: conn} do
-      church = auth_church()
+      %{church: church} = signup()
       conn = get(conn, person_path(conn, :index, church.identifier))
       assert html_response(conn, 200) =~ "Listing People"
     end
@@ -22,7 +22,7 @@ defmodule BlessdWeb.PersonControllerTest do
 
   describe "new person" do
     test "renders form", %{conn: conn} do
-      church = auth_church()
+      %{church: church} = signup()
       conn = get(conn, person_path(conn, :new, church.identifier))
       assert html_response(conn, 200) =~ "New Person"
     end
@@ -30,13 +30,13 @@ defmodule BlessdWeb.PersonControllerTest do
 
   describe "create person" do
     test "redirects to index when data is valid", %{conn: conn} do
-      church = auth_church()
+      %{church: church} = signup()
       conn = post(conn, person_path(conn, :create, church.identifier), person: @create_attrs)
       assert redirected_to(conn) == person_path(conn, :index, church.identifier)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      church = auth_church()
+      %{church: church} = signup()
       conn = post(conn, person_path(conn, :create, church.identifier), person: @invalid_attrs)
       assert html_response(conn, 200) =~ "New Person"
     end
@@ -44,7 +44,7 @@ defmodule BlessdWeb.PersonControllerTest do
 
   describe "edit person" do
     test "renders form for editing chosen person", %{conn: conn} do
-      church = auth_church()
+      %{church: church} = signup()
       person = fixture(:person, church)
       conn = get(conn, person_path(conn, :edit, church.identifier, person))
       assert html_response(conn, 200) =~ "Edit Person"
@@ -53,7 +53,7 @@ defmodule BlessdWeb.PersonControllerTest do
 
   describe "update person" do
     test "redirects when data is valid", %{conn: conn} do
-      church = auth_church()
+      %{church: church} = signup()
       person = fixture(:person, church)
 
       conn =
@@ -66,7 +66,7 @@ defmodule BlessdWeb.PersonControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      church = auth_church()
+      %{church: church} = signup()
       person = fixture(:person, church)
 
       conn =
@@ -78,7 +78,7 @@ defmodule BlessdWeb.PersonControllerTest do
 
   describe "delete person" do
     test "deletes chosen person", %{conn: conn} do
-      church = auth_church()
+      %{church: church} = signup()
       person = fixture(:person, church)
 
       conn = delete(conn, person_path(conn, :delete, church.identifier, person))

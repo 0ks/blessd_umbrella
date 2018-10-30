@@ -18,16 +18,17 @@ defmodule BlessdWeb.Router do
 
     get("/", PageController, :index)
 
-    resources("/churches", ChurchController, only: [:new, :create])
+    resources("/signup", SignupController, only: [:new, :create])
   end
 
   scope "/:church_identifier", BlessdWeb do
     pipe_through([:browser, :load_church])
 
-    resources("/churches", ChurchController, only: [:edit, :update, :delete], singleton: true)
+    resources("/church", ChurchController, only: [:edit, :update, :delete], singleton: true)
 
     resources("/import", ImportController, only: [:create])
     resources("/people", PersonController, except: [:show])
+    resources("/users", UserController, except: [:show, :new, :create])
 
     resources "/services", ServiceController, except: [:show] do
       resources("/attendance", AttendanceController, only: [:index])

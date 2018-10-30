@@ -20,7 +20,7 @@ defmodule Blessd.ObservanceTest do
     end
 
     test "list_services/0 returns all services" do
-      church = auth_church()
+      %{church: church} = signup()
       service = service_fixture(church)
       assert [found] = Observance.list_services(church)
 
@@ -28,7 +28,7 @@ defmodule Blessd.ObservanceTest do
     end
 
     test "get_service!/1 returns the service with given id" do
-      church = auth_church()
+      %{church: church} = signup()
       service = service_fixture(church)
       assert found = Observance.get_service!(service.id, church)
 
@@ -36,18 +36,18 @@ defmodule Blessd.ObservanceTest do
     end
 
     test "create_service/1 with valid data creates a service" do
-      church = auth_church()
+      %{church: church} = signup()
       assert {:ok, %Service{} = service} = Observance.create_service(@valid_attrs, church)
       assert service.date == ~D[2018-10-10]
     end
 
     test "create_service/1 with invalid data returns error changeset" do
-      church = auth_church()
+      %{church: church} = signup()
       assert {:error, %Ecto.Changeset{}} = Observance.create_service(@invalid_attrs, church)
     end
 
     test "update_service/2 with valid data updates the service" do
-      church = auth_church()
+      %{church: church} = signup()
       service = service_fixture(church)
       assert {:ok, service} = Observance.update_service(service, @update_attrs, church)
       assert %Service{} = service
@@ -55,7 +55,7 @@ defmodule Blessd.ObservanceTest do
     end
 
     test "update_service/2 with invalid data returns error changeset" do
-      church = auth_church()
+      %{church: church} = signup()
       service = service_fixture(church)
 
       assert {:error, %Ecto.Changeset{}} =
@@ -67,14 +67,14 @@ defmodule Blessd.ObservanceTest do
     end
 
     test "delete_service/1 deletes the service" do
-      church = auth_church()
+      %{church: church} = signup()
       service = service_fixture(church)
       assert {:ok, %Service{}} = Observance.delete_service(service, church)
       assert_raise Ecto.NoResultsError, fn -> Observance.get_service!(service.id, church) end
     end
 
     test "change_service/1 returns a service changeset" do
-      church = auth_church()
+      %{church: church} = signup()
       service = service_fixture(church)
       assert %Ecto.Changeset{} = Observance.change_service(service, church)
     end

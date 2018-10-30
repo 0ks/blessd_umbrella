@@ -9,3 +9,5 @@ config :blessd, Blessd.Repo,
   database: System.get_env("DATABASE_NAME") || "blessd_test",
   ownership_timeout: 10 * 60 * 1000,
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :bcrypt_elixir, log_rounds: 1

@@ -13,6 +13,10 @@ defmodule BlessdWeb.FormHelpers do
     Form.text_input(form, field, handle_input_opts(form, field, opts))
   end
 
+  def password_input(form, field, opts \\ []) do
+    Form.password_input(form, field, handle_input_opts(form, field, opts))
+  end
+
   defp handle_input_opts(form, field, opts) do
     default_class = default_input_class(form, field)
 
