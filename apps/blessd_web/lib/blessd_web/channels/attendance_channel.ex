@@ -10,12 +10,12 @@ defmodule BlessdWeb.AttendanceChannel do
   end
 
   def handle_in("search", %{"service_id" => service_id, "query" => query}, socket) do
-    church = socket.assigns.current_church
+    user = socket.assigns.current_user
 
     attendants =
       service_id
-      |> Observance.get_service!(church)
-      |> Observance.search_attendants(query, church)
+      |> Observance.get_service!(user)
+      |> Observance.search_attendants(query, user)
 
     html = View.render_to_string(AttendanceView, "table_body.html", attendants: attendants)
 
@@ -23,11 +23,11 @@ defmodule BlessdWeb.AttendanceChannel do
   end
 
   def handle_in("update", %{"id" => id, "attendant" => attendant_params}, socket) do
-    church = socket.assigns.current_church
+    user = socket.assigns.current_user
 
     id
-    |> Observance.get_attendant!(church)
-    |> Observance.update_attendant(attendant_params, church)
+    |> Observance.get_attendant!(user)
+    |> Observance.update_attendant(attendant_params, user)
     |> case do
       {:ok, _attendant} ->
         {:reply, :ok, socket}

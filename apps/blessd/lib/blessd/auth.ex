@@ -2,6 +2,7 @@ defmodule Blessd.Auth do
   import Ecto.Query
 
   alias Blessd.Auth.Church
+  alias Blessd.Auth.User
   alias Blessd.NotAuthorizedError
   alias Blessd.Repo
   alias Ecto.Query
@@ -24,19 +25,47 @@ defmodule Blessd.Auth do
   end
 
   @doc """
-  Check if the given module, query or resource is from the
-  given church.
+  Gets a single user by id.
+
+  Raises `Ecto.NoResultsError` if the Church does not exist.
   """
-  def check!(module, church) when is_atom(module) do
-    module
-    |> Queryable.to_query()
-    |> check!(church)
+  def get_user!(id, church_id) when is_binary(church_id) or is_integer(church_id) do
+    get_user!(id, get_church!(church_id))
   end
 
-  def check!(%Query{} = query, %{id: church_id}) do
+  def get_user!(id, %Church{} = church) do
+    User
+    |> check_church!(church)
+    |> Repo.get!(id)
+    |> Map.put(:church, church)
+  end
+
+  @church_modules [Blessd.Accounts.Church]
+
+  @doc """
+  Check if the given module, query or resource is from the
+  given user and it's church.
+  """
+  def check!(checkable, %User{church: church}), do: check_church!(checkable, church)
+
+  defp check_church!(module, %Church{} = church) when is_atom(module) do
+    module
+    |> Queryable.to_query()
+    |> check_church!(church)
+  end
+
+  defp check_church!(%Query{from: {_, m}} = q, %Church{id: id}) when m in @church_modules do
+    where(q, [t], t.id == ^id)
+  end
+
+  defp check_church!(%Query{} = query, %Church{id: church_id}) do
     where(query, [t], t.church_id == ^church_id)
   end
 
-  def check!(%{church_id: church_id} = resource, %{id: church_id}), do: resource
-  def check!(_, %{}), do: raise(NotAuthorizedError)
+  defp check_church!(%m{id: id} = resource, %Church{id: id}) when m in @church_modules do
+    resource
+  end
+
+  defp check_church!(%{church_id: id} = resource, %Church{id: id}), do: resource
+  defp check_church!(_, %Church{}), do: raise(NotAuthorizedError)
 end

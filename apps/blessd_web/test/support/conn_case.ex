@@ -20,6 +20,7 @@ defmodule BlessdWeb.ConnCase do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
       import Blessd.DataCase
+      import BlessdWeb.ConnCase
       import BlessdWeb.Router.Helpers
 
       # The default endpoint for testing
@@ -36,4 +37,6 @@ defmodule BlessdWeb.ConnCase do
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
+
+  def authenticate(conn, user), do: Plug.Test.init_test_session(conn, %{current_user_id: user.id})
 end

@@ -7,10 +7,10 @@ defmodule BlessdWeb.AttendanceChannelTest do
   alias Blessd.Observance
 
   setup do
-    %{church: church} = signup()
+    user = signup()
 
-    {:ok, _person} = Memberships.create_person(%{name: "person 1", is_member: true}, church)
-    {:ok, _person} = Memberships.create_person(%{name: "person 2", is_member: false}, church)
+    {:ok, _person} = Memberships.create_person(%{name: "person 1", is_member: true}, user)
+    {:ok, _person} = Memberships.create_person(%{name: "person 2", is_member: false}, user)
 
     {:ok, service} =
       Observance.create_service(
@@ -18,14 +18,14 @@ defmodule BlessdWeb.AttendanceChannelTest do
           name: "some name",
           date: ~D[2005-09-23]
         },
-        church
+        user
       )
 
-    service = Observance.get_service!(service.id, church)
-    attendants = Observance.list_attendants(service, church)
+    service = Observance.get_service!(service.id, user)
+    attendants = Observance.list_attendants(service, user)
 
     {:ok, _, socket} =
-      socket("user_id", %{current_church: church})
+      socket("user_id", %{current_user: user})
       |> subscribe_and_join(AttendanceChannel, "attendance:lobby")
 
     {:ok, socket: socket, service: service, attendants: attendants}

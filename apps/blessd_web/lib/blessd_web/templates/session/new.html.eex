@@ -1,0 +1,33 @@
+<h1 class="title has-text-centered"><%= gettext("Sign in") %></h1>
+
+<%= form_for @changeset, session_path(@conn, :create), [as: :session], fn f -> %>
+  <%= error_alert(f) %>
+
+  <div class="field">
+    <%= label f, :church_identifier, class: "label" %>
+    <div class="control">
+      <%= text_input f, :church_identifier %>
+    </div>
+    <%= error_tag f, :church_identifier %>
+  </div>
+
+  <div class="field">
+    <%= label f, :email, class: "label" %>
+    <div class="control">
+      <%= text_input f, :email %>
+    </div>
+    <%= error_tag f, :email %>
+  </div>
+
+  <div class="field">
+    <%= label f, :password, class: "label" %>
+    <div class="control">
+      <%= password_input f, :password %>
+    </div>
+    <%= error_tag f, :password %>
+  </div>
+
+  <div class="buttons">
+    <%= submit gettext("Submit"), class: "button is-primary" %>
+  </div>
+<% end %>

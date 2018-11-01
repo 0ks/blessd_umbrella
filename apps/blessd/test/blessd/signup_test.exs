@@ -19,10 +19,10 @@ defmodule Blessd.SignupTest do
 
   test "register/1 with valid data creates a church, user and its credential" do
     assert {:ok,
-            %{
+            %User{
               church: %Church{} = church,
-              user: %User{credentials: [%Credential{} = credential]} = user
-            }} = Signup.register(@valid_attrs)
+              credentials: [%Credential{} = credential]
+            } = user} = Signup.register(@valid_attrs)
 
     assert church.name == "some name"
     assert church.identifier == "some_identifier"

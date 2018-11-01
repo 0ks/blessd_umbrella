@@ -59,8 +59,28 @@ defmodule Blessd.DataCase do
     "credential" => %{source: "password", token: "password"}
   }
 
-  def signup do
-    {:ok, result} = Signup.register(@signup_attrs)
-    result
+  def signup(original? \\ false) do
+    {:ok, user} = Signup.register(@signup_attrs)
+
+    if original? do
+      user
+    else
+      user = %{user | church: convert_struct!(user.church, Blessd.Auth.Church)}
+      convert_struct!(user, Blessd.Auth.User)
+    end
+  end
+
+  def convert_struct!(struct, target_module) do
+    keys =
+      target_module
+      |> struct!()
+      |> Map.keys()
+
+    map =
+      struct
+      |> Map.from_struct()
+      |> Map.take(keys)
+
+    struct!(target_module, map)
   end
 end

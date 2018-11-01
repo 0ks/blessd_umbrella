@@ -24,7 +24,7 @@ defmodule Blessd.Signup do
     |> Repo.transaction()
     |> case do
       {:ok, %{church: church, user: user, credential: credential}} ->
-        {:ok, %{church: church, user: %{user | credentials: [credential]}}}
+        {:ok, %{user | church: church, credentials: [credential]}}
 
       {:error, :registration, changeset, _} ->
         {:error, changeset}

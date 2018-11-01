@@ -1,7 +1,6 @@
 <h1 class="title has-text-centered"><%= gettext("Sign up") %></h1>
 
-<% path_func = &signup_path(@conn, &1, &2) %>
-<%= form_for @changeset, form_action(:create, @changeset, path_func), fn f -> %>
+<%= form_for @changeset, signup_path(@conn, :create), fn f -> %>
   <%= error_alert(f) %>
 
   <%= inputs_for f, :church, fn ff -> %>

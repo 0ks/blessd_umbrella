@@ -4,18 +4,22 @@ defmodule BlessdWeb.ChurchController do
   alias Blessd.Accounts
 
   def edit(conn, _params) do
+    current_user = conn.assigns.current_user
+
     changeset =
-      conn.assigns.current_church.id
-      |> Accounts.get_church!()
-      |> Accounts.change_church()
+      current_user.church.id
+      |> Accounts.get_church!(current_user)
+      |> Accounts.change_church(current_user)
 
     render(conn, "edit.html", changeset: changeset)
   end
 
   def update(conn, %{"church" => church_params}) do
-    conn.assigns.current_church.id
-    |> Accounts.get_church!()
-    |> Accounts.update_church(church_params)
+    current_user = conn.assigns.current_user
+
+    current_user.church.id
+    |> Accounts.get_church!(current_user)
+    |> Accounts.update_church(church_params, current_user)
     |> case do
       {:ok, church} ->
         conn
@@ -28,10 +32,12 @@ defmodule BlessdWeb.ChurchController do
   end
 
   def delete(conn, _params) do
+    current_user = conn.assigns.current_user
+
     {:ok, _church} =
-      conn.assigns.current_church.id
-      |> Accounts.get_church!()
-      |> Accounts.delete_church()
+      current_user.church.id
+      |> Accounts.get_church!(current_user)
+      |> Accounts.delete_church(current_user)
 
     conn
     |> put_flash(:info, gettext("Church deleted successfully."))

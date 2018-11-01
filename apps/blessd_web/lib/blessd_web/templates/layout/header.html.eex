@@ -1,8 +1,11 @@
-<% current_church = @conn.assigns[:current_church] %>
+<%
+  user = @conn.assigns[:current_user]
+  church = if user, do: user.church, else: nil
+%>
 <nav class="navbar">
   <div class="navbar-brand">
-    <% home_path = if current_church do
-      person_path(@conn, :index, current_church.identifier)
+    <% home_path = if church do
+      person_path(@conn, :index, church.identifier)
     else
       page_path(@conn, :index)
     end %>
@@ -18,33 +21,55 @@
     </div>
   </div>
   <div id="navMenu" class="navbar-menu">
-    <%= if current_church do %>
+    <%= if church do %>
       <div class="navbar-start">
         <%= link gettext("People"),
-          to: person_path(@conn, :index, current_church.identifier),
+          to: person_path(@conn, :index, church.identifier),
           class: "navbar-item",
           tabindex: -1 %>
 
         <%= link gettext("Services"),
-          to: service_path(@conn, :index, current_church.identifier),
-          class: "navbar-item",
-          tabindex: -1 %>
-
-        <%= link gettext("Users"),
-          to: user_path(@conn, :index, current_church.identifier),
+          to: service_path(@conn, :index, church.identifier),
           class: "navbar-item",
           tabindex: -1 %>
       </div>
       <div class="navbar-end">
-        <%= link gettext("Config"),
-          to: church_path(@conn, :edit, current_church.identifier),
-          class: "navbar-item",
-          tabindex: -1 %>
+				<div class="navbar-item has-dropdown is-hoverable">
+          <div class="navbar-link">
+            <img src="<%= gravatar_url(user) %>" class="header-user-avatar"/>
+            <%= user.name %>
+          </div>
+          <div class="navbar-dropdown is-boxed navbar-dropdown-right">
+            <%= link gettext("Profile"),
+              to: user_path(@conn, :edit, church.identifier, user),
+              class: "navbar-item",
+              tabindex: -1 %>
+            <div class="navbar-divider"></div>
+            <%= link gettext("Users"),
+              to: user_path(@conn, :index, church.identifier),
+              class: "navbar-item",
+              tabindex: -1 %>
+            <%= link gettext("Config"),
+              to: church_path(@conn, :edit, church.identifier),
+              class: "navbar-item",
+              tabindex: -1 %>
+            <%= link gettext("Signout"),
+              to: session_path(@conn, :delete, church.identifier),
+              method: :delete,
+              class: "navbar-item",
+              tabindex: -1 %>
+          </div>
+        </div>
+
       </div>
     <% else %>
       <div class="navbar-end">
         <%= link gettext("Signup"),
           to: signup_path(@conn, :new),
+          class: "navbar-item",
+          tabindex: -1 %>
+        <%= link gettext("Signin"),
+          to: session_path(@conn, :new),
           class: "navbar-item",
           tabindex: -1 %>
       </div>

@@ -43,16 +43,21 @@ defmodule BlessdWeb.ErrorHelpers do
     end
   end
 
-  def has_errors?(form) do
-    form.errors != [] ||
-      form.source.changes
-      |> Enum.map(&elem(&1, 1))
-      |> List.flatten()
-      |> Enum.any?(fn
-        %Ecto.Changeset{valid?: valid?} -> !valid?
-        _ -> false
-      end)
+  def has_errors?(%Phoenix.HTML.Form{} = form) do
+    form.errors != [] || has_errors?(form.source)
   end
+
+  def has_errors?(%Ecto.Changeset{changes: changes}) do
+    changes
+    |> Enum.map(&elem(&1, 1))
+    |> List.flatten()
+    |> Enum.any?(fn
+      %Ecto.Changeset{valid?: valid?} -> !valid?
+      _ -> false
+    end)
+  end
+
+  def has_errors?(_), do: false
 
   def has_errors?(form, field) do
     Keyword.get_values(form.errors, field) != []
