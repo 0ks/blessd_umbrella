@@ -21,6 +21,8 @@ defmodule BlessdWeb.ChannelCase do
       use Phoenix.ChannelTest
       import Blessd.DataCase
 
+      alias BlessdWeb.UserSocket
+
       # The default endpoint for testing
       @endpoint BlessdWeb.Endpoint
     end

@@ -16,13 +16,13 @@ defmodule BlessdWeb.ImportController do
       {:ok, _people} ->
         conn
         |> put_flash(:info, gettext("People imported successfully."))
-        |> redirect(to: person_path(conn, :index, user.church.identifier))
+        |> redirect(to: Routes.person_path(conn, :index, user.church.identifier))
 
       {:error, line, changeset} ->
         conn
         |> put_flash(:error, gettext("Sorry! The file provided could not be imported."))
         |> put_flash(:error_details, create_error_details(line, changeset))
-        |> redirect(to: person_path(conn, :index, user.church.identifier))
+        |> redirect(to: Routes.person_path(conn, :index, user.church.identifier))
     end
   end
 

@@ -18,7 +18,7 @@ defmodule BlessdWeb.AttendanceControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> get(service_attendance_path(conn, :index, user.church.identifier, service))
+        |> get(Routes.service_attendance_path(conn, :index, user.church.identifier, service))
 
       assert html_response(conn, 200) =~ "Attendance"
     end

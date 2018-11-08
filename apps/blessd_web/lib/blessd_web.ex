@@ -21,8 +21,8 @@ defmodule BlessdWeb do
     quote do
       use Phoenix.Controller, namespace: BlessdWeb
       import Plug.Conn
-      import BlessdWeb.Router.Helpers
       import BlessdWeb.Gettext
+      alias BlessdWeb.Router.Helpers, as: Routes
     end
   end
 
@@ -52,11 +52,12 @@ defmodule BlessdWeb do
           date_input: 3
         ]
 
-      import BlessdWeb.Router.Helpers
       import BlessdWeb.ErrorHelpers
       import BlessdWeb.StringHelpers
       import BlessdWeb.FormHelpers
       import BlessdWeb.Gettext
+
+      alias BlessdWeb.Router.Helpers, as: Routes
     end
   end
 

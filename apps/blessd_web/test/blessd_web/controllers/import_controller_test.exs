@@ -21,9 +21,9 @@ defmodule BlessdWeb.ImportControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> post(import_path(conn, :create, user.church.identifier), import: @create_attrs)
+        |> post(Routes.import_path(conn, :create, user.church.identifier), import: @create_attrs)
 
-      assert redirected_to(conn) == person_path(conn, :index, user.church.identifier)
+      assert redirected_to(conn) == Routes.person_path(conn, :index, user.church.identifier)
       assert get_flash(conn, :info) == "People imported successfully."
     end
 
@@ -33,9 +33,9 @@ defmodule BlessdWeb.ImportControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> post(import_path(conn, :create, user.church.identifier), import: @invalid_attrs)
+        |> post(Routes.import_path(conn, :create, user.church.identifier), import: @invalid_attrs)
 
-      assert redirected_to(conn) == person_path(conn, :index, user.church.identifier)
+      assert redirected_to(conn) == Routes.person_path(conn, :index, user.church.identifier)
       assert get_flash(conn, :error) == "Sorry! The file provided could not be imported."
 
       details =

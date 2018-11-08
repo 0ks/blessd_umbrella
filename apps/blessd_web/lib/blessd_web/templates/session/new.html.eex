@@ -1,6 +1,6 @@
 <h1 class="title has-text-centered"><%= gettext("Sign in") %></h1>
 
-<%= form_for @changeset, session_path(@conn, :create), [as: :session], fn f -> %>
+<%= form_for @changeset, Routes.session_path(@conn, :create), [as: :session], fn f -> %>
   <%= error_alert(f) %>
 
   <div class="field">

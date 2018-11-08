@@ -1,6 +1,6 @@
 <h1 class="title has-text-centered"><%= gettext("Edit User") %></h1>
 
-<% path_func = &user_path(@conn, &1, @current_user.church.identifier, &2) %>
+<% path_func = &Routes.user_path(@conn, &1, @current_user.church.identifier, &2) %>
 <%= form_for @changeset, form_action(:update, @changeset, path_func), fn f -> %>
   <%= error_alert(f) %>
 
@@ -22,6 +22,6 @@
 
   <div class="buttons">
     <%= submit gettext("Submit"), class: "button is-primary" %>
-    <%= link gettext("Back"), to: user_path(@conn, :index, @current_user.church.identifier), class: "button" %>
+    <%= link gettext("Back"), to: Routes.user_path(@conn, :index, @current_user.church.identifier), class: "button" %>
   </div>
 <% end %>
