@@ -17,10 +17,10 @@ defmodule Blessd.Signup do
   """
   def register(attrs) do
     Multi.new()
-    |> Multi.run(:registration, &validate_registration(attrs, &1))
-    |> Multi.run(:church, &insert_church(attrs["church"], &1))
-    |> Multi.run(:user, &insert_user(attrs["user"], &1))
-    |> Multi.run(:credential, &insert_credential(attrs["credential"], &1))
+    |> Multi.run(:registration, &validate_registration(attrs, &1, &2))
+    |> Multi.run(:church, &insert_church(attrs["church"], &1, &2))
+    |> Multi.run(:user, &insert_user(attrs["user"], &1, &2))
+    |> Multi.run(:credential, &insert_credential(attrs["credential"], &1, &2))
     |> Repo.transaction()
     |> case do
       {:ok, %{church: church, user: user, credential: credential}} ->
@@ -46,29 +46,29 @@ defmodule Blessd.Signup do
     |> apply_action(:insert)
   end
 
-  defp validate_registration(attrs, _changes) do
+  defp validate_registration(attrs, _repo, _changes) do
     case Registration.changeset(%Registration{church: nil, user: nil, credential: nil}, attrs) do
       %Ecto.Changeset{valid?: true} = changeset -> {:ok, changeset}
       %Ecto.Changeset{valid?: false} = changeset -> apply_action(changeset, :insert)
     end
   end
 
-  defp insert_church(attrs, _changes) do
+  defp insert_church(attrs, repo, _changes) do
     %Church{}
     |> Church.changeset(attrs)
-    |> Repo.insert()
+    |> repo.insert()
   end
 
-  defp insert_user(attrs, %{church: church}) do
+  defp insert_user(attrs, repo, %{church: church}) do
     %User{church_id: church.id}
     |> User.changeset(attrs)
-    |> Repo.insert()
+    |> repo.insert()
   end
 
-  defp insert_credential(attrs, %{church: church, user: user}) do
+  defp insert_credential(attrs, repo, %{church: church, user: user}) do
     %Credential{church_id: church.id, user_id: user.id}
     |> Credential.changeset(attrs)
-    |> Repo.insert()
+    |> repo.insert()
   end
 
   @doc """
