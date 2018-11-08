@@ -1,5 +1,7 @@
 defmodule Blessd.Repo do
-  use Ecto.Repo, otp_app: :blessd
+  use Ecto.Repo,
+    otp_app: :blessd,
+    adapter: Ecto.Adapters.Postgres
 
   @doc """
   Dynamically loads the repository url from the

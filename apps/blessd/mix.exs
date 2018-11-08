@@ -39,7 +39,9 @@ defmodule Blessd.Mixfile do
       {:bcrypt_elixir, "~> 1.0"},
       {:comeonin, "~> 4.1"},
       {:csv, "~> 2.1"},
-      {:ecto, "~> 2.1"},
+      {:ecto, "~> 3.0"},
+      {:ecto_sql, "~> 3.0"},
+      {:jason, "~> 1.1"},
       {:postgrex, ">= 0.0.0"}
     ]
   end
