@@ -9,8 +9,8 @@ defmodule BlessdWeb.Router do
     plug(:put_secure_browser_headers)
   end
 
-  pipeline :load_church do
-    plug(BlessdWeb.ChurchPlug)
+  pipeline :authenticated do
+    plug(BlessdWeb.AuthenticationPlug)
   end
 
   scope "/", BlessdWeb do
@@ -18,16 +18,19 @@ defmodule BlessdWeb.Router do
 
     get("/", PageController, :index)
 
-    resources("/churches", ChurchController, only: [:new, :create])
+    resources("/signup", SignupController, only: [:new, :create])
+    resources("/sessions", SessionController, only: [:new, :create])
   end
 
   scope "/:church_identifier", BlessdWeb do
-    pipe_through([:browser, :load_church])
+    pipe_through([:browser, :authenticated])
 
-    resources("/churches", ChurchController, only: [:edit, :update, :delete], singleton: true)
+    resources("/church", ChurchController, only: [:edit, :update, :delete], singleton: true)
 
     resources("/import", ImportController, only: [:create])
     resources("/people", PersonController, except: [:show])
+    resources("/users", UserController, except: [:show, :new, :create])
+    resources("/session", SessionController, only: [:delete], singleton: true)
 
     resources "/services", ServiceController, except: [:show] do
       resources("/attendance", AttendanceController, only: [:index])

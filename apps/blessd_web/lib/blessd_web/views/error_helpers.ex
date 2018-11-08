@@ -24,12 +24,7 @@ defmodule BlessdWeb.ErrorHelpers do
         """)
 
       content_tag :div, class: "message is-danger" do
-        content_tag :div, class: "message-body" do
-          [
-            content_tag(:p, error_message),
-            content_tag(:button, "", class: "delete", "aria-label": "delete")
-          ]
-        end
+        content_tag(:div, error_message, class: "message-body")
       end
     end
   end
@@ -48,9 +43,21 @@ defmodule BlessdWeb.ErrorHelpers do
     end
   end
 
-  def has_errors?(form) do
-    form.errors != []
+  def has_errors?(%Phoenix.HTML.Form{} = form) do
+    form.errors != [] || has_errors?(form.source)
   end
+
+  def has_errors?(%Ecto.Changeset{changes: changes}) do
+    changes
+    |> Enum.map(&elem(&1, 1))
+    |> List.flatten()
+    |> Enum.any?(fn
+      %Ecto.Changeset{valid?: valid?} -> !valid?
+      _ -> false
+    end)
+  end
+
+  def has_errors?(_), do: false
 
   def has_errors?(form, field) do
     Keyword.get_values(form.errors, field) != []

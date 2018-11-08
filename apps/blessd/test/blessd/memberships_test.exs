@@ -10,42 +10,42 @@ defmodule Blessd.MembershipsTest do
     @update_attrs %{email: "updated@email.com", name: "some updated name", is_member: false}
     @invalid_attrs %{email: nil, name: nil, is_member: nil}
 
-    def person_fixture(attrs \\ %{}, church) do
+    def person_fixture(attrs \\ %{}, user) do
       {:ok, person} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> Memberships.create_person(church)
+        |> Memberships.create_person(user)
 
       person
     end
 
     test "list_people/0 returns all people" do
-      church = auth_church()
-      person = person_fixture(church)
-      assert Memberships.list_people(church) == [person]
+      user = signup()
+      person = person_fixture(user)
+      assert Memberships.list_people(user) == [person]
     end
 
     test "get_person!/1 returns the person with given id" do
-      church = auth_church()
-      person = person_fixture(church)
-      assert Memberships.get_person!(person.id, church) == person
+      user = signup()
+      person = person_fixture(user)
+      assert Memberships.get_person!(person.id, user) == person
     end
 
     test "create_person/1 with valid data creates a person" do
-      church = auth_church()
-      assert {:ok, %Person{} = person} = Memberships.create_person(@valid_attrs, church)
+      user = signup()
+      assert {:ok, %Person{} = person} = Memberships.create_person(@valid_attrs, user)
       assert person.email == "some@email.com"
       assert person.name == "some name"
     end
 
     test "create_person/1 with invalid data returns error changeset" do
-      church = auth_church()
-      assert {:error, %Ecto.Changeset{}} = Memberships.create_person(@invalid_attrs, church)
+      user = signup()
+      assert {:error, %Ecto.Changeset{}} = Memberships.create_person(@invalid_attrs, user)
     end
 
     test "create_people/1 with valid data creates a lot of people" do
-      church = auth_church()
-      assert {:ok, people} = Memberships.create_people([@valid_attrs, @update_attrs], church)
+      user = signup()
+      assert {:ok, people} = Memberships.create_people([@valid_attrs, @update_attrs], user)
       assert [%Person{} = p1, %Person{} = p2] = people
 
       assert p1.email == "some@email.com"
@@ -58,14 +58,14 @@ defmodule Blessd.MembershipsTest do
     end
 
     test "create_people/1 with invalid data returns error changeset" do
-      church = auth_church()
+      user = signup()
 
       assert {:error, 1, %Ecto.Changeset{}} =
-               Memberships.create_people([@valid_attrs, @invalid_attrs], church)
+               Memberships.create_people([@valid_attrs, @invalid_attrs], user)
     end
 
     test "import_people/1 with valid data creates a lot of people" do
-      church = auth_church()
+      user = signup()
 
       assert {:ok, people} =
                [
@@ -74,7 +74,7 @@ defmodule Blessd.MembershipsTest do
                  Map.values(@update_attrs)
                ]
                |> Stream.map(&Enum.join(&1, ","))
-               |> Memberships.import_people(church)
+               |> Memberships.import_people(user)
 
       assert [%Person{} = p1, %Person{} = p2] = people
 
@@ -88,7 +88,7 @@ defmodule Blessd.MembershipsTest do
     end
 
     test "import_people/1 with invalid data returns error changeset" do
-      church = auth_church()
+      user = signup()
 
       assert {:error, 3, %Ecto.Changeset{}} =
                [
@@ -97,44 +97,43 @@ defmodule Blessd.MembershipsTest do
                  Map.values(@invalid_attrs)
                ]
                |> Stream.map(&Enum.join(&1, ","))
-               |> Memberships.import_people(church)
+               |> Memberships.import_people(user)
     end
 
     test "update_person/2 with valid data updates the person" do
-      church = auth_church()
-      person = person_fixture(church)
-      assert {:ok, person} = Memberships.update_person(person, @update_attrs, church)
+      user = signup()
+      person = person_fixture(user)
+      assert {:ok, person} = Memberships.update_person(person, @update_attrs, user)
       assert %Person{} = person
       assert person.email == "updated@email.com"
       assert person.name == "some updated name"
     end
 
     test "update_person/2 with invalid data returns error changeset" do
-      church = auth_church()
-      person = person_fixture(church)
+      user = signup()
+      person = person_fixture(user)
 
-      assert {:error, %Ecto.Changeset{}} =
-               Memberships.update_person(person, @invalid_attrs, church)
+      assert {:error, %Ecto.Changeset{}} = Memberships.update_person(person, @invalid_attrs, user)
 
-      assert person == Memberships.get_person!(person.id, church)
+      assert person == Memberships.get_person!(person.id, user)
     end
 
     test "delete_person/1 deletes the person" do
-      church = auth_church()
-      person = person_fixture(church)
-      assert {:ok, %Person{}} = Memberships.delete_person(person, church)
-      assert_raise Ecto.NoResultsError, fn -> Memberships.get_person!(person.id, church) end
+      user = signup()
+      person = person_fixture(user)
+      assert {:ok, %Person{}} = Memberships.delete_person(person, user)
+      assert_raise Ecto.NoResultsError, fn -> Memberships.get_person!(person.id, user) end
     end
 
     test "new_person/1 returns a person" do
-      %{id: church_id} = church = auth_church()
-      assert %Person{church_id: ^church_id} = Memberships.new_person(church)
+      %{church: %{id: church_id}} = user = signup()
+      assert %Person{church_id: ^church_id} = Memberships.new_person(user)
     end
 
     test "change_person/1 returns a person changeset" do
-      church = auth_church()
-      person = person_fixture(church)
-      assert %Ecto.Changeset{} = Memberships.change_person(person, church)
+      user = signup()
+      person = person_fixture(user)
+      assert %Ecto.Changeset{} = Memberships.change_person(person, user)
     end
   end
 end

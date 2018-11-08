@@ -3,5 +3,5 @@
 <%= render "form.html",
   conn: @conn,
   changeset: @changeset,
-  current_church: @current_church,
+  current_user: @current_user,
   action: :create %>

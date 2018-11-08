@@ -11,9 +11,9 @@ defmodule Blessd.Memberships do
   @doc """
   Returns the list of people.
   """
-  def list_people(church) do
+  def list_people(current_user) do
     Person
-    |> Auth.check!(church)
+    |> Auth.check!(current_user)
     |> Person.order()
     |> Repo.all()
   end
@@ -23,17 +23,17 @@ defmodule Blessd.Memberships do
 
   Raises `Ecto.NoResultsError` if the Person does not exist.
   """
-  def get_person!(id, church) do
+  def get_person!(id, current_user) do
     Person
-    |> Auth.check!(church)
+    |> Auth.check!(current_user)
     |> Repo.get!(id)
   end
 
   @doc """
   Creates a person.
   """
-  def create_person(attrs, church) do
-    church
+  def create_person(attrs, current_user) do
+    current_user
     |> new_person()
     |> Person.changeset(attrs)
     |> Repo.insert()
@@ -42,10 +42,10 @@ defmodule Blessd.Memberships do
   @doc """
   Imports a list of people from a file.
   """
-  def import_people(stream, church) do
+  def import_people(stream, current_user) do
     stream
     |> CSV.decode!(headers: true)
-    |> create_people(church)
+    |> create_people(current_user)
     |> case do
       {:ok, people} -> {:ok, people}
       {:error, index, changeset} -> {:error, index + 2, changeset}
@@ -55,12 +55,12 @@ defmodule Blessd.Memberships do
   @doc """
   Creates people in batches.
   """
-  def create_people(enum, church) do
+  def create_people(enum, current_user) do
     enum
     |> Stream.with_index()
     |> Enum.reduce(Multi.new(), fn {row, index}, multi ->
       changeset =
-        church
+        current_user
         |> new_person()
         |> Person.changeset(row)
 
@@ -76,9 +76,9 @@ defmodule Blessd.Memberships do
   @doc """
   Updates a person.
   """
-  def update_person(%Person{} = person, attrs, church) do
+  def update_person(%Person{} = person, attrs, current_user) do
     person
-    |> Auth.check!(church)
+    |> Auth.check!(current_user)
     |> Person.changeset(attrs)
     |> Repo.update()
   end
@@ -86,25 +86,25 @@ defmodule Blessd.Memberships do
   @doc """
   Deletes a Person.
   """
-  def delete_person(%Person{} = person, church) do
+  def delete_person(%Person{} = person, current_user) do
     person
-    |> Auth.check!(church)
+    |> Auth.check!(current_user)
     |> Repo.delete()
   end
 
   @doc """
   Builds a person to insert.
   """
-  def new_person(church) do
-    Auth.check!(%Person{church_id: church.id}, church)
+  def new_person(current_user) do
+    Auth.check!(%Person{church_id: current_user.church.id}, current_user)
   end
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking person changes.
   """
-  def change_person(%Person{} = person, church) do
+  def change_person(%Person{} = person, current_user) do
     person
-    |> Auth.check!(church)
+    |> Auth.check!(current_user)
     |> Person.changeset(%{})
   end
 end

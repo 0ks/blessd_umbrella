@@ -2,38 +2,24 @@ defmodule BlessdWeb.ChurchController do
   use BlessdWeb, :controller
 
   alias Blessd.Accounts
-  alias Blessd.Accounts.Church
-
-  def new(conn, _params) do
-    changeset = Accounts.change_church(%Church{})
-    render(conn, "new.html", changeset: changeset)
-  end
-
-  def create(conn, %{"church" => church_params}) do
-    case Accounts.create_church(church_params) do
-      {:ok, church} ->
-        conn
-        |> put_flash(:info, gettext("Church created successfully."))
-        |> redirect(to: person_path(conn, :index, church.identifier))
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
-    end
-  end
 
   def edit(conn, _params) do
+    current_user = conn.assigns.current_user
+
     changeset =
-      conn.assigns.current_church.id
-      |> Accounts.get_church!()
-      |> Accounts.change_church()
+      current_user.church.id
+      |> Accounts.get_church!(current_user)
+      |> Accounts.change_church(current_user)
 
     render(conn, "edit.html", changeset: changeset)
   end
 
   def update(conn, %{"church" => church_params}) do
-    conn.assigns.current_church.id
-    |> Accounts.get_church!()
-    |> Accounts.update_church(church_params)
+    current_user = conn.assigns.current_user
+
+    current_user.church.id
+    |> Accounts.get_church!(current_user)
+    |> Accounts.update_church(church_params, current_user)
     |> case do
       {:ok, church} ->
         conn
@@ -46,10 +32,12 @@ defmodule BlessdWeb.ChurchController do
   end
 
   def delete(conn, _params) do
+    current_user = conn.assigns.current_user
+
     {:ok, _church} =
-      conn.assigns.current_church.id
-      |> Accounts.get_church!()
-      |> Accounts.delete_church()
+      current_user.church.id
+      |> Accounts.get_church!(current_user)
+      |> Accounts.delete_church(current_user)
 
     conn
     |> put_flash(:info, gettext("Church deleted successfully."))

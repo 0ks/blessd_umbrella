@@ -1,0 +1,57 @@
+<h1 class="title has-text-centered"><%= gettext("Sign up") %></h1>
+
+<%= form_for @changeset, signup_path(@conn, :create), fn f -> %>
+  <%= error_alert(f) %>
+
+  <%= inputs_for f, :church, fn ff -> %>
+    <div class="field">
+      <%= label ff, :name, gettext("Church name"), class: "label" %>
+      <div class="control">
+        <%= text_input ff, :name %>
+      </div>
+      <%= error_tag ff, :name %>
+    </div>
+
+    <div class="field">
+      <%= label ff, :identifier, gettext("Church identifier"), class: "label" %>
+      <div class="control">
+        <%= text_input ff, :identifier %>
+      </div>
+      <%= error_tag ff, :identifier %>
+    </div>
+  <% end %>
+
+  <%= inputs_for f, :user, fn ff -> %>
+    <div class="field">
+      <%= label ff, :name, gettext("User name"), class: "label" %>
+      <div class="control">
+        <%= text_input ff, :name %>
+      </div>
+      <%= error_tag ff, :name %>
+    </div>
+
+    <div class="field">
+      <%= label ff, :email, gettext("User email"), class: "label" %>
+      <div class="control">
+        <%= text_input ff, :email %>
+      </div>
+      <%= error_tag ff, :email %>
+    </div>
+  <% end %>
+
+  <%= inputs_for f, :credential, fn ff -> %>
+    <%= hidden_input ff, :source %>
+
+    <div class="field">
+      <%= label ff, :token, gettext("User password"), class: "label" %>
+      <div class="control">
+        <%= password_input ff, :token %>
+      </div>
+      <%= error_tag ff, :token %>
+    </div>
+  <% end %>
+
+  <div class="buttons">
+    <%= submit gettext("Submit"), class: "button is-primary" %>
+  </div>
+<% end %>

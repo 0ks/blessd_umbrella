@@ -14,8 +14,7 @@ defmodule Blessd.DataCase do
 
   use ExUnit.CaseTemplate
 
-  alias Blessd.Accounts
-  alias Blessd.Auth.Church
+  alias Blessd.Signup
 
   using do
     quote do
@@ -54,19 +53,34 @@ defmodule Blessd.DataCase do
     end)
   end
 
-  @church_attrs %{name: "Test Church", identifier: "test_church"}
+  @signup_attrs %{
+    "church" => %{name: "Test Church", identifier: "test_church"},
+    "user" => %{name: "Test User", email: "test_user@mail.com"},
+    "credential" => %{source: "password", token: "password"}
+  }
 
-  def auth_church(attrs \\ %{}) do
-    {:ok, church} =
-      attrs
-      |> Enum.into(@church_attrs)
-      |> Accounts.create_church()
+  def signup(original? \\ false) do
+    {:ok, user} = Signup.register(@signup_attrs)
 
-    church_map =
-      church
+    if original? do
+      user
+    else
+      user = %{user | church: convert_struct!(user.church, Blessd.Auth.Church)}
+      convert_struct!(user, Blessd.Auth.User)
+    end
+  end
+
+  def convert_struct!(struct, target_module) do
+    keys =
+      target_module
+      |> struct!()
+      |> Map.keys()
+
+    map =
+      struct
       |> Map.from_struct()
-      |> Map.take(Map.keys(%Church{}))
+      |> Map.take(keys)
 
-    struct!(Church, church_map)
+    struct!(target_module, map)
   end
 end
