@@ -6,9 +6,6 @@ defmodule BlessdWeb.UserSocket do
   ## Channels
   channel("attendance:*", BlessdWeb.AttendanceChannel)
 
-  ## Transports
-  transport(:websocket, Phoenix.Transports.WebSocket)
-
   def connect(%{"token" => token}, socket) do
     case Phoenix.Token.verify(socket, "user socket", token, max_age: 1_209_600) do
       {:ok, {user_id, church_id}} ->
