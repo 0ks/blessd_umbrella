@@ -54,7 +54,7 @@ defmodule Blessd.Auth do
     |> check_church!(church)
   end
 
-  defp check_church!(%Query{from: {_, m}} = q, %Church{id: id}) when m in @church_modules do
+  defp check_church!(%Query{from: %{source: {_, m}}} = q, %Church{id: id}) when m in @church_modules do
     where(q, [t], t.id == ^id)
   end
 
