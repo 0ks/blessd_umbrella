@@ -12,7 +12,7 @@ defmodule BlessdWeb.SignupController do
       {:ok, %{church: church}} ->
         conn
         |> put_flash(:info, gettext("Signed up sucessfully"))
-        |> redirect(to: person_path(conn, :index, church.identifier))
+        |> redirect(to: Routes.person_path(conn, :index, church.identifier))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

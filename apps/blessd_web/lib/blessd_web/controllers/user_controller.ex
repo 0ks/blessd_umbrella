@@ -27,7 +27,7 @@ defmodule BlessdWeb.UserController do
       {:ok, _user} ->
         conn
         |> put_flash(:info, gettext("User updated successfully."))
-        |> redirect(to: user_path(conn, :index, current_user.church.identifier))
+        |> redirect(to: Routes.user_path(conn, :index, current_user.church.identifier))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", changeset: changeset)
@@ -41,6 +41,6 @@ defmodule BlessdWeb.UserController do
 
     conn
     |> put_flash(:info, gettext("User deleted successfully."))
-    |> redirect(to: user_path(conn, :index, current_user.church.identifier))
+    |> redirect(to: Routes.user_path(conn, :index, current_user.church.identifier))
   end
 end

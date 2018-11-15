@@ -19,7 +19,7 @@ defmodule BlessdWeb.ServiceControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> get(service_path(conn, :index, user.church.identifier))
+        |> get(Routes.service_path(conn, :index, user.church.identifier))
 
       assert html_response(conn, 200) =~ "Listing Services"
     end
@@ -32,7 +32,7 @@ defmodule BlessdWeb.ServiceControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> get(service_path(conn, :new, user.church.identifier))
+        |> get(Routes.service_path(conn, :new, user.church.identifier))
 
       assert html_response(conn, 200) =~ "New Service"
     end
@@ -45,9 +45,9 @@ defmodule BlessdWeb.ServiceControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> post(service_path(conn, :create, user.church.identifier), service: @create_attrs)
+        |> post(Routes.service_path(conn, :create, user.church.identifier), service: @create_attrs)
 
-      assert redirected_to(conn) == service_path(conn, :index, user.church.identifier)
+      assert redirected_to(conn) == Routes.service_path(conn, :index, user.church.identifier)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -56,7 +56,9 @@ defmodule BlessdWeb.ServiceControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> post(service_path(conn, :create, user.church.identifier), service: @invalid_attrs)
+        |> post(Routes.service_path(conn, :create, user.church.identifier),
+          service: @invalid_attrs
+        )
 
       assert html_response(conn, 200) =~ "New Service"
     end
@@ -70,7 +72,7 @@ defmodule BlessdWeb.ServiceControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> get(service_path(conn, :edit, user.church.identifier, service))
+        |> get(Routes.service_path(conn, :edit, user.church.identifier, service))
 
       assert html_response(conn, 200) =~ "Edit Service"
     end
@@ -84,16 +86,16 @@ defmodule BlessdWeb.ServiceControllerTest do
       resp =
         conn
         |> authenticate(user)
-        |> put(service_path(conn, :update, user.church.identifier, service),
+        |> put(Routes.service_path(conn, :update, user.church.identifier, service),
           service: @update_attrs
         )
 
-      assert redirected_to(resp) == service_path(conn, :index, user.church.identifier)
+      assert redirected_to(resp) == Routes.service_path(conn, :index, user.church.identifier)
 
       resp =
         conn
         |> authenticate(user)
-        |> get(service_path(conn, :index, user.church.identifier))
+        |> get(Routes.service_path(conn, :index, user.church.identifier))
 
       assert html_response(resp, 200) =~ "01/01/2000"
     end
@@ -105,7 +107,7 @@ defmodule BlessdWeb.ServiceControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> put(service_path(conn, :update, user.church.identifier, service),
+        |> put(Routes.service_path(conn, :update, user.church.identifier, service),
           service: @invalid_attrs
         )
 
@@ -121,14 +123,14 @@ defmodule BlessdWeb.ServiceControllerTest do
       resp =
         conn
         |> authenticate(user)
-        |> delete(service_path(conn, :delete, user.church.identifier, service))
+        |> delete(Routes.service_path(conn, :delete, user.church.identifier, service))
 
-      assert redirected_to(resp) == service_path(conn, :index, user.church.identifier)
+      assert redirected_to(resp) == Routes.service_path(conn, :index, user.church.identifier)
 
       assert_error_sent(404, fn ->
         conn
         |> authenticate(user)
-        |> get(service_path(conn, :edit, user.church.identifier, service))
+        |> get(Routes.service_path(conn, :edit, user.church.identifier, service))
       end)
     end
   end

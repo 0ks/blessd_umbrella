@@ -26,7 +26,7 @@ defmodule BlessdWeb.ServiceController do
       {:ok, _service} ->
         conn
         |> put_flash(:info, gettext("Service created successfully."))
-        |> redirect(to: service_path(conn, :index, user.church.identifier))
+        |> redirect(to: Routes.service_path(conn, :index, user.church.identifier))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -52,7 +52,7 @@ defmodule BlessdWeb.ServiceController do
       {:ok, _service} ->
         conn
         |> put_flash(:info, gettext("Service updated successfully."))
-        |> redirect(to: service_path(conn, :index, user.church.identifier))
+        |> redirect(to: Routes.service_path(conn, :index, user.church.identifier))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", changeset: changeset)
@@ -66,6 +66,6 @@ defmodule BlessdWeb.ServiceController do
 
     conn
     |> put_flash(:info, gettext("Service deleted successfully."))
-    |> redirect(to: service_path(conn, :index, user.church.identifier))
+    |> redirect(to: Routes.service_path(conn, :index, user.church.identifier))
   end
 end

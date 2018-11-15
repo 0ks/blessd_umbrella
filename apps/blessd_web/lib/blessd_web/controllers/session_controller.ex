@@ -12,7 +12,7 @@ defmodule BlessdWeb.SessionController do
       {:ok, session} ->
         conn
         |> put_session(:current_user_id, session.user.id)
-        |> redirect(to: person_path(conn, :index, session.church.identifier))
+        |> redirect(to: Routes.person_path(conn, :index, session.church.identifier))
 
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)

@@ -25,7 +25,8 @@ defmodule BlessdWeb.AttendanceChannelTest do
     attendants = Observance.list_attendants(service, user)
 
     {:ok, _, socket} =
-      socket("user_id", %{current_user: user})
+      UserSocket
+      |> socket("user_id", %{current_user: user})
       |> subscribe_and_join(AttendanceChannel, "attendance:lobby")
 
     {:ok, socket: socket, service: service, attendants: attendants}

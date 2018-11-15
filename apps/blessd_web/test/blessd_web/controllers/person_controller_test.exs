@@ -19,7 +19,7 @@ defmodule BlessdWeb.PersonControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> get(person_path(conn, :index, user.church.identifier))
+        |> get(Routes.person_path(conn, :index, user.church.identifier))
 
       assert html_response(conn, 200) =~ "Listing People"
     end
@@ -32,7 +32,7 @@ defmodule BlessdWeb.PersonControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> get(person_path(conn, :new, user.church.identifier))
+        |> get(Routes.person_path(conn, :new, user.church.identifier))
 
       assert html_response(conn, 200) =~ "New Person"
     end
@@ -45,9 +45,9 @@ defmodule BlessdWeb.PersonControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> post(person_path(conn, :create, user.church.identifier), person: @create_attrs)
+        |> post(Routes.person_path(conn, :create, user.church.identifier), person: @create_attrs)
 
-      assert redirected_to(conn) == person_path(conn, :index, user.church.identifier)
+      assert redirected_to(conn) == Routes.person_path(conn, :index, user.church.identifier)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -56,7 +56,7 @@ defmodule BlessdWeb.PersonControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> post(person_path(conn, :create, user.church.identifier), person: @invalid_attrs)
+        |> post(Routes.person_path(conn, :create, user.church.identifier), person: @invalid_attrs)
 
       assert html_response(conn, 200) =~ "New Person"
     end
@@ -70,7 +70,7 @@ defmodule BlessdWeb.PersonControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> get(person_path(conn, :edit, user.church.identifier, person))
+        |> get(Routes.person_path(conn, :edit, user.church.identifier, person))
 
       assert html_response(conn, 200) =~ "Edit Person"
     end
@@ -84,14 +84,16 @@ defmodule BlessdWeb.PersonControllerTest do
       resp =
         conn
         |> authenticate(user)
-        |> put(person_path(conn, :update, user.church.identifier, person), person: @update_attrs)
+        |> put(Routes.person_path(conn, :update, user.church.identifier, person),
+          person: @update_attrs
+        )
 
-      assert redirected_to(resp) == person_path(conn, :index, user.church.identifier)
+      assert redirected_to(resp) == Routes.person_path(conn, :index, user.church.identifier)
 
       resp =
         conn
         |> authenticate(user)
-        |> get(person_path(conn, :index, user.church.identifier))
+        |> get(Routes.person_path(conn, :index, user.church.identifier))
 
       assert html_response(resp, 200) =~ "updated@email.com"
     end
@@ -103,7 +105,9 @@ defmodule BlessdWeb.PersonControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> put(person_path(conn, :update, user.church.identifier, person), person: @invalid_attrs)
+        |> put(Routes.person_path(conn, :update, user.church.identifier, person),
+          person: @invalid_attrs
+        )
 
       assert html_response(conn, 200) =~ "Edit Person"
     end
@@ -117,12 +121,12 @@ defmodule BlessdWeb.PersonControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> delete(person_path(conn, :delete, user.church.identifier, person))
+        |> delete(Routes.person_path(conn, :delete, user.church.identifier, person))
 
-      assert redirected_to(conn) == person_path(conn, :index, user.church.identifier)
+      assert redirected_to(conn) == Routes.person_path(conn, :index, user.church.identifier)
 
       assert_error_sent(404, fn ->
-        get(conn, person_path(conn, :edit, user.church.identifier, person))
+        get(conn, Routes.person_path(conn, :edit, user.church.identifier, person))
       end)
     end
   end

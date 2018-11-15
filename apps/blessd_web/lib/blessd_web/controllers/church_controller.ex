@@ -24,7 +24,7 @@ defmodule BlessdWeb.ChurchController do
       {:ok, church} ->
         conn
         |> put_flash(:info, gettext("Church updated successfully."))
-        |> redirect(to: person_path(conn, :index, church.identifier))
+        |> redirect(to: Routes.person_path(conn, :index, church.identifier))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", changeset: changeset)
@@ -41,6 +41,6 @@ defmodule BlessdWeb.ChurchController do
 
     conn
     |> put_flash(:info, gettext("Church deleted successfully."))
-    |> redirect(to: page_path(conn, :index))
+    |> redirect(to: Routes.page_path(conn, :index))
   end
 end

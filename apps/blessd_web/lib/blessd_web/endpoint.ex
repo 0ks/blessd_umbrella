@@ -1,7 +1,7 @@
 defmodule BlessdWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :blessd_web
 
-  socket("/socket", BlessdWeb.UserSocket)
+  socket("/socket", BlessdWeb.UserSocket, websocket: true)
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -27,7 +27,7 @@ defmodule BlessdWeb.Endpoint do
   plug(Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
-    json_decoder: Poison
+    json_decoder: Jason
   )
 
   plug(Plug.MethodOverride)

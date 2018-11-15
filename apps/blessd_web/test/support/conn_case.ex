@@ -21,7 +21,7 @@ defmodule BlessdWeb.ConnCase do
       use Phoenix.ConnTest
       import Blessd.DataCase
       import BlessdWeb.ConnCase
-      import BlessdWeb.Router.Helpers
+      alias BlessdWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
       @endpoint BlessdWeb.Endpoint

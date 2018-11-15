@@ -22,6 +22,6 @@
 
 <div class="field is-grouped">
   <div class="control">
-    <%= link gettext("Back"), to: service_path(@conn, :index, @current_user.church.identifier), class: "button" %>
+    <%= link gettext("Back"), to: Routes.service_path(@conn, :index, @current_user.church.identifier), class: "button" %>
   </div>
 </div>
