@@ -18,7 +18,7 @@ config :blessd_web, BlessdWeb.Endpoint,
   http: [port: {:system, "PORT"}],
   server: true,
   secret_key_base: "${SECRET_KEY_BASE}",
-  url: [host: "example.com", port: 80],
+  url: [host: "${HOSTNAME}", port: "${PORT}"],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # ## SSL Support
