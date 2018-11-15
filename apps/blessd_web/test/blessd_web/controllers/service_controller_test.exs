@@ -56,7 +56,9 @@ defmodule BlessdWeb.ServiceControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> post(Routes.service_path(conn, :create, user.church.identifier), service: @invalid_attrs)
+        |> post(Routes.service_path(conn, :create, user.church.identifier),
+          service: @invalid_attrs
+        )
 
       assert html_response(conn, 200) =~ "New Service"
     end

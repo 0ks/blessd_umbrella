@@ -84,7 +84,9 @@ defmodule BlessdWeb.PersonControllerTest do
       resp =
         conn
         |> authenticate(user)
-        |> put(Routes.person_path(conn, :update, user.church.identifier, person), person: @update_attrs)
+        |> put(Routes.person_path(conn, :update, user.church.identifier, person),
+          person: @update_attrs
+        )
 
       assert redirected_to(resp) == Routes.person_path(conn, :index, user.church.identifier)
 
@@ -103,7 +105,9 @@ defmodule BlessdWeb.PersonControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> put(Routes.person_path(conn, :update, user.church.identifier, person), person: @invalid_attrs)
+        |> put(Routes.person_path(conn, :update, user.church.identifier, person),
+          person: @invalid_attrs
+        )
 
       assert html_response(conn, 200) =~ "Edit Person"
     end
