@@ -9,10 +9,11 @@ defmodule BlessdWeb.SignupController do
 
   def create(conn, %{"registration" => registration_params}) do
     case Signup.register(registration_params) do
-      {:ok, %{church: church}} ->
+      {:ok, user} ->
         conn
+        |> put_session(:current_user_id, user.id)
         |> put_flash(:info, gettext("Signed up sucessfully"))
-        |> redirect(to: Routes.person_path(conn, :index, church.identifier))
+        |> redirect(to: Routes.person_path(conn, :index, user.church.identifier))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
