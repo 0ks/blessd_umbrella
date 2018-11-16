@@ -15,15 +15,11 @@ use Mix.Config
 # which you typically run after static files are built.
 config :blessd_web, BlessdWeb.Endpoint,
   load_from_system_env: true,
-  secret_key_base: System.get_env("SECRET_KEY_BASE"),
-  url: [
-    scheme: "https",
-    host: System.get_env("HEROKU_HOST"),
-    port: 443
-  ],
-  force_ssl: [rewrite_on: [:x_forwarded_proto]],
-  cache_static_manifest: "priv/static/cache_manifest.json",
-  load_from_system_env: true
+  http: [port: {:system, "PORT"}],
+  server: true,
+  secret_key_base: "${SECRET_KEY_BASE}",
+  url: [host: "${URL_HOSTNAME}", port: "${URL_PORT}"],
+  cache_static_manifest: "priv/static/cache_manifest.json"
 
 # ## SSL Support
 #
