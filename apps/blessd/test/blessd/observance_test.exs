@@ -6,9 +6,9 @@ defmodule Blessd.ObservanceTest do
   describe "meetings" do
     alias Blessd.Observance.Meeting
 
-    @valid_attrs %{name: "Meeting 1", date: ~D[2018-10-10]}
-    @update_attrs %{name: "Meeting 2", date: ~D[2000-01-01]}
-    @invalid_attrs %{name: nil, date: nil}
+    @valid_attrs %{"name" => "some name", "occurrences" => %{"0" => %{date: ~D[2018-10-10]}}}
+    @update_attrs %{"name" => "updated name", "occurrences" => %{"0" => %{date: ~D[2000-01-01]}}}
+    @invalid_attrs %{name: nil}
 
     def meeting_fixture(attrs \\ %{}, user) do
       {:ok, meeting} =
@@ -24,7 +24,7 @@ defmodule Blessd.ObservanceTest do
       meeting = meeting_fixture(user)
       assert [found] = Observance.list_meetings(user)
 
-      assert found.date == meeting.date
+      assert found.name == meeting.name
     end
 
     test "get_meeting!/1 returns the meeting with given id" do
@@ -32,13 +32,13 @@ defmodule Blessd.ObservanceTest do
       meeting = meeting_fixture(user)
       assert found = Observance.get_meeting!(meeting.id, user)
 
-      assert found.date == meeting.date
+      assert found.name == meeting.name
     end
 
     test "create_meeting/1 with valid data creates a meeting" do
       user = signup()
       assert {:ok, %Meeting{} = meeting} = Observance.create_meeting(@valid_attrs, user)
-      assert meeting.date == ~D[2018-10-10]
+      assert meeting.name == "some name"
     end
 
     test "create_meeting/1 with invalid data returns error changeset" do
@@ -49,9 +49,8 @@ defmodule Blessd.ObservanceTest do
     test "update_meeting/2 with valid data updates the meeting" do
       user = signup()
       meeting = meeting_fixture(user)
-      assert {:ok, meeting} = Observance.update_meeting(meeting, @update_attrs, user)
-      assert %Meeting{} = meeting
-      assert meeting.date == ~D[2000-01-01]
+      assert {:ok, %Meeting{} = meeting} = Observance.update_meeting(meeting, @update_attrs, user)
+      assert meeting.name == "updated name"
     end
 
     test "update_meeting/2 with invalid data returns error changeset" do
@@ -63,7 +62,7 @@ defmodule Blessd.ObservanceTest do
 
       assert found = Observance.get_meeting!(meeting.id, user)
 
-      assert found.date == meeting.date
+      assert found.name == meeting.name
     end
 
     test "delete_meeting/1 deletes the meeting" do

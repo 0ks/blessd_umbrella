@@ -15,10 +15,7 @@ defmodule BlessdWeb.AttendanceChannelTest do
 
     {:ok, meeting} =
       Observance.create_meeting(
-        %{
-          name: "some name",
-          date: ~D[2005-09-23]
-        },
+        %{"name" => "some name", "occurrences" => %{"0" => %{date: ~D[2018-09-23]}}},
         user
       )
 

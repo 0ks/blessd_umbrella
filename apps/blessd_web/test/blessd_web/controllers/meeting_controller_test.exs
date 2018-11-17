@@ -3,9 +3,9 @@ defmodule BlessdWeb.MeetingControllerTest do
 
   alias Blessd.Observance
 
-  @create_attrs %{name: "Meeting 1", date: ~D[2018-10-10]}
-  @update_attrs %{name: "Meeting 2", date: ~D[2000-01-01]}
-  @invalid_attrs %{name: nil, date: nil}
+  @create_attrs %{"name" => "some name", "occurrences" => %{"0" => %{date: ~D[2018-10-10]}}}
+  @update_attrs %{"name" => "updated name", "occurrences" => %{"0" => %{date: ~D[2000-01-01]}}}
+  @invalid_attrs %{name: nil}
 
   def fixture(:meeting, user) do
     {:ok, meeting} = Observance.create_meeting(@create_attrs, user)
@@ -97,7 +97,7 @@ defmodule BlessdWeb.MeetingControllerTest do
         |> authenticate(user)
         |> get(Routes.meeting_path(conn, :index, user.church.identifier))
 
-      assert html_response(resp, 200) =~ "01/01/2000"
+      assert html_response(resp, 200) =~ "updated name"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do

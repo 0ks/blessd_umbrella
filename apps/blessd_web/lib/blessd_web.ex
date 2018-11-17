@@ -43,13 +43,15 @@ defmodule BlessdWeb do
 
       import Phoenix.HTML.Form,
         except: [
+          date_input: 2,
+          date_input: 3,
           humanize: 1,
-          text_input: 2,
-          text_input: 3,
           password_input: 2,
           password_input: 3,
-          date_input: 2,
-          date_input: 3
+          text_input: 2,
+          text_input: 3,
+          textarea: 2,
+          textarea: 3
         ]
 
       import BlessdWeb.ErrorHelpers

@@ -10,20 +10,24 @@
     <%= error_tag f, :name %>
   </div>
 
+  <%= if @action == :create do %>
+    <%= inputs_for f, :occurrences, fn ff -> %>
+      <div class="field">
+        <%= label ff, :date, class: "label" %>
+        <div class="control">
+          <%= date_input ff, :date, class: "js-date", readonly: true %>
+        </div>
+        <%= error_tag ff, :date %>
+      </div>
+    <% end %>
+  <% end %>
+
   <div class="field">
     <%= label f, :description, class: "label" %>
     <div class="control">
       <%= textarea f, :description %>
     </div>
     <%= error_tag f, :description %>
-  </div>
-
-  <div class="field">
-    <%= label f, :date, class: "label" %>
-    <div class="control">
-      <%= date_input f, :date, class: "js-date", readonly: true %>
-    </div>
-    <%= error_tag f, :date %>
   </div>
 
   <div class="buttons">

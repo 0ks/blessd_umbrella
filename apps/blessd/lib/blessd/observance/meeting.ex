@@ -6,15 +6,16 @@ defmodule Blessd.Observance.Meeting do
 
   alias Blessd.Auth.Church
   alias Blessd.Observance.Attendant
+  alias Blessd.Observance.MeetingOccurrence
 
   schema "meetings" do
     belongs_to(:church, Church)
 
     field(:name, :string)
     field(:description, :string)
-    field(:date, :date)
 
     has_many(:attendants, Attendant)
+    has_many(:occurrences, MeetingOccurrence)
 
     timestamps()
   end
@@ -22,8 +23,8 @@ defmodule Blessd.Observance.Meeting do
   @doc false
   def changeset(meeting, attrs) do
     meeting
-    |> cast(attrs, [:name, :description, :date])
-    |> validate_required([:name, :date])
+    |> cast(attrs, [:name, :description])
+    |> validate_required([:name])
   end
 
   @doc false

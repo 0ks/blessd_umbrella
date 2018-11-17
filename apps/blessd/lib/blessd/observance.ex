@@ -3,11 +3,15 @@ defmodule Blessd.Observance do
   The Observance context.
   """
 
+  import Ecto.Changeset
+
   alias Blessd.Auth
   alias Blessd.Observance.Person
   alias Blessd.Observance.Meeting
+  alias Blessd.Observance.MeetingOccurrence
   alias Blessd.Observance.Attendant
   alias Blessd.Repo
+  alias Ecto.Multi
 
   @doc """
   Returns the list of meetings.
@@ -35,10 +39,27 @@ defmodule Blessd.Observance do
   Creates a meeting.
   """
   def create_meeting(attrs, current_user) do
-    current_user
-    |> new_meeting()
-    |> Meeting.changeset(attrs)
-    |> Repo.insert()
+    changeset =
+      current_user
+      |> new_meeting()
+      |> Meeting.changeset(attrs)
+
+    Multi.new()
+    |> Multi.insert(:meeting, changeset)
+    |> Multi.run(:occurrence, &insert_occurrence(&1, &2, attrs["occurrences"]["0"], current_user))
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{meeting: meeting, occurrence: occurrence}} ->
+        {:ok, %{meeting | occurrences: [occurrence]}}
+
+      {:error, :meeting, changeset, _} ->
+        {:error, changeset}
+
+      {:error, assoc, child_changeset, _} ->
+        changeset
+        |> put_assoc(assoc, child_changeset)
+        |> apply_action(:insert)
+    end
   end
 
   @doc """
@@ -64,7 +85,13 @@ defmodule Blessd.Observance do
   Builds a meeting to insert.
   """
   def new_meeting(current_user) do
-    Auth.check!(%Meeting{church_id: current_user.church.id}, current_user)
+    Auth.check!(
+      %Meeting{
+        church_id: current_user.church.id,
+        occurrences: [new_occurrence(current_user)]
+      },
+      current_user
+    )
   end
 
   @doc """
@@ -74,6 +101,31 @@ defmodule Blessd.Observance do
     meeting
     |> Auth.check!(current_user)
     |> Meeting.changeset(%{})
+  end
+
+  defp insert_occurrence(repo, %{meeting: meeting}, attrs, current_user) do
+    insert_occurrence(repo, meeting, attrs, current_user)
+  end
+
+  defp insert_occurrence(repo, %Meeting{id: meeting_id}, attrs, current_user) do
+    current_user
+    |> new_occurrence(meeting_id, nil)
+    |> MeetingOccurrence.changeset(attrs)
+    |> repo.insert()
+  end
+
+  @doc """
+  Builds a meeting occurrence to insert.
+  """
+  def new_occurrence(current_user, meeting_id \\ nil, date \\ Timex.today()) do
+    Auth.check!(
+      %MeetingOccurrence{
+        church_id: current_user.church.id,
+        meeting_id: meeting_id,
+        date: date
+      },
+      current_user
+    )
   end
 
   @doc """
