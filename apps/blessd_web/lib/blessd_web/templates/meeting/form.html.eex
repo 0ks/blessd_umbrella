@@ -3,6 +3,22 @@
   <%= error_alert(f) %>
 
   <div class="field">
+    <%= label f, :name, class: "label" %>
+    <div class="control">
+      <%= text_input f, :name %>
+    </div>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="field">
+    <%= label f, :description, class: "label" %>
+    <div class="control">
+      <%= textarea f, :description %>
+    </div>
+    <%= error_tag f, :description %>
+  </div>
+
+  <div class="field">
     <%= label f, :date, class: "label" %>
     <div class="control">
       <%= date_input f, :date, class: "js-date", readonly: true %>

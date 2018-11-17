@@ -6,9 +6,9 @@ defmodule Blessd.ObservanceTest do
   describe "meetings" do
     alias Blessd.Observance.Meeting
 
-    @valid_attrs %{date: ~D[2018-10-10]}
-    @update_attrs %{date: ~D[2000-01-01]}
-    @invalid_attrs %{date: nil}
+    @valid_attrs %{name: "Meeting 1", date: ~D[2018-10-10]}
+    @update_attrs %{name: "Meeting 2", date: ~D[2000-01-01]}
+    @invalid_attrs %{name: nil, date: nil}
 
     def meeting_fixture(attrs \\ %{}, user) do
       {:ok, meeting} =

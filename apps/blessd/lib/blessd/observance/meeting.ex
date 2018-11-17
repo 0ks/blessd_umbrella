@@ -10,6 +10,8 @@ defmodule Blessd.Observance.Meeting do
   schema "meetings" do
     belongs_to(:church, Church)
 
+    field(:name, :string)
+    field(:description, :string)
     field(:date, :date)
 
     has_many(:attendants, Attendant)
@@ -20,10 +22,10 @@ defmodule Blessd.Observance.Meeting do
   @doc false
   def changeset(meeting, attrs) do
     meeting
-    |> cast(attrs, [:date])
-    |> validate_required([:date])
+    |> cast(attrs, [:name, :description, :date])
+    |> validate_required([:name, :date])
   end
 
   @doc false
-  def order(query), do: order_by(query, [s], desc: s.date)
+  def order(query), do: order_by(query, [s], desc: s.name)
 end

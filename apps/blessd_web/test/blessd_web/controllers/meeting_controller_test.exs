@@ -3,9 +3,9 @@ defmodule BlessdWeb.MeetingControllerTest do
 
   alias Blessd.Observance
 
-  @create_attrs %{date: ~D[2018-10-10]}
-  @update_attrs %{date: ~D[2000-01-01]}
-  @invalid_attrs %{date: nil}
+  @create_attrs %{name: "Meeting 1", date: ~D[2018-10-10]}
+  @update_attrs %{name: "Meeting 2", date: ~D[2000-01-01]}
+  @invalid_attrs %{name: nil, date: nil}
 
   def fixture(:meeting, user) do
     {:ok, meeting} = Observance.create_meeting(@create_attrs, user)
