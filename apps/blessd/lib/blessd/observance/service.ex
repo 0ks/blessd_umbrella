@@ -5,14 +5,14 @@ defmodule Blessd.Observance.Service do
   import Ecto.Query
 
   alias Blessd.Auth.Church
-  alias Blessd.Observance.ServiceAttendant
+  alias Blessd.Observance.Attendant
 
   schema "services" do
     belongs_to(:church, Church)
 
     field(:date, :date)
 
-    has_many(:attendants, ServiceAttendant)
+    has_many(:attendants, Attendant)
 
     timestamps()
   end
@@ -26,14 +26,4 @@ defmodule Blessd.Observance.Service do
 
   @doc false
   def order(query), do: order_by(query, [s], desc: s.date)
-
-  @doc false
-  def preload(query) do
-    attendants_query =
-      ServiceAttendant
-      |> ServiceAttendant.preload()
-      |> ServiceAttendant.order_preloaded()
-
-    preload(query, attendants: ^attendants_query)
-  end
 end

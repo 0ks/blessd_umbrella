@@ -5,6 +5,7 @@ defmodule BlessdWeb.AttendanceChannelTest do
 
   alias Blessd.Memberships
   alias Blessd.Observance
+  alias Blessd.Observance.Person
 
   setup do
     user = signup()
@@ -22,14 +23,14 @@ defmodule BlessdWeb.AttendanceChannelTest do
       )
 
     service = Observance.get_service!(service.id, user)
-    attendants = Observance.list_attendants(service, user)
+    people = Observance.list_people(user)
 
     {:ok, _, socket} =
       UserSocket
       |> socket("user_id", %{current_user: user})
       |> subscribe_and_join(AttendanceChannel, "attendance:lobby")
 
-    {:ok, socket: socket, service: service, attendants: attendants}
+    {:ok, socket: socket, service: service, people: people}
   end
 
   test "search replies with html", %{socket: socket, service: service} do
@@ -42,10 +43,10 @@ defmodule BlessdWeb.AttendanceChannelTest do
     refute String.contains?(body, "person 2")
   end
 
-  test "update replies with ok", %{socket: socket, service: service, attendants: attendants} do
-    attendant = List.first(attendants)
-    assert attendant.is_present == false
-    ref = push(socket, "update", %{"id" => attendant.id, "attendant" => %{"is_present" => true}})
+  test "toggle replies with ok", %{socket: socket, service: service, people: people} do
+    person = List.first(people)
+    refute Person.present?(person, service)
+    ref = push(socket, "toggle", %{"person_id" => person.id, "service_id" => service.id})
     assert_reply(ref, :ok)
 
     ref = push(socket, "search", %{"service_id" => service.id, "query" => "1"})

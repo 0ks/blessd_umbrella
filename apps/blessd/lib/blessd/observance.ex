@@ -6,9 +6,8 @@ defmodule Blessd.Observance do
   alias Blessd.Auth
   alias Blessd.Observance.Person
   alias Blessd.Observance.Service
-  alias Blessd.Observance.ServiceAttendant
+  alias Blessd.Observance.Attendant
   alias Blessd.Repo
-  alias Ecto.Multi
 
   @doc """
   Returns the list of services.
@@ -29,7 +28,6 @@ defmodule Blessd.Observance do
     Service
     |> Auth.check!(current_user)
     |> Service.order()
-    |> Service.preload()
     |> Repo.get!(id)
   end
 
@@ -79,98 +77,50 @@ defmodule Blessd.Observance do
   end
 
   @doc """
-  Returns the list of service attendants.
-
-  If the service has no attendant, it calls `create_attendants/1`
-  for the given service.
+  Returns the list of people with their attendants preloaded.
   """
-  def list_attendants(%Service{attendants: []} = service, current_user) do
-    case create_attendants(service, current_user) do
-      {:ok, _attendants} ->
-        ServiceAttendant
-        |> Auth.check!(current_user)
-        |> ServiceAttendant.by_service(service)
-        |> ServiceAttendant.preload()
-        |> ServiceAttendant.order_preloaded()
-        |> Repo.all()
-
-      {:error, _changeset} ->
-        raise "Error creating first attendants"
-    end
-  end
-
-  def list_attendants(%Service{attendants: attendants} = service, current_user) do
-    Auth.check!(service, current_user)
-    attendants
-  end
-
-  @doc """
-  Search for attendants.
-  """
-  def search_attendants(%Service{} = service, query, current_user) do
-    ServiceAttendant
+  def list_people(current_user) do
+    Person
     |> Auth.check!(current_user)
-    |> ServiceAttendant.by_service(service)
-    |> ServiceAttendant.preload()
-    |> ServiceAttendant.order_preloaded()
-    |> ServiceAttendant.search(query)
+    |> Person.preload()
+    |> Person.order()
     |> Repo.all()
   end
 
   @doc """
-  Gets a single attendant.
-
-  Raises `Ecto.NoResultsError` if the Service does not exist.
+  Search for people and preload their attendants.
   """
-  def get_attendant!(attendant_id, current_user) do
-    ServiceAttendant
+  def search_people(query, current_user) do
+    Person
     |> Auth.check!(current_user)
-    |> Repo.get!(attendant_id)
+    |> Person.preload()
+    |> Person.order()
+    |> Person.search(query)
+    |> Repo.all()
   end
 
   @doc """
-  Updates an attendant.
+  Creates an attendant if it does not exists and removes it if it exists.
   """
-  def update_attendant(%ServiceAttendant{} = attendant, attrs, current_user) do
-    attendant
-    |> Auth.check!(current_user)
-    |> ServiceAttendant.update_changeset(attrs)
-    |> Repo.update()
+  def toggle_attendant(person_id, service_id, current_user) do
+    case Repo.get_by(Attendant, person_id: person_id, service_id: service_id) do
+      nil ->
+        current_user
+        |> new_attendant()
+        |> Attendant.changeset(%{person_id: person_id, service_id: service_id})
+        |> Repo.insert()
+
+      %Attendant{} = attendant ->
+        attendant
+        |> Auth.check!(current_user)
+        |> Repo.delete()
+    end
   end
 
   @doc """
   Builds an attendant to insert.
   """
   def new_attendant(current_user) do
-    Auth.check!(%ServiceAttendant{church_id: current_user.church.id}, current_user)
-  end
-
-  @doc """
-  Create initial attendants for the given service.
-  """
-  def create_attendants(%Service{id: service_id} = service, current_user) do
-    Auth.check!(service, current_user)
-
-    Person
-    |> Auth.check!(current_user)
-    |> Person.select_ids()
-    |> Repo.all()
-    |> Enum.reduce(Multi.new(), fn person_id, multi ->
-      changeset =
-        current_user
-        |> new_attendant()
-        |> ServiceAttendant.insert_changeset(%{
-          service_id: service_id,
-          person_id: person_id,
-          is_present: false
-        })
-
-      Multi.insert(multi, :"attendant#{person_id}", changeset)
-    end)
-    |> Repo.transaction()
-    |> case do
-      {:ok, map} -> {:ok, Map.values(map)}
-      {:error, _, changeset, _} -> {:error, changeset}
-    end
+    Auth.check!(%Attendant{church_id: current_user.church.id}, current_user)
   end
 end
