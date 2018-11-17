@@ -9,11 +9,10 @@ export default class AttendanceView {
       .receive("ok", _ => {
         console.log("Joined successfully")
 
-        const table = document.querySelector(".js-attendants");
-        AttendanceView.addCheckboxesListener(table)
-
+        const table = document.querySelector(".js-people");
         const search = document.querySelector(".js-search");
-        const tableBody = table.querySelector(".js-attendants-body");
+        const tableBody = table.querySelector(".js-people-body");
+        AttendanceView.addCheckboxesListener(tableBody)
         AttendanceView.addSearchListener(search, tableBody)
 
         AttendanceView.bindKeys(tableBody)
@@ -23,25 +22,25 @@ export default class AttendanceView {
       .receive("error", resp => { console.error("Unable to join", resp) });
   }
 
-  static addCheckboxesListener(element) {
-    element.addEventListener("change", event => {
+  static addCheckboxesListener(tableBody) {
+    tableBody.addEventListener("change", event => {
       const checkbox = event.target;
 
-      AttendanceView.updateAttendant(
-        checkbox.getAttribute("data-id"),
-        {is_present: checkbox.checked}
+      AttendanceView.toggleAttendant(
+        checkbox.getAttribute("data-person-id"),
+        tableBody.getAttribute("data-service-id")
       );
     });
   }
 
-  static updateAttendant(id, params) {
+  static toggleAttendant(personId, serviceId) {
     channel
-      .push("update", {
-        id: id,
-        attendant: params
+      .push("toggle", {
+        person_id: personId,
+        service_id: serviceId
       })
-      .receive("ok", _ => console.log("Updated attendant", _))
-      .receive("error", reason => console.error("Unable to update attendant", reason))
+      .receive("ok", _ => console.log("Toggled attendant", _))
+      .receive("error", reason => console.error("Unable to toggle attendant", reason))
       .receive("timeout", _ => console.error("Networking issue..."));
   }
 
@@ -54,7 +53,7 @@ export default class AttendanceView {
       if (![13, 38, 40].includes(event.keyCode)) {
         const serviceId = tableBody.getAttribute("data-service-id");
 
-        AttendanceView.searchAttendants(serviceId, input.value, resp => {
+        AttendanceView.searchPeople(serviceId, input.value, resp => {
           tableBody.innerHTML = resp.table_body;
           AttendanceView.selectRow(tableBody, 0);
 
@@ -65,14 +64,14 @@ export default class AttendanceView {
     })
   }
 
-  static searchAttendants(serviceId, query, callback) {
+  static searchPeople(serviceId, query, callback) {
     channel
       .push("search", {
         service_id: serviceId,
         query: query
       })
       .receive("ok", callback)
-      .receive("error", reason => console.error("Unable to search attendants", reason))
+      .receive("error", reason => console.error("Unable to search people", reason))
       .receive("timeout", _ => console.error("Networking issue..."));
   }
 
@@ -104,7 +103,8 @@ export default class AttendanceView {
 
   static keyEnter(tableBody) {
     const row = AttendanceView.getRow(tableBody);
-    if (row) AttendanceView.toggleRowCheckbox(row);
+    const serviceId = tableBody.getAttribute("data-service-id");
+    if (row) AttendanceView.toggleRowCheckbox(row, serviceId);
   }
 
   static bindKeys(tableBody) {
@@ -115,7 +115,7 @@ export default class AttendanceView {
   }
 
   static bindRowHover(tableBody) {
-    const rows = tableBody.querySelectorAll(".js-attendant");
+    const rows = tableBody.querySelectorAll(".js-person");
 
     for (let row of rows) {
       row.addEventListener("mouseenter", event => {
@@ -140,16 +140,17 @@ export default class AttendanceView {
 
   static bindRowClick(tableBody) {
     tableBody.addEventListener("click", event => {
-      AttendanceView.toggleRowCheckbox(event.target.parentElement)
+      const serviceId = tableBody.getAttribute("data-service-id");
+      AttendanceView.toggleRowCheckbox(event.target.parentElement, serviceId)
     });
   }
 
-  static toggleRowCheckbox(tr) {
-    const checkbox = tr.querySelector(".js-attendant-is-present");
+  static toggleRowCheckbox(tr, serviceId) {
+    const checkbox = tr.querySelector(".js-person-is-present");
     checkbox.checked = !checkbox.checked;
-    AttendanceView.updateAttendant(
-      checkbox.getAttribute("data-id"),
-      {is_present: checkbox.checked}
+    AttendanceView.toggleAttendant(
+      checkbox.getAttribute("data-person-id"),
+      serviceId
     );
   }
 }

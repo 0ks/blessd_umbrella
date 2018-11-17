@@ -12,28 +12,26 @@ defmodule BlessdWeb.AttendanceChannel do
   def handle_in("search", %{"service_id" => service_id, "query" => query}, socket) do
     user = socket.assigns.current_user
 
-    attendants =
-      service_id
-      |> Observance.get_service!(user)
-      |> Observance.search_attendants(query, user)
+    service = Observance.get_service!(service_id, user)
+    people = Observance.search_people(query, user)
 
-    html = View.render_to_string(AttendanceView, "table_body.html", attendants: attendants)
+    html =
+      View.render_to_string(AttendanceView, "table_body.html", people: people, service: service)
 
     {:reply, {:ok, %{table_body: html}}, socket}
   end
 
-  def handle_in("update", %{"id" => id, "attendant" => attendant_params}, socket) do
+  def handle_in("toggle", %{"person_id" => person_id, "service_id" => service_id}, socket) do
     user = socket.assigns.current_user
 
-    id
-    |> Observance.get_attendant!(user)
-    |> Observance.update_attendant(attendant_params, user)
+    person_id
+    |> Observance.toggle_attendant(service_id, user)
     |> case do
       {:ok, _attendant} ->
         {:reply, :ok, socket}
 
       {:error, %Ecto.Changeset{}} ->
-        {:reply, {:error, "Failed to update attendant"}, socket}
+        {:reply, {:error, "Failed to toggle attendant"}, socket}
     end
   end
 end

@@ -7,7 +7,7 @@
   </div>
 </div>
 
-<table class="table js-attendants">
+<table class="table js-people">
   <thead>
     <tr>
       <th class="attendant-present-column"><input type="checkbox" disabled checked></th>
@@ -15,8 +15,8 @@
       <th><%= gettext("Email") %></th>
     </tr>
   </thead>
-  <tbody class="js-attendants-body" data-service-id="<%= @service.id %>">
-    <%= render "table_body.html", attendants: @attendants %>
+  <tbody class="js-people-body" data-service-id="<%= @service.id %>">
+    <%= render "table_body.html", people: @people, service: @service %>
   </tbody>
 </table>
 

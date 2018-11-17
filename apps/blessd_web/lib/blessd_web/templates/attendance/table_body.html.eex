@@ -1,13 +1,13 @@
-<%= for attendant <- @attendants do %>
-  <tr class="js-attendant">
-    <td class="attendant-present-column">
+<%= for person <- @people do %>
+  <tr class="js-person">
+    <td class="person-present-column">
       <input
         type="checkbox"
-        class="js-attendant-is-present"
-        data-id="<%= attendant.id %>"
-        <%= if attendant.is_present, do: "checked" %> />
+        class="js-person-is-present"
+        data-person-id="<%= person.id %>"
+        <%= if Person.present?(person, @service), do: "checked" %> />
     </td>
-    <td><%= attendant.person.name %></td>
-    <td><%= attendant.person.email %></td>
+    <td><%= person.name %></td>
+    <td><%= person.email %></td>
   </tr>
 <% end %>
