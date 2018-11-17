@@ -10,7 +10,7 @@
 <table class="table js-attendants">
   <thead>
     <tr>
-      <th><%= gettext("Present") %></th>
+      <th class="attendant-present-column"><input type="checkbox" disabled checked></th>
       <th><%= gettext("Name") %></th>
       <th><%= gettext("Email") %></th>
     </tr>

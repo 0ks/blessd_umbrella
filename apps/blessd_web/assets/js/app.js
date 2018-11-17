@@ -16,6 +16,7 @@ import css from '../css/app.scss';
 import "phoenix_html";
 
 import "./datepicker";
+import "./header";
 import "./file";
 import "./modal";
 

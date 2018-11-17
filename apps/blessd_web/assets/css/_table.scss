@@ -6,3 +6,10 @@
     cursor: pointer;
   }
 }
+
+@media screen and (max-width: $desktop) {
+  .table {
+    table-layout: fixed;
+    word-wrap: break-word;
+  }
+}

@@ -12,3 +12,8 @@
   margin-right: 10px;
 }
 
+@media screen and (max-width: $desktop) {
+  .header-user-avatar {
+    margin-bottom: -8px;
+  }
+}
