@@ -30,5 +30,5 @@ before_script:
 script:
   - mix test
   - if [ -z "$FORMAT" ]; then echo "Format check skipped"; else mix format --check-formatted --dry-run; fi
-  - if [ -z "$DEPLOY" ] && [ "$TRAVIS_BRANCH" == "master" ]; then git push -f gigalixir HEAD:refs/heads/master; fi
+  - if [ -z "$DEPLOY" ] || [ "$TRAVIS_BRANCH" != "master" ]; then echo "Deploy skipped"; else git push -f gigalixir HEAD:refs/heads/master; fi
 
