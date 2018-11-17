@@ -15,7 +15,8 @@ defmodule BlessdWeb.AttendanceChannel do
     service = Observance.get_service!(service_id, user)
     people = Observance.search_people(query, user)
 
-    html = View.render_to_string(AttendanceView, "table_body.html", people: people, service: service)
+    html =
+      View.render_to_string(AttendanceView, "table_body.html", people: people, service: service)
 
     {:reply, {:ok, %{table_body: html}}, socket}
   end
