@@ -6,12 +6,12 @@ defmodule Blessd.Observance.Attendant do
 
   alias Blessd.Auth.Church
   alias Blessd.Observance.Person
-  alias Blessd.Observance.Service
+  alias Blessd.Observance.Meeting
 
   schema "attendants" do
     belongs_to(:church, Church)
 
-    belongs_to(:service, Service)
+    belongs_to(:meeting, Meeting)
     belongs_to(:person, Person)
 
     timestamps()
@@ -20,12 +20,12 @@ defmodule Blessd.Observance.Attendant do
   @doc false
   def changeset(attendant, attrs) do
     attendant
-    |> cast(attrs, [:service_id, :person_id])
+    |> cast(attrs, [:meeting_id, :person_id])
     |> basic_validations()
   end
 
   defp basic_validations(changeset) do
-    validate_required(changeset, [:service_id, :person_id])
+    validate_required(changeset, [:meeting_id, :person_id])
   end
 
   def order(query) do
@@ -42,6 +42,6 @@ defmodule Blessd.Observance.Attendant do
     |> preload([a, person: p], person: p)
   end
 
-  def by_service(query, %Service{id: service_id}), do: by_service(query, service_id)
-  def by_service(query, service_id), do: where(query, [a], a.service_id == ^service_id)
+  def by_meeting(query, %Meeting{id: meeting_id}), do: by_meeting(query, meeting_id)
+  def by_meeting(query, meeting_id), do: where(query, [a], a.meeting_id == ^meeting_id)
 end

@@ -1,7 +1,7 @@
-<h1 class="title has-text-centered"><%= gettext("New Service") %></h1>
+<h1 class="title has-text-centered"><%= gettext("Edit Meeting") %></h1>
 
 <%= render "form.html",
   conn: @conn,
   changeset: @changeset,
   current_user: @current_user,
-  action: :create %>
+  action: :update %>

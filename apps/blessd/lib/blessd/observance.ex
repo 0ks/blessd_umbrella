@@ -5,75 +5,75 @@ defmodule Blessd.Observance do
 
   alias Blessd.Auth
   alias Blessd.Observance.Person
-  alias Blessd.Observance.Service
+  alias Blessd.Observance.Meeting
   alias Blessd.Observance.Attendant
   alias Blessd.Repo
 
   @doc """
-  Returns the list of services.
+  Returns the list of meetings.
   """
-  def list_services(current_user) do
-    Service
+  def list_meetings(current_user) do
+    Meeting
     |> Auth.check!(current_user)
-    |> Service.order()
+    |> Meeting.order()
     |> Repo.all()
   end
 
   @doc """
-  Gets a single service.
+  Gets a single meeting.
 
-  Raises `Ecto.NoResultsError` if the Service does not exist.
+  Raises `Ecto.NoResultsError` if the Meeting does not exist.
   """
-  def get_service!(id, current_user) do
-    Service
+  def get_meeting!(id, current_user) do
+    Meeting
     |> Auth.check!(current_user)
-    |> Service.order()
+    |> Meeting.order()
     |> Repo.get!(id)
   end
 
   @doc """
-  Creates a service.
+  Creates a meeting.
   """
-  def create_service(attrs, current_user) do
+  def create_meeting(attrs, current_user) do
     current_user
-    |> new_service()
-    |> Service.changeset(attrs)
+    |> new_meeting()
+    |> Meeting.changeset(attrs)
     |> Repo.insert()
   end
 
   @doc """
-  Updates a service.
+  Updates a meeting.
   """
-  def update_service(%Service{} = service, attrs, current_user) do
-    service
+  def update_meeting(%Meeting{} = meeting, attrs, current_user) do
+    meeting
     |> Auth.check!(current_user)
-    |> Service.changeset(attrs)
+    |> Meeting.changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
-  Deletes a Service.
+  Deletes a Meeting.
   """
-  def delete_service(%Service{} = service, current_user) do
-    service
+  def delete_meeting(%Meeting{} = meeting, current_user) do
+    meeting
     |> Auth.check!(current_user)
     |> Repo.delete()
   end
 
   @doc """
-  Builds a service to insert.
+  Builds a meeting to insert.
   """
-  def new_service(current_user) do
-    Auth.check!(%Service{church_id: current_user.church.id}, current_user)
+  def new_meeting(current_user) do
+    Auth.check!(%Meeting{church_id: current_user.church.id}, current_user)
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking service changes.
+  Returns an `%Ecto.Changeset{}` for tracking meeting changes.
   """
-  def change_service(%Service{} = service, current_user) do
-    service
+  def change_meeting(%Meeting{} = meeting, current_user) do
+    meeting
     |> Auth.check!(current_user)
-    |> Service.changeset(%{})
+    |> Meeting.changeset(%{})
   end
 
   @doc """
@@ -102,12 +102,12 @@ defmodule Blessd.Observance do
   @doc """
   Creates an attendant if it does not exists and removes it if it exists.
   """
-  def toggle_attendant(person_id, service_id, current_user) do
-    case Repo.get_by(Attendant, person_id: person_id, service_id: service_id) do
+  def toggle_attendant(person_id, meeting_id, current_user) do
+    case Repo.get_by(Attendant, person_id: person_id, meeting_id: meeting_id) do
       nil ->
         current_user
         |> new_attendant()
-        |> Attendant.changeset(%{person_id: person_id, service_id: service_id})
+        |> Attendant.changeset(%{person_id: person_id, meeting_id: meeting_id})
         |> Repo.insert()
 
       %Attendant{} = attendant ->

@@ -1,4 +1,4 @@
-defmodule Blessd.Observance.Service do
+defmodule Blessd.Observance.Meeting do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -7,7 +7,7 @@ defmodule Blessd.Observance.Service do
   alias Blessd.Auth.Church
   alias Blessd.Observance.Attendant
 
-  schema "services" do
+  schema "meetings" do
     belongs_to(:church, Church)
 
     field(:date, :date)
@@ -18,8 +18,8 @@ defmodule Blessd.Observance.Service do
   end
 
   @doc false
-  def changeset(service, attrs) do
-    service
+  def changeset(meeting, attrs) do
+    meeting
     |> cast(attrs, [:date])
     |> validate_required([:date])
   end
