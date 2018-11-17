@@ -1,6 +1,6 @@
 <%= for attendant <- @attendants do %>
   <tr class="js-attendant">
-    <td>
+    <td class="attendant-present-column">
       <input
         type="checkbox"
         class="js-attendant-is-present"
