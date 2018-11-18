@@ -9,4 +9,6 @@ config :blessd, Blessd.Repo,
   ownership_timeout: 10 * 60 * 1000,
   pool: Ecto.Adapters.SQL.Sandbox
 
+config :blessd, Blessd.Mailer, adapter: Bamboo.TestAdapter
+
 config :bcrypt_elixir, log_rounds: 1
