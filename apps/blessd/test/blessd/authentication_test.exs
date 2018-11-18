@@ -5,6 +5,12 @@ defmodule Blessd.AuthenticationTest do
   alias Blessd.Authentication.Session
   alias Blessd.Authentication.User
 
+  @signup2_attrs %{
+    "church" => %{name: "Test Church 2", identifier: "test_church2"},
+    "user" => %{name: "Test User", email: "test_user@mail.com"},
+    "credential" => %{source: "password", token: "password"}
+  }
+
   test "authenticate/2 authenticates a user by its email and password" do
     %{church: church, id: id, email: email} = signup()
 
@@ -13,6 +19,15 @@ defmodule Blessd.AuthenticationTest do
                email: email,
                password: "password",
                church_identifier: church.identifier
+             })
+
+    %{church: church2, id: id2, email: ^email} = signup(false, @signup2_attrs)
+
+    assert {:ok, %Session{user: %User{id: ^id2}}} =
+             Authentication.authenticate(%{
+               email: email,
+               password: "password",
+               church_identifier: church2.identifier
              })
   end
 

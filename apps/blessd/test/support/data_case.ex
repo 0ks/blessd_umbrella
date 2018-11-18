@@ -59,8 +59,8 @@ defmodule Blessd.DataCase do
     "credential" => %{source: "password", token: "password"}
   }
 
-  def signup(original? \\ false) do
-    {:ok, user} = Signup.register(@signup_attrs)
+  def signup(original? \\ false, attrs \\ @signup_attrs) do
+    {:ok, user} = Signup.register(attrs)
 
     if original? do
       user
