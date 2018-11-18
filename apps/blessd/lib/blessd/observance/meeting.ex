@@ -5,7 +5,6 @@ defmodule Blessd.Observance.Meeting do
   import Ecto.Query
 
   alias Blessd.Auth.Church
-  alias Blessd.Observance.Attendant
   alias Blessd.Observance.MeetingOccurrence
 
   schema "meetings" do
@@ -14,7 +13,6 @@ defmodule Blessd.Observance.Meeting do
     field(:name, :string)
     field(:description, :string)
 
-    has_many(:attendants, Attendant)
     has_many(:occurrences, MeetingOccurrence)
 
     timestamps()
@@ -25,6 +23,13 @@ defmodule Blessd.Observance.Meeting do
     meeting
     |> cast(attrs, [:name, :description])
     |> validate_required([:name])
+  end
+
+  @doc false
+  def preload(query) do
+    occurrences_query = MeetingOccurrence.order(MeetingOccurrence)
+
+    preload(query, [s], occurrences: ^occurrences_query)
   end
 
   @doc false

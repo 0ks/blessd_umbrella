@@ -5,7 +5,7 @@
         type="checkbox"
         class="js-person-is-present"
         data-person-id="<%= person.id %>"
-        <%= if Person.present?(person, @meeting), do: "checked" %> />
+        <%= if Person.present?(person, @occurrence), do: "checked" %> />
     </td>
     <td><%= person.name %></td>
     <td><%= person.email %></td>

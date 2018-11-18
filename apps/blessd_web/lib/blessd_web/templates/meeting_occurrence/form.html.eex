@@ -1,0 +1,17 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= error_alert(f) %>
+
+  <div class="field">
+    <%= label f, :date, class: "label" %>
+    <div class="control">
+      <%= date_input f, :date, class: "js-date", readonly: true %>
+    </div>
+    <%= error_tag f, :date %>
+  </div>
+
+  <div class="buttons">
+    <%= submit gettext("Submit"), class: "button is-primary" %>
+    <%= link gettext("Back"), to: Routes.meeting_path(@conn, :index, @current_user.church.identifier), class: "button" %>
+  </div>
+<% end %>
+

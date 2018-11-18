@@ -36,7 +36,4 @@ defmodule BlessdWeb.FormHelpers do
 
     Keyword.put(opts, :class, "#{default_class} #{old_class}")
   end
-
-  defp default_input_class(form, field, default_class) do
-  end
 end

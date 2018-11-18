@@ -1,7 +1,7 @@
 defmodule Blessd.Repo.Migrations.CreateMeetingOccurrences do
   use Ecto.Migration
 
-  def up do
+  def change do
     create table(:meeting_occurrences) do
       add :church_id, references(:churches, on_delete: :delete_all), null: false
 
@@ -12,19 +12,5 @@ defmodule Blessd.Repo.Migrations.CreateMeetingOccurrences do
     end
 
     create index(:meeting_occurrences, [:church_id])
-
-    alter table(:meetings) do
-      remove :date
-    end
-  end
-
-  def down do
-    alter table(:meetings) do
-      add :date, :date
-    end
-
-    drop index(:meeting_occurrences, [:church_id])
-
-    drop table(:meeting_occurrences)
   end
 end

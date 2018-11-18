@@ -19,6 +19,7 @@ defmodule Blessd.Observance do
   def list_meetings(current_user) do
     Meeting
     |> Auth.check!(current_user)
+    |> Meeting.preload()
     |> Meeting.order()
     |> Repo.all()
   end
@@ -31,7 +32,6 @@ defmodule Blessd.Observance do
   def get_meeting!(id, current_user) do
     Meeting
     |> Auth.check!(current_user)
-    |> Meeting.order()
     |> Repo.get!(id)
   end
 
@@ -41,7 +41,7 @@ defmodule Blessd.Observance do
   def create_meeting(attrs, current_user) do
     changeset =
       current_user
-      |> new_meeting()
+      |> new_meeting([])
       |> Meeting.changeset(attrs)
 
     Multi.new()
@@ -85,10 +85,14 @@ defmodule Blessd.Observance do
   Builds a meeting to insert.
   """
   def new_meeting(current_user) do
+    new_meeting(current_user, [new_occurrence(current_user)])
+  end
+
+  def new_meeting(current_user, occurrences) do
     Auth.check!(
       %Meeting{
         church_id: current_user.church.id,
-        occurrences: [new_occurrence(current_user)]
+        occurrences: occurrences
       },
       current_user
     )
@@ -103,6 +107,25 @@ defmodule Blessd.Observance do
     |> Meeting.changeset(%{})
   end
 
+  @doc """
+  Gets a single meeting occurrence.
+
+  Raises `Ecto.NoResultsError` if the MeetingOccurrence does not exist.
+  """
+  def get_occurrence!(id, current_user) do
+    MeetingOccurrence
+    |> Auth.check!(current_user)
+    |> MeetingOccurrence.preload()
+    |> Repo.get!(id)
+  end
+
+  @doc """
+  Creates a meeting occurrence.
+  """
+  def create_occurrence(%Meeting{} = meeting, attrs, current_user) do
+    insert_occurrence(Repo, meeting, attrs, current_user)
+  end
+
   defp insert_occurrence(repo, %{meeting: meeting}, attrs, current_user) do
     insert_occurrence(repo, meeting, attrs, current_user)
   end
@@ -112,6 +135,34 @@ defmodule Blessd.Observance do
     |> new_occurrence(meeting_id, nil)
     |> MeetingOccurrence.changeset(attrs)
     |> repo.insert()
+  end
+
+  @doc """
+  Updates a meeting occurrence.
+  """
+  def update_occurrence(%MeetingOccurrence{} = occurrence, attrs, current_user) do
+    occurrence
+    |> Auth.check!(current_user)
+    |> MeetingOccurrence.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Meeting occurrence.
+  """
+  def delete_occurrence(%MeetingOccurrence{} = occurrence, current_user) do
+    occurrence
+    |> Auth.check!(current_user)
+    |> Repo.delete()
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking meeting occurrence changes.
+  """
+  def change_occurrence(%MeetingOccurrence{} = occurrence, current_user) do
+    occurrence
+    |> Auth.check!(current_user)
+    |> MeetingOccurrence.changeset(%{})
   end
 
   @doc """
@@ -154,12 +205,12 @@ defmodule Blessd.Observance do
   @doc """
   Creates an attendant if it does not exists and removes it if it exists.
   """
-  def toggle_attendant(person_id, meeting_id, current_user) do
-    case Repo.get_by(Attendant, person_id: person_id, meeting_id: meeting_id) do
+  def toggle_attendant(person_id, occurrence_id, current_user) do
+    case Repo.get_by(Attendant, person_id: person_id, meeting_occurrence_id: occurrence_id) do
       nil ->
         current_user
         |> new_attendant()
-        |> Attendant.changeset(%{person_id: person_id, meeting_id: meeting_id})
+        |> Attendant.changeset(%{person_id: person_id, meeting_occurrence_id: occurrence_id})
         |> Repo.insert()
 
       %Attendant{} = attendant ->

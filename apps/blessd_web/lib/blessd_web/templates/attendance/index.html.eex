@@ -1,4 +1,10 @@
-<h1 class="title has-text-centered"><%= gettext("Attendance") %></h1>
+<h1 class="title has-text-centered">
+  <%= gettext(
+    "Attendance to %{meeting} on %{date}",
+    meeting: @occurrence.meeting.name,
+    date: humanize(@occurrence.date)
+  ) %>
+</h1>
 
 <div class="field">
   <label class="label" for="meeting_name">Search</label>
@@ -15,8 +21,8 @@
       <th><%= gettext("Email") %></th>
     </tr>
   </thead>
-  <tbody class="js-people-body" data-meeting-id="<%= @meeting.id %>">
-    <%= render "table_body.html", people: @people, meeting: @meeting %>
+  <tbody class="js-people-body" data-occurrence-id="<%= @occurrence.id %>">
+    <%= render "table_body.html", people: @people, occurrence: @occurrence %>
   </tbody>
 </table>
 

@@ -2,6 +2,7 @@
 @import "~bulma/sass/base/_all";
 @import "~bulma/sass/elements/_all";
 @import "~bulma/sass/grid/_all";
+@import "~bulma/sass/components/dropdown";
 @import "~bulma/sass/components/message";
 @import "~bulma/sass/components/modal";
 @import "~bulma/sass/components/navbar";
@@ -13,5 +14,7 @@
 @import "container";
 @import "elements";
 @import "table";
+@import "dropdown";
 
 @import "views/attendance";
+@import "views/meeting";

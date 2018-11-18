@@ -1,0 +1,12 @@
+<h1 class="title has-text-centered"><%= gettext("New Meeting Occurrence") %></h1>
+
+<%= render "form.html",
+  conn: @conn,
+  changeset: @changeset,
+  current_user: @current_user,
+  action: Routes.meeting_occurrence_path(
+    @conn,
+    :create,
+    @current_user.church.identifier,
+    @meeting
+  ) %>
