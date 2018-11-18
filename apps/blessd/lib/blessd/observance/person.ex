@@ -5,7 +5,7 @@ defmodule Blessd.Observance.Person do
 
   alias Blessd.Observance.Attendant
   alias Blessd.Observance.Person
-  alias Blessd.Observance.Service
+  alias Blessd.Observance.MeetingOccurrence
 
   schema "people" do
     field(:church_id, :id)
@@ -25,8 +25,8 @@ defmodule Blessd.Observance.Person do
     |> preload([p, attendants: a], attendants: a)
   end
 
-  def present?(%Person{attendants: attendants}, %Service{id: service_id}) do
-    Enum.any?(attendants, &(&1.service_id == service_id))
+  def present?(%Person{attendants: attendants}, %MeetingOccurrence{id: occurrence_id}) do
+    Enum.any?(attendants, &(&1.meeting_occurrence_id == occurrence_id))
   end
 
   def search(query, query_str) do

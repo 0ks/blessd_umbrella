@@ -1,0 +1,38 @@
+<% path_func = &Routes.meeting_path(@conn, &1, @current_user.church.identifier, &2) %>
+<%= form_for @changeset, form_action(@action, @changeset, path_func), fn f -> %>
+  <%= error_alert(f) %>
+
+  <div class="field">
+    <%= label f, :name, class: "label" %>
+    <div class="control">
+      <%= text_input f, :name %>
+    </div>
+    <%= error_tag f, :name %>
+  </div>
+
+  <%= if @action == :create do %>
+    <%= inputs_for f, :occurrences, fn ff -> %>
+      <div class="field">
+        <%= label ff, :date, class: "label" %>
+        <div class="control">
+          <%= date_input ff, :date, class: "js-date", readonly: true %>
+        </div>
+        <%= error_tag ff, :date %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="field">
+    <%= label f, :description, class: "label" %>
+    <div class="control">
+      <%= textarea f, :description %>
+    </div>
+    <%= error_tag f, :description %>
+  </div>
+
+  <div class="buttons">
+    <%= submit gettext("Submit"), class: "button is-primary" %>
+    <%= link gettext("Back"), to: Routes.meeting_path(@conn, :index, @current_user.church.identifier), class: "button" %>
+  </div>
+<% end %>
+

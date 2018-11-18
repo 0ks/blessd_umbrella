@@ -32,7 +32,13 @@ defmodule BlessdWeb.Router do
     resources "/users", UserController, except: [:show, :new, :create]
     resources "/session", SessionController, only: [:delete], singleton: true
 
-    resources "/services", ServiceController, except: [:show] do
+    resources "/meetings", MeetingController, except: [:show] do
+      resources "/occurrences", MeetingOccurrenceController,
+        only: [:new, :create],
+        as: :occurrence
+    end
+
+    resources "/meeting_occurrences", MeetingOccurrenceController, only: [:edit, :update, :delete] do
       resources "/attendance", AttendanceController, only: [:index]
     end
   end

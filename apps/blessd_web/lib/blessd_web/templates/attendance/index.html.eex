@@ -1,7 +1,13 @@
-<h1 class="title has-text-centered"><%= gettext("Attendance") %></h1>
+<h1 class="title has-text-centered">
+  <%= gettext(
+    "Attendance to %{meeting} on %{date}",
+    meeting: @occurrence.meeting.name,
+    date: humanize(@occurrence.date)
+  ) %>
+</h1>
 
 <div class="field">
-  <label class="label" for="service_name">Search</label>
+  <label class="label" for="meeting_name">Search</label>
   <div class="control">
     <input class="input js-search" type="text">
   </div>
@@ -15,13 +21,13 @@
       <th><%= gettext("Email") %></th>
     </tr>
   </thead>
-  <tbody class="js-people-body" data-service-id="<%= @service.id %>">
-    <%= render "table_body.html", people: @people, service: @service %>
+  <tbody class="js-people-body" data-occurrence-id="<%= @occurrence.id %>">
+    <%= render "table_body.html", people: @people, occurrence: @occurrence %>
   </tbody>
 </table>
 
 <div class="field is-grouped">
   <div class="control">
-    <%= link gettext("Back"), to: Routes.service_path(@conn, :index, @current_user.church.identifier), class: "button" %>
+    <%= link gettext("Back"), to: Routes.meeting_path(@conn, :index, @current_user.church.identifier), class: "button" %>
   </div>
 </div>

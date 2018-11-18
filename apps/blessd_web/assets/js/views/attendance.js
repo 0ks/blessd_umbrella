@@ -28,16 +28,16 @@ export default class AttendanceView {
 
       AttendanceView.toggleAttendant(
         checkbox.getAttribute("data-person-id"),
-        tableBody.getAttribute("data-service-id")
+        tableBody.getAttribute("data-occurrence-id")
       );
     });
   }
 
-  static toggleAttendant(personId, serviceId) {
+  static toggleAttendant(personId, occurrenceId) {
     channel
       .push("toggle", {
         person_id: personId,
-        service_id: serviceId
+        meeting_occurrence_id: occurrenceId
       })
       .receive("ok", _ => console.log("Toggled attendant", _))
       .receive("error", reason => console.error("Unable to toggle attendant", reason))
@@ -51,9 +51,9 @@ export default class AttendanceView {
 
     input.addEventListener("keyup", event => {
       if (![13, 38, 40].includes(event.keyCode)) {
-        const serviceId = tableBody.getAttribute("data-service-id");
+        const occurrenceId = tableBody.getAttribute("data-occurrence-id");
 
-        AttendanceView.searchPeople(serviceId, input.value, resp => {
+        AttendanceView.searchPeople(occurrenceId, input.value, resp => {
           tableBody.innerHTML = resp.table_body;
           AttendanceView.selectRow(tableBody, 0);
 
@@ -64,10 +64,10 @@ export default class AttendanceView {
     })
   }
 
-  static searchPeople(serviceId, query, callback) {
+  static searchPeople(occurrenceId, query, callback) {
     channel
       .push("search", {
-        service_id: serviceId,
+        meeting_occurrence_id: occurrenceId,
         query: query
       })
       .receive("ok", callback)
@@ -103,8 +103,8 @@ export default class AttendanceView {
 
   static keyEnter(tableBody) {
     const row = AttendanceView.getRow(tableBody);
-    const serviceId = tableBody.getAttribute("data-service-id");
-    if (row) AttendanceView.toggleRowCheckbox(row, serviceId);
+    const occurrenceId = tableBody.getAttribute("data-occurrence-id");
+    if (row) AttendanceView.toggleRowCheckbox(row, occurrenceId);
   }
 
   static bindKeys(tableBody) {
@@ -140,17 +140,17 @@ export default class AttendanceView {
 
   static bindRowClick(tableBody) {
     tableBody.addEventListener("click", event => {
-      const serviceId = tableBody.getAttribute("data-service-id");
-      AttendanceView.toggleRowCheckbox(event.target.parentElement, serviceId)
+      const occurrenceId = tableBody.getAttribute("data-occurrence-id");
+      AttendanceView.toggleRowCheckbox(event.target.parentElement, occurrenceId)
     });
   }
 
-  static toggleRowCheckbox(tr, serviceId) {
+  static toggleRowCheckbox(tr, occurrenceId) {
     const checkbox = tr.querySelector(".js-person-is-present");
     checkbox.checked = !checkbox.checked;
     AttendanceView.toggleAttendant(
       checkbox.getAttribute("data-person-id"),
-      serviceId
+      occurrenceId
     );
   }
 }

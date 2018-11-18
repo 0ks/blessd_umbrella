@@ -1,0 +1,94 @@
+<h1 class="title has-text-centered"><%= gettext("Listing Meetings") %></h1>
+
+<%= for meeting <- @meetings do %>
+  <h2 class="subtitle">
+    <%= meeting.name %>
+    <div class="dropdown is-hoverable meeting-options">
+      <div class="dropdown-trigger">
+        <button class="button is-small" aria-haspopup="true" aria-controls="dropdown-menu4">
+          <span><%= gettext("...") %></span>
+        </button>
+      </div>
+      <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+        <div class="dropdown-content">
+          <%= link gettext("New Occurrence"),
+            class: "dropdown-item",
+            to: Routes.meeting_occurrence_path(
+              @conn,
+              :new,
+              @current_user.church.identifier,
+              meeting
+            ) %>
+          <hr class="dropdown-divider">
+          <%= link gettext("Edit"),
+            class: "dropdown-item",
+            to: Routes.meeting_path(
+              @conn,
+              :edit,
+              @current_user.church.identifier,
+              meeting
+            ) %>
+          <%= link gettext("Delete"),
+            method: :delete,
+            data: [confirm: gettext("Are you sure?")],
+            class: "dropdown-item",
+            to: Routes.meeting_path(
+              @conn,
+              :delete,
+              @current_user.church.identifier,
+              meeting
+            ) %>
+        </div>
+      </div>
+    </div>
+  </h2>
+
+  <table class="table">
+    <tbody>
+      <%= for occurrence <- meeting.occurrences do %>
+        <tr>
+          <td><%= humanize(occurrence.date) %></td>
+
+          <td>
+            <div class="field has-addons is-pulled-right">
+              <div class="control">
+                <%= link gettext("Attendance"),
+                  class: "button is-small",
+                  to: Routes.meeting_occurrence_attendance_path(
+                    @conn,
+                    :index,
+                    @current_user.church.identifier,
+                    occurrence
+                  ) %>
+              </div>
+              <div class="control">
+                <%= link gettext("Edit"),
+                  class: "button is-small",
+                  to: Routes.meeting_occurrence_path(
+                    @conn,
+                    :edit,
+                    @current_user.church.identifier,
+                    occurrence
+                  ) %>
+              </div>
+              <div class="control">
+                <%= link gettext("Delete"),
+                  method: :delete,
+                  data: [confirm: gettext("Are you sure?")],
+                  class: "button is-danger is-small",
+                  to: Routes.meeting_occurrence_path(
+                    @conn,
+                    :delete,
+                    @current_user.church.identifier,
+                    occurrence
+                  ) %>
+              </div>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<%= link gettext("New Meeting"), to: Routes.meeting_path(@conn, :new, @current_user.church.identifier), class: "button is-primary" %>

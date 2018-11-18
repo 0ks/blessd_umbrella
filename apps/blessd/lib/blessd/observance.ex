@@ -3,77 +3,180 @@ defmodule Blessd.Observance do
   The Observance context.
   """
 
+  import Ecto.Changeset
+
   alias Blessd.Auth
   alias Blessd.Observance.Person
-  alias Blessd.Observance.Service
+  alias Blessd.Observance.Meeting
+  alias Blessd.Observance.MeetingOccurrence
   alias Blessd.Observance.Attendant
   alias Blessd.Repo
+  alias Ecto.Multi
 
   @doc """
-  Returns the list of services.
+  Returns the list of meetings.
   """
-  def list_services(current_user) do
-    Service
+  def list_meetings(current_user) do
+    Meeting
     |> Auth.check!(current_user)
-    |> Service.order()
+    |> Meeting.preload()
+    |> Meeting.order()
     |> Repo.all()
   end
 
   @doc """
-  Gets a single service.
+  Gets a single meeting.
 
-  Raises `Ecto.NoResultsError` if the Service does not exist.
+  Raises `Ecto.NoResultsError` if the Meeting does not exist.
   """
-  def get_service!(id, current_user) do
-    Service
+  def get_meeting!(id, current_user) do
+    Meeting
     |> Auth.check!(current_user)
-    |> Service.order()
     |> Repo.get!(id)
   end
 
   @doc """
-  Creates a service.
+  Creates a meeting.
   """
-  def create_service(attrs, current_user) do
-    current_user
-    |> new_service()
-    |> Service.changeset(attrs)
-    |> Repo.insert()
+  def create_meeting(attrs, current_user) do
+    changeset =
+      current_user
+      |> new_meeting([])
+      |> Meeting.changeset(attrs)
+
+    Multi.new()
+    |> Multi.insert(:meeting, changeset)
+    |> Multi.run(:occurrence, &insert_occurrence(&1, &2, attrs["occurrences"]["0"], current_user))
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{meeting: meeting, occurrence: occurrence}} ->
+        {:ok, %{meeting | occurrences: [occurrence]}}
+
+      {:error, :meeting, changeset, _} ->
+        {:error, changeset}
+
+      {:error, assoc, child_changeset, _} ->
+        changeset
+        |> put_assoc(assoc, child_changeset)
+        |> apply_action(:insert)
+    end
   end
 
   @doc """
-  Updates a service.
+  Updates a meeting.
   """
-  def update_service(%Service{} = service, attrs, current_user) do
-    service
+  def update_meeting(%Meeting{} = meeting, attrs, current_user) do
+    meeting
     |> Auth.check!(current_user)
-    |> Service.changeset(attrs)
+    |> Meeting.changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
-  Deletes a Service.
+  Deletes a Meeting.
   """
-  def delete_service(%Service{} = service, current_user) do
-    service
+  def delete_meeting(%Meeting{} = meeting, current_user) do
+    meeting
     |> Auth.check!(current_user)
     |> Repo.delete()
   end
 
   @doc """
-  Builds a service to insert.
+  Builds a meeting to insert.
   """
-  def new_service(current_user) do
-    Auth.check!(%Service{church_id: current_user.church.id}, current_user)
+  def new_meeting(current_user) do
+    new_meeting(current_user, [new_occurrence(current_user)])
+  end
+
+  def new_meeting(current_user, occurrences) do
+    Auth.check!(
+      %Meeting{
+        church_id: current_user.church.id,
+        occurrences: occurrences
+      },
+      current_user
+    )
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking service changes.
+  Returns an `%Ecto.Changeset{}` for tracking meeting changes.
   """
-  def change_service(%Service{} = service, current_user) do
-    service
+  def change_meeting(%Meeting{} = meeting, current_user) do
+    meeting
     |> Auth.check!(current_user)
-    |> Service.changeset(%{})
+    |> Meeting.changeset(%{})
+  end
+
+  @doc """
+  Gets a single meeting occurrence.
+
+  Raises `Ecto.NoResultsError` if the MeetingOccurrence does not exist.
+  """
+  def get_occurrence!(id, current_user) do
+    MeetingOccurrence
+    |> Auth.check!(current_user)
+    |> MeetingOccurrence.preload()
+    |> Repo.get!(id)
+  end
+
+  @doc """
+  Creates a meeting occurrence.
+  """
+  def create_occurrence(%Meeting{} = meeting, attrs, current_user) do
+    insert_occurrence(Repo, meeting, attrs, current_user)
+  end
+
+  defp insert_occurrence(repo, %{meeting: meeting}, attrs, current_user) do
+    insert_occurrence(repo, meeting, attrs, current_user)
+  end
+
+  defp insert_occurrence(repo, %Meeting{id: meeting_id}, attrs, current_user) do
+    current_user
+    |> new_occurrence(meeting_id, nil)
+    |> MeetingOccurrence.changeset(attrs)
+    |> repo.insert()
+  end
+
+  @doc """
+  Updates a meeting occurrence.
+  """
+  def update_occurrence(%MeetingOccurrence{} = occurrence, attrs, current_user) do
+    occurrence
+    |> Auth.check!(current_user)
+    |> MeetingOccurrence.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Meeting occurrence.
+  """
+  def delete_occurrence(%MeetingOccurrence{} = occurrence, current_user) do
+    occurrence
+    |> Auth.check!(current_user)
+    |> Repo.delete()
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking meeting occurrence changes.
+  """
+  def change_occurrence(%MeetingOccurrence{} = occurrence, current_user) do
+    occurrence
+    |> Auth.check!(current_user)
+    |> MeetingOccurrence.changeset(%{})
+  end
+
+  @doc """
+  Builds a meeting occurrence to insert.
+  """
+  def new_occurrence(current_user, meeting_id \\ nil, date \\ Timex.today()) do
+    Auth.check!(
+      %MeetingOccurrence{
+        church_id: current_user.church.id,
+        meeting_id: meeting_id,
+        date: date
+      },
+      current_user
+    )
   end
 
   @doc """
@@ -102,12 +205,12 @@ defmodule Blessd.Observance do
   @doc """
   Creates an attendant if it does not exists and removes it if it exists.
   """
-  def toggle_attendant(person_id, service_id, current_user) do
-    case Repo.get_by(Attendant, person_id: person_id, service_id: service_id) do
+  def toggle_attendant(person_id, occurrence_id, current_user) do
+    case Repo.get_by(Attendant, person_id: person_id, meeting_occurrence_id: occurrence_id) do
       nil ->
         current_user
         |> new_attendant()
-        |> Attendant.changeset(%{person_id: person_id, service_id: service_id})
+        |> Attendant.changeset(%{person_id: person_id, meeting_occurrence_id: occurrence_id})
         |> Repo.insert()
 
       %Attendant{} = attendant ->

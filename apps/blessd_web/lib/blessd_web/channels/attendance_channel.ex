@@ -9,23 +9,30 @@ defmodule BlessdWeb.AttendanceChannel do
     {:ok, socket}
   end
 
-  def handle_in("search", %{"service_id" => service_id, "query" => query}, socket) do
+  def handle_in("search", %{"meeting_occurrence_id" => occurrence_id, "query" => query}, socket) do
     user = socket.assigns.current_user
 
-    service = Observance.get_service!(service_id, user)
+    occurrence = Observance.get_occurrence!(occurrence_id, user)
     people = Observance.search_people(query, user)
 
     html =
-      View.render_to_string(AttendanceView, "table_body.html", people: people, service: service)
+      View.render_to_string(AttendanceView, "table_body.html",
+        people: people,
+        occurrence: occurrence
+      )
 
     {:reply, {:ok, %{table_body: html}}, socket}
   end
 
-  def handle_in("toggle", %{"person_id" => person_id, "service_id" => service_id}, socket) do
+  def handle_in(
+        "toggle",
+        %{"person_id" => person_id, "meeting_occurrence_id" => occurrence_id},
+        socket
+      ) do
     user = socket.assigns.current_user
 
     person_id
-    |> Observance.toggle_attendant(service_id, user)
+    |> Observance.toggle_attendant(occurrence_id, user)
     |> case do
       {:ok, _attendant} ->
         {:reply, :ok, socket}
