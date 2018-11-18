@@ -39,8 +39,11 @@ defmodule Blessd.Authentication.Session do
   end
 
   defp validate_user(changeset) do
-    with %Ecto.Changeset{valid?: true, changes: %{email: email, password: password}} <- changeset,
-         {:ok, credential} <- get_credential(email),
+    with %Ecto.Changeset{
+           valid?: true,
+           changes: %{church: church, email: email, password: password}
+         } <- changeset,
+         {:ok, credential} <- get_credential(email, church),
          true <- Comeonin.Bcrypt.checkpw(password, credential.token) do
       put_assoc(changeset, :user, credential.user)
     else
@@ -56,10 +59,12 @@ defmodule Blessd.Authentication.Session do
     end
   end
 
-  defp get_credential(email) do
+  defp get_credential(email, %Ecto.Changeset{data: church}), do: get_credential(email, church)
+
+  defp get_credential(email, %Church{id: church_id}) do
     Credential
     |> join(:left, [c], assoc(c, :user))
-    |> where([c, u], u.email == ^email and c.source == "password")
+    |> where([c, u], u.church_id == ^church_id and u.email == ^email and c.source == "password")
     |> preload([c, u], user: u)
     |> Repo.one()
     |> case do
