@@ -47,3 +47,7 @@ config :blessd_web, BlessdWeb.Endpoint,
       ~r{lib/blessd_web/templates/.*(eex)$}
     ]
   ]
+
+config :blessd_web, BlessdWeb.Mailer,
+  adapter: Bamboo.LocalAdapter,
+  open_email_in_browser_url: "http://localhost:4000/sent_emails"

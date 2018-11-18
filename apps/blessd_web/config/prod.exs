@@ -21,6 +21,10 @@ config :blessd_web, BlessdWeb.Endpoint,
   url: [host: "${URL_HOSTNAME}", port: "${URL_PORT}"],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :blessd_web, BlessdWeb.Mailer,
+  adapter: Bamboo.SendGridAdapter,
+  api_key: {:system, "SENDGRID_API_KEY"}
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

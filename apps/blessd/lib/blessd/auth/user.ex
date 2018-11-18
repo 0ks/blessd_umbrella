@@ -8,5 +8,6 @@ defmodule Blessd.Auth.User do
 
     field(:name, :string)
     field(:email, :string)
+    field(:confirmed_at, :utc_datetime)
   end
 end

@@ -23,6 +23,12 @@ defmodule BlessdWeb.Router do
   end
 
   scope "/:church_identifier", BlessdWeb do
+    pipe_through :browser
+
+    resources "/confirmation/:token", ConfirmationController, only: [:create], singleton: true
+  end
+
+  scope "/:church_identifier", BlessdWeb do
     pipe_through [:browser, :authenticated]
 
     resources "/church", ChurchController, only: [:edit, :update, :delete], singleton: true
