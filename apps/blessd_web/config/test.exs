@@ -7,4 +7,3 @@ config :blessd_web, BlessdWeb.Endpoint,
   server: false
 
 config :blessd_web, BlessdWeb.Mailer, adapter: Bamboo.TestAdapter
-

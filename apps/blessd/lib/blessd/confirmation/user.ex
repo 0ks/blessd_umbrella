@@ -38,4 +38,3 @@ defmodule Blessd.Confirmation.User do
     |> String.slice(0, length)
   end
 end
-

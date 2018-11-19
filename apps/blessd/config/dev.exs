@@ -7,4 +7,3 @@ config :blessd, Blessd.Repo,
   database: "blessd_dev",
   hostname: "localhost",
   pool_size: 10
-

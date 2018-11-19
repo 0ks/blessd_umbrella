@@ -42,4 +42,3 @@ defmodule Blessd.Confirmation do
     end
   end
 end
-
