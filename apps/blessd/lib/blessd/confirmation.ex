@@ -27,18 +27,26 @@ defmodule Blessd.Confirmation do
     confirm(token, Auth.get_church!(identifier))
   end
 
-  def confirm(token, %Church{id: church_id}) do
+  def confirm(token, church) do
+    with {:ok, user} <- get_user_by_token(token, church) do
+      confirm(user)
+    end
+  end
+
+  def confirm(user) do
+    user
+    |> User.confirm_changeset()
+    |> Repo.update()
+  end
+
+  defp get_user_by_token(token, %Church{id: church_id}) do
     User
     |> where([u], u.church_id == ^church_id and u.confirmation_token == ^token)
+    |> preload([u], :church)
     |> Repo.one()
     |> case do
-      nil ->
-        {:error, :invalid_token}
-
-      user ->
-        user
-        |> User.confirm_changeset()
-        |> Repo.update!()
+      nil -> {:error, :not_found}
+      user -> {:ok, user}
     end
   end
 end

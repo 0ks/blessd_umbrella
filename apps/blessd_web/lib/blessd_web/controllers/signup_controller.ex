@@ -10,7 +10,7 @@ defmodule BlessdWeb.SignupController do
 
   def create(conn, %{"registration" => registration_params}) do
     with {:ok, user} <- Signup.register(registration_params),
-         {:ok, user} <- ConfirmationMailer.send(conn, user) do
+         {:ok, user} = ConfirmationMailer.send(user) do
       conn
       |> put_session(:current_user_id, user.id)
       |> put_flash(:info, gettext("Signed up sucessfully"))

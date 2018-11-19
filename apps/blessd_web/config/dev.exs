@@ -10,6 +10,14 @@ config :blessd_web, BlessdWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
+  live_reload: [
+    patterns: [
+      ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
+      ~r{priv/gettext/.*(po)$},
+      ~r{lib/blessd_web/views/.*(ex)$},
+      ~r{lib/blessd_web/templates/.*(eex)$}
+    ]
+  ],
   check_origin: false,
   watchers: [
     node: [
@@ -20,6 +28,10 @@ config :blessd_web, BlessdWeb.Endpoint,
       cd: Path.expand("../assets", __DIR__)
     ]
   ]
+
+config :blessd_web, BlessdWeb.Mailer,
+  adapter: Bamboo.LocalAdapter,
+  open_email_in_browser_url: "http://localhost:4000/sent_emails"
 
 # ## SSL Support
 #
@@ -37,17 +49,3 @@ config :blessd_web, BlessdWeb.Endpoint,
 # configured to run both http and https servers on
 # different ports.
 
-# Watch static and templates for browser reloading.
-config :blessd_web, BlessdWeb.Endpoint,
-  live_reload: [
-    patterns: [
-      ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
-      ~r{priv/gettext/.*(po)$},
-      ~r{lib/blessd_web/views/.*(ex)$},
-      ~r{lib/blessd_web/templates/.*(eex)$}
-    ]
-  ]
-
-config :blessd_web, BlessdWeb.Mailer,
-  adapter: Bamboo.LocalAdapter,
-  open_email_in_browser_url: "http://localhost:4000/sent_emails"

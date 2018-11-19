@@ -168,7 +168,8 @@ defmodule Blessd.Observance do
   @doc """
   Builds a meeting occurrence to insert.
   """
-  def new_occurrence(current_user, meeting_id \\ nil, date \\ Timex.today()) do
+  # TODO - we should consider user's timezone here
+  def new_occurrence(current_user, meeting_id \\ nil, date \\ Date.utc_today()) do
     Auth.check!(
       %MeetingOccurrence{
         church_id: current_user.church.id,
