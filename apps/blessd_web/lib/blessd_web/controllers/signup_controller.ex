@@ -3,6 +3,7 @@ defmodule BlessdWeb.SignupController do
 
   alias Blessd.Signup
   alias BlessdWeb.ConfirmationMailer
+  alias BlessdWeb.Session
 
   def new(conn, _params) do
     render(conn, "new.html", changeset: Signup.new_registration())
@@ -12,7 +13,7 @@ defmodule BlessdWeb.SignupController do
     with {:ok, user} <- Signup.register(registration_params),
          {:ok, user} = ConfirmationMailer.send(user) do
       conn
-      |> put_session(:current_user_id, user.id)
+      |> Session.put_user(user)
       |> put_flash(:info, gettext("Signed up sucessfully"))
       |> redirect(to: Routes.person_path(conn, :index, user.church.identifier))
     else

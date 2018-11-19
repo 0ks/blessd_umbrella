@@ -2,12 +2,13 @@ defmodule BlessdWeb.ConfirmationController do
   use BlessdWeb, :controller
 
   alias Blessd.Confirmation
+  alias BlessdWeb.Session
 
   def create(conn, %{"church_identifier" => identifier, "token" => token}) do
     case Confirmation.confirm(token, identifier) do
       {:ok, user} ->
         conn
-        |> put_session(:current_user_id, user.id)
+        |> Session.put_user(user)
         |> put_flash(:info, gettext("Email confirmed successfully."))
         |> redirect(to: Routes.person_path(conn, :index, user.church.identifier))
 

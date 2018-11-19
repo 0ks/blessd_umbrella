@@ -3,10 +3,7 @@ defmodule Blessd.Confirmation do
   The Confirmation context.
   """
 
-  import Ecto.Query
-
   alias Blessd.Auth
-  alias Blessd.Auth.Church
   alias Blessd.Confirmation.User
   alias Blessd.Repo
 
@@ -16,10 +13,10 @@ defmodule Blessd.Confirmation do
     |> Repo.update()
   end
 
-  def generate_token(%{id: user_id, church: church}) do
+  def generate_token(%{id: user_id}) do
     User
+    |> User.preload()
     |> Repo.get!(user_id)
-    |> Map.put(:church, church)
     |> generate_token()
   end
 
@@ -39,10 +36,11 @@ defmodule Blessd.Confirmation do
     |> Repo.update()
   end
 
-  defp get_user_by_token(token, %Church{id: church_id}) do
+  defp get_user_by_token(token, church) do
     User
-    |> where([u], u.church_id == ^church_id and u.confirmation_token == ^token)
-    |> preload([u], :church)
+    |> User.by_church(church)
+    |> User.by_token(token)
+    |> User.preload()
     |> Repo.one()
     |> case do
       nil -> {:error, :not_found}

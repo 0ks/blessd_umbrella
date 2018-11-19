@@ -25,7 +25,7 @@ defmodule Blessd.Auth do
   end
 
   @doc """
-  Gets a single user by id.
+  Gets a single user by id and church.
 
   Raises `Ecto.NoResultsError` if the Church does not exist.
   """

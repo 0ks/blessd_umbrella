@@ -21,11 +21,13 @@ import "./file";
 import "./modal";
 
 import AttendanceView from "./views/attendance";
+import SessionView from "./views/session";
 
 window.views = {
   Elixir: {
     BlessdWeb: {
       AttendanceView: AttendanceView,
+      SessionView: SessionView
     }
   }
 };

@@ -23,7 +23,7 @@ defmodule BlessdWeb.ConfirmationMailer do
   end
 
   defp email_html(user) do
-    to_string ~E"""
+    to_string(~E"""
     <h1><%= gettext("Welcome to Blessd, %{name}.", name: user.name) %></h1>
 
     <p>
@@ -39,18 +39,18 @@ defmodule BlessdWeb.ConfirmationMailer do
         url: confirmation_url(user)
       ) %>
     </p>
-    """
+    """)
   end
 
   defp email_text(user) do
-    to_string ~E"""
+    to_string(~E"""
     <%= gettext("Welcome to Blessd, %{name}.", name: user.name) %>
 
     <%= gettext(
       "Here is your confirmation link: %{url}",
       url: confirmation_url(user)
     ) %>
-    """
+    """)
   end
 
   defp confirmation_url(user) do
