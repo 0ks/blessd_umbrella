@@ -27,14 +27,16 @@ defmodule BlessdWeb.Router do
   scope "/:church_identifier", BlessdWeb do
     pipe_through :browser
 
-    get "/confirmation/:token", ConfirmationController, :create
+    resources "/confirmation", ConfirmationController, only: [:show]
   end
 
   scope "/:church_identifier", BlessdWeb do
     pipe_through [:browser, :authenticated]
 
-    resources "/church", ChurchController, only: [:edit, :update, :delete], singleton: true
+    get "/", DashboardController, :index
 
+    resources "/confirmation", ConfirmationController, only: [:create]
+    resources "/church", ChurchController, only: [:edit, :update, :delete], singleton: true
     resources "/import", ImportController, only: [:create]
     resources "/people", PersonController, except: [:show]
     resources "/users", UserController, except: [:show, :new, :create]

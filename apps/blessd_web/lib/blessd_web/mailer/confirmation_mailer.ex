@@ -54,6 +54,6 @@ defmodule BlessdWeb.ConfirmationMailer do
   end
 
   defp confirmation_url(user) do
-    Routes.confirmation_url(Endpoint, :create, user.church.identifier, user.confirmation_token)
+    Routes.confirmation_url(Endpoint, :show, user.church.identifier, user.confirmation_token)
   end
 end

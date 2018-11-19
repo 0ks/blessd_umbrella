@@ -18,10 +18,10 @@ defmodule BlessdWeb.SessionController do
       {:ok, session} ->
         conn
         |> Session.put_user(session.user)
-        |> redirect(to: Routes.person_path(conn, :index, session.church.identifier))
+        |> redirect(to: Routes.dashboard_path(conn, :index, session.church.identifier))
 
       {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, users: Session.list_users(conn))
     end
   end
 

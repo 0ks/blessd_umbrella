@@ -6,7 +6,9 @@ defmodule BlessdWeb.Session do
   def get_user(%Plug.Conn{params: %{"church_identifier" => church_identifier}} = conn) do
     conn
     |> list_users()
-    |> Enum.find(&(&1.church.identifier == church_identifier))
+    |> Enum.find(fn user ->
+      user.church_id == church_identifier || user.church.identifier == church_identifier
+    end)
   end
 
   def list_users(conn) do

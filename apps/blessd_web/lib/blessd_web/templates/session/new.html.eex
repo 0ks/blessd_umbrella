@@ -1,8 +1,6 @@
 <h1 class="title has-text-centered"><%= gettext("Sign in") %></h1>
 
-<% signin? = @users == [] or @conn.params["force_signin"] %>
-
-<div class="js-current-users columns is-multiline <%= if signin?, do: "is-hidden" %>">
+<div class="js-current-users columns is-multiline">
   <%= for user <- @users do %>
     <div class="column is-one-third">
       <div class="card">
@@ -18,7 +16,7 @@
         </div>
         <footer class="card-footer">
           <%= link gettext("Open"),
-            to: Routes.person_path(@conn, :index, user.church.identifier),
+            to: Routes.dashboard_path(@conn, :index, user.church.identifier),
             class: "card-footer-item" %>
         </footer>
       </div>
@@ -46,7 +44,7 @@
   </div>
 </div>
 
-<% form_class = if !signin?, do: "is-hidden js-form", else: "js-form" %>
+<% form_class = if @users != [], do: "is-hidden js-form", else: "js-form" %>
 
 <%= form_for @changeset, Routes.session_path(@conn, :create), [as: :session, class: form_class], fn f -> %>
   <%= error_alert(f) %>

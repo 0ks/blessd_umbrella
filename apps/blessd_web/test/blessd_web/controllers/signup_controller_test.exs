@@ -24,7 +24,7 @@ defmodule BlessdWeb.SignupControllerTest do
     test "redirects to index when data is valid", %{conn: conn} do
       conn = post(conn, Routes.signup_path(conn, :create), registration: @create_attrs)
 
-      assert redirected_to(conn) == Routes.person_path(conn, :index, "signup_church")
+      assert redirected_to(conn) == Routes.dashboard_path(conn, :index, "signup_church")
     end
 
     test "renders errors when data is invalid", %{conn: conn} do

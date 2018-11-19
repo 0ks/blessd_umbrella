@@ -1,12 +1,11 @@
 <%
   user = @conn.assigns[:current_user]
-  users = @conn.assigns[:users]
   church = if user, do: user.church, else: nil
 %>
 <nav class="navbar">
   <div class="navbar-brand">
     <% home_path = if church do
-      Routes.person_path(@conn, :index, church.identifier)
+      Routes.dashboard_path(@conn, :index, church.identifier)
     else
       Routes.page_path(@conn, :index)
     end %>
@@ -55,22 +54,10 @@
               class: "navbar-item",
               tabindex: -1 %>
             <div class="navbar-divider"></div>
-            <b class="navbar-item">
-              <%= gettext("Switch church") %>
-            </b>
-            <%= for switch <- users do %>
-              <%= if switch != user do %>
-                <%= link switch.church.name,
-                  to: Routes.person_path(@conn, :index, switch.church.identifier),
-                  class: "navbar-item",
-                  tabindex: -1 %>
-              <% end %>
-            <% end %>
-            <%= link gettext("Sign in to another church"),
-              to: Routes.session_path(@conn, :new, force_signin: true),
+            <%= link gettext("Switch church"),
+              to: Routes.session_path(@conn, :new),
               class: "navbar-item",
               tabindex: -1 %>
-            <div class="navbar-divider"></div>
             <%= link gettext("Signout"),
               to: Routes.session_path(@conn, :delete, church.identifier),
               method: :delete,

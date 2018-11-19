@@ -18,7 +18,6 @@ defmodule BlessdWeb.AuthenticationPlug do
       user ->
         conn
         |> assign(:current_user, user)
-        |> assign(:users, Session.list_users(conn))
         |> assign(
           :current_user_token,
           Phoenix.Token.sign(conn, "user socket", {user.id, user.church.id})

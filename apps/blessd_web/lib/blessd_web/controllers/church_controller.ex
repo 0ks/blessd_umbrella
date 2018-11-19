@@ -17,14 +17,14 @@ defmodule BlessdWeb.ChurchController do
   def update(conn, %{"church" => church_params}) do
     current_user = conn.assigns.current_user
 
-    current_user.church.id
+    current_user.church_id
     |> Accounts.get_church!(current_user)
     |> Accounts.update_church(church_params, current_user)
     |> case do
       {:ok, church} ->
         conn
         |> put_flash(:info, gettext("Church updated successfully."))
-        |> redirect(to: Routes.person_path(conn, :index, church.identifier))
+        |> redirect(to: Routes.church_path(conn, :edit, church.identifier))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", changeset: changeset)
