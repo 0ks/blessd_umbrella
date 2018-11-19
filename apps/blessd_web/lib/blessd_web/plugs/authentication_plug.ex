@@ -12,7 +12,7 @@ defmodule BlessdWeb.AuthenticationPlug do
       nil ->
         conn
         |> put_flash(:error, gettext("This page can only be accessed when signed in."))
-        |> redirect(to: "/")
+        |> redirect(to: "/sessions/new?church_identifier=#{conn.params["church_identifier"]}")
         |> halt()
 
       user ->

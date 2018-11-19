@@ -1,6 +1,8 @@
 <h1 class="title has-text-centered"><%= gettext("Sign in") %></h1>
 
-<div class="js-current-users columns is-multiline">
+<% church_identifier = @conn.params["church_identifier"] %>
+
+<div class="js-current-users columns is-multiline <%= if church_identifier, do: "is-hidden" %>">
   <%= for user <- @users do %>
     <div class="column is-one-third">
       <div class="card">
@@ -44,7 +46,7 @@
   </div>
 </div>
 
-<% form_class = if @users != [], do: "is-hidden js-form", else: "js-form" %>
+<% form_class = if @users != [] and !church_identifier, do: "is-hidden js-form", else: "js-form" %>
 
 <%= form_for @changeset, Routes.session_path(@conn, :create), [as: :session, class: form_class], fn f -> %>
   <%= error_alert(f) %>
@@ -52,7 +54,7 @@
   <div class="field">
     <%= label f, :church_identifier, class: "label" %>
     <div class="control">
-      <%= text_input f, :church_identifier %>
+      <%= text_input f, :church_identifier, value: church_identifier %>
     </div>
     <%= error_tag f, :church_identifier %>
   </div>
