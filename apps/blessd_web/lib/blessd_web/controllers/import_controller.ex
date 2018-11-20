@@ -23,6 +23,9 @@ defmodule BlessdWeb.ImportController do
         |> put_flash(:error, gettext("Sorry! The file provided could not be imported."))
         |> put_flash(:error_details, create_error_details(line, changeset))
         |> redirect(to: Routes.person_path(conn, :index, user.church.identifier))
+
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 

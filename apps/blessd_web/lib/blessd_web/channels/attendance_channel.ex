@@ -10,18 +10,26 @@ defmodule BlessdWeb.AttendanceChannel do
   end
 
   def handle_in("search", %{"meeting_occurrence_id" => occurrence_id, "query" => query}, socket) do
-    user = socket.assigns.current_user
+    with user = socket.assigns.current_user,
+         {:ok, occurrence} <- Observance.find_occurrence(occurrence_id, user),
+         {:ok, people} <- Observance.search_people(query, user) do
+      html =
+        View.render_to_string(AttendanceView, "table_body.html",
+          people: people,
+          occurrence: occurrence
+        )
 
-    occurrence = Observance.get_occurrence!(occurrence_id, user)
-    people = Observance.search_people(query, user)
+      {:reply, {:ok, %{table_body: html}}, socket}
+    else
+      {:error, :not_found} ->
+        {:reply, {:error, "Occurrence not found"}, socket}
 
-    html =
-      View.render_to_string(AttendanceView, "table_body.html",
-        people: people,
-        occurrence: occurrence
-      )
+      {:error, :unauthorized} ->
+        {:reply, {:error, "Unauthorized user"}, socket}
 
-    {:reply, {:ok, %{table_body: html}}, socket}
+      {:error, :unconfirmed} ->
+        {:reply, {:error, "Unconfirmed user"}, socket}
+    end
   end
 
   def handle_in(
@@ -31,14 +39,18 @@ defmodule BlessdWeb.AttendanceChannel do
       ) do
     user = socket.assigns.current_user
 
-    person_id
-    |> Observance.toggle_attendant(occurrence_id, user)
-    |> case do
+    case Observance.toggle_attendant(person_id, occurrence_id, user) do
       {:ok, _attendant} ->
         {:reply, :ok, socket}
 
       {:error, %Ecto.Changeset{}} ->
         {:reply, {:error, "Failed to toggle attendant"}, socket}
+
+      {:error, :unauthorized} ->
+        {:reply, {:error, "Unauthorized user"}, socket}
+
+      {:error, :unconfirmed} ->
+        {:reply, {:error, "Unconfirmed user"}, socket}
     end
   end
 end

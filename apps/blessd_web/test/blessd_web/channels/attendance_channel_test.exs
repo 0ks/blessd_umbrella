@@ -19,7 +19,7 @@ defmodule BlessdWeb.AttendanceChannelTest do
         user
       )
 
-    people = Observance.list_people(user)
+    {:ok, people} = Observance.list_people(user)
 
     {:ok, _, socket} =
       UserSocket

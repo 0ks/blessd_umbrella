@@ -23,6 +23,8 @@ defmodule BlessdWeb do
       import Plug.Conn
       import BlessdWeb.Gettext
       alias BlessdWeb.Router.Helpers, as: Routes
+
+      action_fallback BlessdWeb.FallbackController
     end
   end
 

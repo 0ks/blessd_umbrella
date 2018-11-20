@@ -3,25 +3,35 @@ defmodule BlessdWeb.Session do
 
   alias Blessd.Auth
 
-  def get_user(%Plug.Conn{params: %{"church_identifier" => church_identifier}} = conn) do
-    conn
-    |> list_users()
-    |> Enum.find(fn user ->
-      user.church_id == church_identifier || user.church.identifier == church_identifier
-    end)
+  def find_user(%Plug.Conn{params: %{"church_identifier" => church_identifier}} = conn) do
+    with {:ok, users} <- list_users(conn) do
+      users
+      |> Enum.find(fn user ->
+        user.church_id == church_identifier || user.church.identifier == church_identifier
+      end)
+      |> case do
+        nil -> {:error, :not_found}
+        user -> {:ok, user}
+      end
+    end
   end
 
   def list_users(conn) do
     case get_session(conn, :users) do
       nil ->
-        []
+        {:ok, []}
 
       users ->
-        users
-        |> Stream.filter(&elem(&1, 1))
-        |> Enum.map(fn {church_id, user_id} ->
-          Auth.get_user!(user_id, church_id)
-        end)
+        users =
+          users
+          |> Stream.filter(&elem(&1, 1))
+          |> Stream.map(fn {church_id, user_id} ->
+            Auth.find_user(user_id, church_id)
+          end)
+          |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
+          |> Map.get(:ok, [])
+
+        {:ok, users}
     end
   end
 
@@ -32,7 +42,7 @@ defmodule BlessdWeb.Session do
     end
   end
 
-  def delete_user(conn), do: delete_user(conn, get_user(conn))
+  def delete_user(conn), do: with({:ok, user} <- find_user(conn), do: delete_user(conn, user))
 
   def delete_user(conn, user) do
     users = get_session(conn, :users)

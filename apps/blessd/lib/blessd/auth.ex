@@ -3,7 +3,6 @@ defmodule Blessd.Auth do
 
   alias Blessd.Auth.Church
   alias Blessd.Auth.User
-  alias Blessd.NotAuthorizedError
   alias Blessd.Repo
   alias Ecto.Query
   alias Ecto.Queryable
@@ -13,15 +12,15 @@ defmodule Blessd.Auth do
 
   Raises `Ecto.NoResultsError` if the Church does not exist.
   """
-  def get_church!(identifier) when is_binary(identifier) do
+  def find_church(identifier) when is_binary(identifier) do
     case Integer.parse(identifier) do
-      {id, _} -> get_church!(id)
-      :error -> Repo.get_by!(Church, identifier: identifier)
+      {id, _} -> find_church(id)
+      :error -> Repo.find_by(Church, identifier: identifier)
     end
   end
 
-  def get_church!(id) when is_integer(id) do
-    Repo.get!(Church, id)
+  def find_church(id) when is_integer(id) do
+    Repo.find(Church, id)
   end
 
   @doc """
@@ -29,44 +28,58 @@ defmodule Blessd.Auth do
 
   Raises `Ecto.NoResultsError` if the Church does not exist.
   """
-  def get_user!(id, church_id) when is_binary(church_id) or is_integer(church_id) do
-    get_user!(id, get_church!(church_id))
+  def find_user(id, church_id) when is_binary(church_id) or is_integer(church_id) do
+    with {:ok, church} <- find_church(church_id), do: find_user(id, church)
   end
 
-  def get_user!(id, %Church{} = church) do
-    User
-    |> check_church!(church)
-    |> Repo.get!(id)
-    |> Map.put(:church, church)
+  def find_user(id, %Church{} = church) do
+    with {:ok, query} <- check_church(User, church),
+         {:ok, user} <- Repo.find(query, id) do
+      {:ok, Map.put(user, :church, church)}
+    end
   end
 
   @church_modules [Blessd.Accounts.Church]
+  @user_modules [Blessd.Accounts.User]
 
   @doc """
   Check if the given module, query or resource is from the
   given user and it's church.
   """
-  def check!(checkable, %User{church: church}), do: check_church!(checkable, church)
-
-  defp check_church!(module, %Church{} = church) when is_atom(module) do
+  def check(module, %User{} = user) when module in @user_modules do
     module
     |> Queryable.to_query()
-    |> check_church!(church)
+    |> check(user)
   end
 
-  defp check_church!(%Query{from: %{source: {_, m}}} = q, %Church{id: id})
+  def check(%Query{from: %{source: {_, m}}} = q, %User{id: id})
+      when m in @user_modules do
+    {:ok, where(q, [t], t.id == ^id)}
+  end
+
+  def check(%module{id: id} = user, %User{id: id}) when module in @user_modules, do: {:ok, user}
+  def check(_, %User{confirmed_at: nil}), do: {:error, :unconfirmed}
+  def check(checkable, %User{church: church}), do: check_church(checkable, church)
+
+  defp check_church(module, %Church{} = church) when is_atom(module) do
+    module
+    |> Queryable.to_query()
+    |> check_church(church)
+  end
+
+  defp check_church(%Query{from: %{source: {_, m}}} = q, %Church{id: id})
        when m in @church_modules do
-    where(q, [t], t.id == ^id)
+    {:ok, where(q, [t], t.id == ^id)}
   end
 
-  defp check_church!(%Query{} = query, %Church{id: church_id}) do
-    where(query, [t], t.church_id == ^church_id)
+  defp check_church(%Query{} = query, %Church{id: church_id}) do
+    {:ok, where(query, [t], t.church_id == ^church_id)}
   end
 
-  defp check_church!(%m{id: id} = resource, %Church{id: id}) when m in @church_modules do
-    resource
+  defp check_church(%m{id: id} = resource, %Church{id: id}) when m in @church_modules do
+    {:ok, resource}
   end
 
-  defp check_church!(%{church_id: id} = resource, %Church{id: id}), do: resource
-  defp check_church!(_, %Church{}), do: raise(NotAuthorizedError)
+  defp check_church(%{church_id: id} = resource, %Church{id: id}), do: {:ok, resource}
+  defp check_church(_, %Church{}), do: {:error, :unauthorized}
 end

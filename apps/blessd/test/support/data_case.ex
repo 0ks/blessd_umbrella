@@ -14,6 +14,7 @@ defmodule Blessd.DataCase do
 
   use ExUnit.CaseTemplate
 
+  alias Blessd.Confirmation
   alias Blessd.Signup
 
   using do
@@ -59,15 +60,13 @@ defmodule Blessd.DataCase do
     "credential" => %{source: "password", token: "password"}
   }
 
-  def signup(original? \\ false, attrs \\ @signup_attrs) do
+  def signup(attrs \\ @signup_attrs) do
     {:ok, user} = Signup.register(attrs)
+    {:ok, confirmation_user} = Confirmation.generate_token(user)
+    {:ok, confirmed_user} = Confirmation.confirm(confirmation_user)
 
-    if original? do
-      user
-    else
-      user = %{user | church: convert_struct!(user.church, Blessd.Auth.Church)}
-      convert_struct!(user, Blessd.Auth.User)
-    end
+    confirmed_user = %{confirmed_user | church: convert_struct!(user.church, Blessd.Auth.Church)}
+    convert_struct!(confirmed_user, Blessd.Auth.User)
   end
 
   def convert_struct!(struct, target_module) do

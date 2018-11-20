@@ -30,7 +30,7 @@ defmodule Blessd.Authentication.Session do
 
   defp validate_church(changeset) do
     with %Ecto.Changeset{valid?: true, changes: %{church_identifier: identifier}} <- changeset,
-         {:ok, church} <- get_church(identifier) do
+         {:ok, church} <- Repo.find_by(Church, identifier: identifier) do
       put_assoc(changeset, :church, church)
     else
       %Ecto.Changeset{valid?: false} = changeset -> changeset
@@ -43,7 +43,7 @@ defmodule Blessd.Authentication.Session do
            valid?: true,
            changes: %{church: church, email: email, password: password}
          } <- changeset,
-         {:ok, credential} <- get_credential(email, church),
+         {:ok, credential} <- find_credential(email, church),
          true <- Comeonin.Bcrypt.checkpw(password, credential.token) do
       put_assoc(changeset, :user, credential.user)
     else
@@ -59,24 +59,13 @@ defmodule Blessd.Authentication.Session do
     end
   end
 
-  defp get_credential(email, %Ecto.Changeset{data: church}), do: get_credential(email, church)
+  defp find_credential(email, %Ecto.Changeset{data: church}), do: find_credential(email, church)
 
-  defp get_credential(email, %Church{id: church_id}) do
+  defp find_credential(email, %Church{id: church_id}) do
     Credential
     |> join(:left, [c], assoc(c, :user))
     |> where([c, u], u.church_id == ^church_id and u.email == ^email and c.source == "password")
     |> preload([c, u], user: u)
-    |> Repo.one()
-    |> case do
-      nil -> {:error, :not_found}
-      credential -> {:ok, credential}
-    end
-  end
-
-  defp get_church(identifier) do
-    case Repo.get_by(Church, identifier: identifier) do
-      nil -> {:error, :not_found}
-      credential -> {:ok, credential}
-    end
+    |> Repo.single()
   end
 end

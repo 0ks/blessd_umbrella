@@ -5,12 +5,14 @@ defmodule BlessdWeb.SessionController do
   alias BlessdWeb.Session
 
   def new(conn, _params) do
-    render(
-      conn,
-      "new.html",
-      changeset: Authentication.new_session(),
-      users: Session.list_users(conn)
-    )
+    with {:ok, users} <- Session.list_users(conn) do
+      render(
+        conn,
+        "new.html",
+        changeset: Authentication.new_session(),
+        users: users
+      )
+    end
   end
 
   def create(conn, %{"session" => session_params}) do
@@ -21,7 +23,9 @@ defmodule BlessdWeb.SessionController do
         |> redirect(to: Routes.dashboard_path(conn, :index, session.church.identifier))
 
       {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset, users: Session.list_users(conn))
+        with {:ok, users} <- Session.list_users(conn) do
+          render(conn, "new.html", changeset: changeset, users: users)
+        end
     end
   end
 

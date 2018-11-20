@@ -54,7 +54,7 @@ defmodule Blessd.Confirmation.User do
   defp os_now, do: :os.system_time(:seconds)
 
   defp generate_token do
-    Base.url_encode64("#{os_now() + 12 * 60 * 60}:#{:crypto.strong_rand_bytes(30)}")
+    Base.url_encode64("#{os_now() + 12 * 60 * 60}:#{Ecto.UUID.generate()}")
   end
 
   @doc false

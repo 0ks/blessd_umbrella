@@ -22,15 +22,15 @@ defmodule Blessd.ObservanceTest do
     test "list_meetings/0 returns all meetings" do
       user = signup()
       meeting = meeting_fixture(user)
-      assert [found] = Observance.list_meetings(user)
+      assert {:ok, [found]} = Observance.list_meetings(user)
 
       assert found.name == meeting.name
     end
 
-    test "get_meeting!/1 returns the meeting with given id" do
+    test "find_meeting/1 returns the meeting with given id" do
       user = signup()
       meeting = meeting_fixture(user)
-      assert found = Observance.get_meeting!(meeting.id, user)
+      assert {:ok, found} = Observance.find_meeting(meeting.id, user)
 
       assert found.name == meeting.name
     end
@@ -60,7 +60,7 @@ defmodule Blessd.ObservanceTest do
       assert {:error, %Ecto.Changeset{}} =
                Observance.update_meeting(meeting, @invalid_attrs, user)
 
-      assert found = Observance.get_meeting!(meeting.id, user)
+      assert {:ok, found} = Observance.find_meeting(meeting.id, user)
 
       assert found.name == meeting.name
     end
@@ -69,13 +69,13 @@ defmodule Blessd.ObservanceTest do
       user = signup()
       meeting = meeting_fixture(user)
       assert {:ok, %Meeting{}} = Observance.delete_meeting(meeting, user)
-      assert_raise Ecto.NoResultsError, fn -> Observance.get_meeting!(meeting.id, user) end
+      assert {:error, :not_found} == Observance.find_meeting(meeting.id, user)
     end
 
     test "change_meeting/1 returns a meeting changeset" do
       user = signup()
       meeting = meeting_fixture(user)
-      assert %Ecto.Changeset{} = Observance.change_meeting(meeting, user)
+      assert {:ok, %Ecto.Changeset{}} = Observance.change_meeting(meeting, user)
     end
   end
 end

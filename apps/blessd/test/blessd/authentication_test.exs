@@ -21,7 +21,7 @@ defmodule Blessd.AuthenticationTest do
                church_identifier: church.identifier
              })
 
-    %{church: church2, id: id2, email: ^email} = signup(false, @signup2_attrs)
+    %{church: church2, id: id2, email: ^email} = signup(@signup2_attrs)
 
     assert {:ok, %Session{user: %User{id: ^id2}}} =
              Authentication.authenticate(%{

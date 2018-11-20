@@ -14,18 +14,17 @@ defmodule Blessd.Confirmation do
   end
 
   def generate_token(%{id: user_id}) do
-    User
-    |> User.preload()
-    |> Repo.get!(user_id)
-    |> generate_token()
+    with {:ok, user} <- User |> User.preload() |> Repo.find(user_id) do
+      generate_token(user)
+    end
   end
 
   def confirm(token, identifier) when is_binary(identifier) do
-    confirm(token, Auth.get_church!(identifier))
+    with {:ok, church} <- Auth.find_church(identifier), do: confirm(token, church)
   end
 
   def confirm(token, church) do
-    with {:ok, user} <- get_user_by_token(token, church) do
+    with {:ok, user} <- find_user_by_token(token, church) do
       confirm(user)
     end
   end
@@ -36,15 +35,11 @@ defmodule Blessd.Confirmation do
     |> Repo.update()
   end
 
-  defp get_user_by_token(token, church) do
+  defp find_user_by_token(token, church) do
     User
     |> User.by_church(church)
     |> User.by_token(token)
     |> User.preload()
-    |> Repo.one()
-    |> case do
-      nil -> {:error, :not_found}
-      user -> {:ok, user}
-    end
+    |> Repo.single()
   end
 end
