@@ -1,11 +1,11 @@
-defmodule Blessd.Signup.Credential do
+defmodule Blessd.Invitation.Credential do
   use Ecto.Schema
 
   import Blessd.Changeset.Credential
 
   alias Blessd.Auth.Church
-  alias Blessd.Signup.Credential
-  alias Blessd.Signup.User
+  alias Blessd.Invitation.Credential
+  alias Blessd.Invitation.User
 
   schema "credentials" do
     belongs_to(:church, Church)
@@ -22,12 +22,5 @@ defmodule Blessd.Signup.Credential do
     credential
     |> cast(attrs)
     |> validate_all()
-  end
-
-  @doc false
-  def registration_changeset(%Credential{} = credential, attrs) do
-    credential
-    |> cast(attrs)
-    |> validate_basic()
   end
 end
