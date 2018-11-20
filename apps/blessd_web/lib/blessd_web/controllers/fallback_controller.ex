@@ -23,9 +23,10 @@ defmodule BlessdWeb.FallbackController do
     conn
     |> put_flash(
       :error,
-      gettext(
-        "You must confirm your email first. Please check your inbox, or request another email confirmation below."
-      )
+      gettext("""
+      You must confirm your email first. Please check your inbox, request another email
+      or change to a correct email address if needed.
+      """)
     )
     |> redirect(
       to: Routes.dashboard_path(conn, :index, conn.assigns.current_user.church.identifier)

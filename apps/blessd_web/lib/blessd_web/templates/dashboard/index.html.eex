@@ -20,8 +20,8 @@
               <p>
                 <%= gettext(
                   """
-                  If you can't find it, or it's expired,
-                  click below and we will send a new one.
+                  If you can't find it, or it's expired, we will send a new one
+                  or check if the email address you gave us is correct.
                   """
                 ) %>
               </p>
@@ -31,6 +31,9 @@
             <%= link gettext("Resend email"),
               to: Routes.confirmation_path(@conn, :create, @resources.user.church.identifier),
               method: :post,
+              class: "card-footer-item" %>
+            <%= link gettext("Check email"),
+              to: Routes.user_path(@conn, :edit, @resources.user.church.identifier, @resources.user),
               class: "card-footer-item" %>
           </footer>
         </div>
