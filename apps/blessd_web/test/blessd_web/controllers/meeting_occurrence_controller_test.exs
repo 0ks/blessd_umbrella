@@ -132,11 +132,12 @@ defmodule BlessdWeb.MeetingOccurrenceControllerTest do
 
       assert redirected_to(resp) == Routes.meeting_path(conn, :index, user.church.identifier)
 
-      assert_error_sent(404, fn ->
+      resp =
         conn
         |> authenticate(user)
         |> get(Routes.meeting_occurrence_path(conn, :edit, user.church.identifier, occurrence))
-      end)
+
+      assert resp.status == 404
     end
   end
 end

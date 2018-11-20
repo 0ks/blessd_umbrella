@@ -37,7 +37,9 @@ defmodule BlessdWeb.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bamboo, "~> 1.1"},
       {:blessd, in_umbrella: true},
+      {:eex_html, "~> 0.2"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.1"},
       {:phoenix, "~> 1.4.0"},

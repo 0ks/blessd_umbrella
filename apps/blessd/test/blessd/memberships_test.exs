@@ -22,13 +22,13 @@ defmodule Blessd.MembershipsTest do
     test "list_people/0 returns all people" do
       user = signup()
       person = person_fixture(user)
-      assert Memberships.list_people(user) == [person]
+      assert Memberships.list_people(user) == {:ok, [person]}
     end
 
-    test "get_person!/1 returns the person with given id" do
+    test "find_person/1 returns the person with given id" do
       user = signup()
       person = person_fixture(user)
-      assert Memberships.get_person!(person.id, user) == person
+      assert Memberships.find_person(person.id, user) == {:ok, person}
     end
 
     test "create_person/1 with valid data creates a person" do
@@ -115,25 +115,25 @@ defmodule Blessd.MembershipsTest do
 
       assert {:error, %Ecto.Changeset{}} = Memberships.update_person(person, @invalid_attrs, user)
 
-      assert person == Memberships.get_person!(person.id, user)
+      assert {:ok, person} == Memberships.find_person(person.id, user)
     end
 
     test "delete_person/1 deletes the person" do
       user = signup()
       person = person_fixture(user)
       assert {:ok, %Person{}} = Memberships.delete_person(person, user)
-      assert_raise Ecto.NoResultsError, fn -> Memberships.get_person!(person.id, user) end
+      assert {:error, :not_found} == Memberships.find_person(person.id, user)
     end
 
     test "new_person/1 returns a person" do
       %{church: %{id: church_id}} = user = signup()
-      assert %Person{church_id: ^church_id} = Memberships.new_person(user)
+      assert {:ok, %Person{church_id: ^church_id}} = Memberships.new_person(user)
     end
 
     test "change_person/1 returns a person changeset" do
       user = signup()
       person = person_fixture(user)
-      assert %Ecto.Changeset{} = Memberships.change_person(person, user)
+      assert {:ok, %Ecto.Changeset{}} = Memberships.change_person(person, user)
     end
   end
 end

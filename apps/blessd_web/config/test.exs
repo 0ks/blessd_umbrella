@@ -5,3 +5,5 @@ use Mix.Config
 config :blessd_web, BlessdWeb.Endpoint,
   http: [port: 4001],
   server: false
+
+config :blessd_web, BlessdWeb.Mailer, adapter: Bamboo.TestAdapter

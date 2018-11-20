@@ -1,0 +1,55 @@
+<h1 class="title has-text-centered">
+  <%= gettext "%{church} Dashboard", church: @resources.user.church.name %>
+</h1>
+
+<%= if show_any_card?(@resources) do %>
+  <div class="columns is-multiline">
+    <div class="column is-one-third">
+      <%= if show_card?(:confirmation, @resources) do %>
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              <%= gettext("Confirm your email") %>
+            </p>
+          </header>
+          <div class="card-content">
+            <div class="content">
+              <p>
+                <%= gettext("We sent you an email with the instructions on how to do it.") %>
+              </p>
+              <p>
+                <%= gettext(
+                  """
+                  If you can't find it, or it's expired, we will send a new one
+                  or check if the email address you gave us is correct.
+                  """
+                ) %>
+              </p>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <%= link gettext("Resend email"),
+              to: Routes.confirmation_path(@conn, :create, @resources.user.church.identifier),
+              method: :post,
+              class: "card-footer-item" %>
+            <%= link gettext("Check email"),
+              to: Routes.user_path(@conn, :edit, @resources.user.church.identifier, @resources.user),
+              class: "card-footer-item" %>
+          </footer>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <div class="hero is-large">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <p class="subtitle">
+          <%= gettext "Keep in touch!" %></br>
+          <%= gettext "You will find some useful info here in the future." %>
+        </p>
+      </div>
+    </div>
+  </div>
+<% end %>
+

@@ -38,5 +38,7 @@ defmodule BlessdWeb.ConnCase do
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 
-  def authenticate(conn, user), do: Plug.Test.init_test_session(conn, %{current_user_id: user.id})
+  def authenticate(conn, user) do
+    Plug.Test.init_test_session(conn, %{users: %{user.church.id => user.id}})
+  end
 end

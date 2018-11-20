@@ -118,16 +118,19 @@ defmodule BlessdWeb.PersonControllerTest do
       user = signup()
       person = fixture(:person, user)
 
-      conn =
+      resp =
         conn
         |> authenticate(user)
         |> delete(Routes.person_path(conn, :delete, user.church.identifier, person))
 
-      assert redirected_to(conn) == Routes.person_path(conn, :index, user.church.identifier)
+      assert redirected_to(resp) == Routes.person_path(conn, :index, user.church.identifier)
 
-      assert_error_sent(404, fn ->
-        get(conn, Routes.person_path(conn, :edit, user.church.identifier, person))
-      end)
+      resp =
+        conn
+        |> authenticate(user)
+        |> get(Routes.person_path(conn, :edit, user.church.identifier, person))
+
+      assert resp.status == 404
     end
   end
 end

@@ -1,12 +1,60 @@
 <h1 class="title has-text-centered"><%= gettext("Sign in") %></h1>
 
-<%= form_for @changeset, Routes.session_path(@conn, :create), [as: :session], fn f -> %>
+<% church_identifier = @conn.params["church_identifier"] %>
+
+<div class="js-current-users columns is-multiline <%= if church_identifier, do: "is-hidden" %>">
+  <%= for user <- @users do %>
+    <div class="column is-one-third">
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">
+            <%= user.church.name %>
+          </p>
+        </header>
+        <div class="card-content">
+          <div class="content">
+            <%= gettext("Signed in as %{name}", name: user.name) %> <br />
+          </div>
+        </div>
+        <footer class="card-footer">
+          <%= link gettext("Open"),
+            to: Routes.dashboard_path(@conn, :index, user.church.identifier),
+            class: "card-footer-item" %>
+        </footer>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="column is-one-third">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title">
+          <%= gettext("Another church") %>
+        </p>
+      </header>
+      <div class="card-content">
+        <div class="content">
+          <%= gettext("Sign in to another church") %>
+        </div>
+      </div>
+      <footer class="card-footer">
+        <%= link gettext("Sign in"),
+          to: "#",
+          class: "card-footer-item js-manual-church" %>
+      </footer>
+    </div>
+  </div>
+</div>
+
+<% form_class = if @users != [] and !church_identifier, do: "is-hidden js-form", else: "js-form" %>
+
+<%= form_for @changeset, Routes.session_path(@conn, :create), [as: :session, class: form_class], fn f -> %>
   <%= error_alert(f) %>
 
   <div class="field">
     <%= label f, :church_identifier, class: "label" %>
     <div class="control">
-      <%= text_input f, :church_identifier %>
+      <%= text_input f, :church_identifier, value: church_identifier %>
     </div>
     <%= error_tag f, :church_identifier %>
   </div>
@@ -29,5 +77,9 @@
 
   <div class="buttons">
     <%= submit gettext("Submit"), class: "button is-primary" %>
+
+    <%= if @users != [] do %>
+      <%= link gettext("Choose church"), to: "#", class: "button js-choose-church" %>
+    <% end %>
   </div>
 <% end %>

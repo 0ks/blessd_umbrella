@@ -13,6 +13,8 @@ defmodule BlessdWeb.Router do
     plug BlessdWeb.AuthenticationPlug
   end
 
+  forward "/sent_emails", Bamboo.SentEmailViewerPlug
+
   scope "/", BlessdWeb do
     pipe_through :browser
 
@@ -23,10 +25,18 @@ defmodule BlessdWeb.Router do
   end
 
   scope "/:church_identifier", BlessdWeb do
+    pipe_through :browser
+
+    resources "/confirmation", ConfirmationController, only: [:show]
+  end
+
+  scope "/:church_identifier", BlessdWeb do
     pipe_through [:browser, :authenticated]
 
-    resources "/church", ChurchController, only: [:edit, :update, :delete], singleton: true
+    get "/", DashboardController, :index
 
+    resources "/confirmation", ConfirmationController, only: [:create]
+    resources "/church", ChurchController, only: [:edit, :update, :delete], singleton: true
     resources "/import", ImportController, only: [:create]
     resources "/people", PersonController, except: [:show]
     resources "/users", UserController, except: [:show, :new, :create]

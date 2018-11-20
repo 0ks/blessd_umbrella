@@ -4,10 +4,10 @@ defmodule BlessdWeb.AttendanceController do
   alias Blessd.Observance
 
   def index(conn, %{"meeting_occurrence_id" => occurrence_id}) do
-    user = conn.assigns.current_user
-    occurrence = Observance.get_occurrence!(occurrence_id, user)
-    people = Observance.list_people(user)
-
-    render(conn, "index.html", occurrence: occurrence, people: people)
+    with user = conn.assigns.current_user,
+         {:ok, occurrence} <- Observance.find_occurrence(occurrence_id, user),
+         {:ok, people} <- Observance.list_people(user) do
+      render(conn, "index.html", occurrence: occurrence, people: people)
+    end
   end
 end
