@@ -12,7 +12,7 @@
     <%= link to: home_path,
       class: "navbar-item",
       tabindex: -1 do %>
-      <img src="<%= Routes.static_url(@conn, "/images/cross.png") %>"></img>
+      <img src="<%= Routes.static_path(@conn, "/images/cross.png") %>"></img>
     <% end %>
     <div class="navbar-burger burger" data-target="navMenu">
       <span></span>
