@@ -9,7 +9,37 @@
     </tr>
   </thead>
   <tbody>
-<%= for user <- @users do %>
+    <tr>
+      <td>
+        <%= @current_user.name %>
+        <span class="tag is-info"><%= gettext("Me") %></span>
+      </td>
+      <td><%= @current_user.email %></td>
+
+      <td>
+        <div class="field has-addons is-pulled-right">
+          <div class="control">
+            <%= link gettext("Edit"),
+              to: Routes.user_path(@conn, :edit, @current_user.church.identifier, @current_user),
+              class: "button is-small" %>
+          </div>
+          <div class="control">
+            <%= link gettext("Delete"),
+              to: Routes.user_path(
+                @conn,
+                :delete,
+                @current_user.church.identifier,
+                @current_user
+              ),
+              method: :delete,
+              data: [confirm: gettext("Are you sure?")],
+              class: "button is-danger is-small" %>
+          </div>
+        </div>
+      </td>
+    </tr>
+<% current_user_id = @current_user.id %>
+<%= for %{id: user_id} = user when user_id != current_user_id <- @users do %>
     <tr>
       <td>
         <%= cond do %>
@@ -35,13 +65,6 @@
                   token: user.invitation_token
                 ),
                 method: :post,
-                class: "button is-small" %>
-            </div>
-          <% end %>
-          <%= if Accounts.authorized?(user, :change, @current_user) do %>
-            <div class="control">
-              <%= link gettext("Edit"),
-                to: Routes.user_path(@conn, :edit, @current_user.church.identifier, user),
                 class: "button is-small" %>
             </div>
           <% end %>
