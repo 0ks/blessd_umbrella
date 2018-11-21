@@ -1,3 +1,30 @@
+// Responsive table
 .table {
   width: 100%;
+}
+
+@media screen and (max-width: $desktop) {
+  .table {
+    table-layout: fixed;
+    word-wrap: break-word;
+  }
+}
+
+// Table navigation
+.table tbody tr.nav-focus {
+  background: $light;
+  cursor: pointer;
+
+  input[type=checkbox] {
+    cursor: pointer;
+  }
+}
+
+// Only element inside .field.has-addons must have border radius
+.field.has-addons .control {
+  .button, .input, .select select {
+    &:first-child:last-child {
+      border-radius: 2px;
+    }
+  }
 }

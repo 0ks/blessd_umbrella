@@ -3,6 +3,7 @@ defmodule BlessdWeb.InvitationController do
 
   alias Blessd.Invitation
   alias BlessdWeb.InvitationMailer
+  alias BlessdWeb.Session
 
   def new(conn, _params) do
     with current_user = conn.assigns.current_user,
@@ -40,7 +41,8 @@ defmodule BlessdWeb.InvitationController do
 
   def edit(conn, %{"church_identifier" => identifier, "id" => token}) do
     with {:ok, user} <- Invitation.validate_token(token, identifier),
-         {:ok, changeset} <- Invitation.new_accept(user) do
+         {:ok, accept} <- Invitation.new_accept(user),
+         {:ok, changeset} <- Invitation.change_accept(accept) do
       render(conn, "edit.html", changeset: changeset)
     else
       {:error, reason} ->
@@ -50,9 +52,10 @@ defmodule BlessdWeb.InvitationController do
     end
   end
 
-  def update(conn, %{"church_identifier" => identifier, "id" => token, "invitation" => attrs}) do
+  def update(conn, %{"church_identifier" => identifier, "id" => token, "accept" => attrs}) do
     with {:ok, user} <- Invitation.accept(token, attrs, identifier) do
       conn
+      |> Session.put_user(user)
       |> put_flash(:info, gettext("Invitation accepted succesfully."))
       |> redirect(to: Routes.dashboard_path(conn, :index, user.church.identifier))
     else

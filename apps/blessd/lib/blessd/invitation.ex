@@ -33,7 +33,7 @@ defmodule Blessd.Invitation do
     with {:ok, user} <- find_user(token, identifier) do
       user
       |> change(%{})
-      |> validate_confirmation()
+      |> validate_invitation()
       |> apply_action(:insert)
     end
   end
@@ -41,11 +41,11 @@ defmodule Blessd.Invitation do
   def accept(token, attrs, identifier) do
     with {:ok, user} <- find_user(token, identifier),
          {:ok, credential} <- new_credential(user),
-         credential_changeset = Credential.changeset(credential, attrs["credential"]) do
+         {:ok, accept} <- new_accept(user, credential) do
       Multi.new()
-      |> Multi.run(:accept, &validate_accept(&1, &2, attrs))
+      |> Multi.run(:accept, &validate_accept(&1, &2, accept, attrs))
       |> Multi.update(:user, User.accept_changeset(user, attrs["user"]))
-      |> Multi.insert(:credential, credential_changeset)
+      |> Multi.insert(:credential, Credential.changeset(credential, attrs["credential"]))
       |> Repo.transaction()
       |> case do
         {:ok, %{user: user}} ->
@@ -62,22 +62,20 @@ defmodule Blessd.Invitation do
     end
   end
 
-  defp validate_accept(_repo, _changes, attrs) do
-    case Accept.changeset(%Accept{user: nil, credential: nil}, attrs) do
+  defp validate_accept(_repo, _changes, accept, attrs) do
+    case Accept.changeset(accept, attrs) do
       %Ecto.Changeset{valid?: true} = changeset -> {:ok, changeset}
       %Ecto.Changeset{valid?: false} = changeset -> apply_action(changeset, :insert)
     end
   end
 
   def new_accept(user) do
-    Accept.changeset(
-      %Accept{
-        user: user,
-        credential: new_credential(user)
-      },
-      %{}
-    )
+    with {:ok, credential} <- new_credential(user), do: new_accept(user, credential)
   end
+
+  def new_accept(user, credential), do: {:ok, %Accept{user: user, credential: credential}}
+
+  def change_accept(accept), do: {:ok, Accept.changeset(accept, %{})}
 
   def new_user(current_user) do
     authorize(
@@ -93,16 +91,8 @@ defmodule Blessd.Invitation do
     end
   end
 
-  def new_credential(current_user) do
-    authorize(
-      %Credential{
-        church_id: current_user.church_id,
-        user_id: current_user.id,
-        source: "password"
-      },
-      :new,
-      current_user
-    )
+  def new_credential(user) do
+    {:ok, %Credential{church_id: user.church_id, user_id: user.id, source: "password"}}
   end
 
   def change_credential(credential, current_user) do
