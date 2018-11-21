@@ -1,6 +1,7 @@
 defmodule Blessd.Invitation.User do
   use Ecto.Schema
 
+  import Blessd.Changeset.User
   import Ecto.Changeset
   import Ecto.Query
 
@@ -13,53 +14,35 @@ defmodule Blessd.Invitation.User do
     field(:name, :string)
     field(:email, :string)
     field(:invitation_token, :string)
-    field(:accepted_at, :utc_datetime)
+    field(:confirmed_at, :utc_datetime)
 
     timestamps()
   end
 
   @doc false
-  def token_changeset(%User{} = user) do
+  def invite_changeset(%User{} = user, attrs) do
     user
-    |> change(%{invitation_token: generate_token(), confirmed_at: nil})
-    |> validate_invitation()
+    |> cast(attrs, [:email])
+    |> validate_required([:email])
+    |> unique_constraint(:email, name: :users_church_id_email_index)
+    |> put_invitation()
   end
 
   @doc false
-  def accept_changeset(%User{} = user) do
+  def reinvite_changeset(%User{} = user) do
     user
-    |> change(%{confirmed_at: utc_now()})
-    |> validate_invitation()
-    |> put_change(:invitation_token, nil)
-    |> validate_required(:confirmed_at)
-  end
-
-  defp validate_invitation(changeset) do
-    with {:ok, decoded} <- changeset |> get_field(:invitation_token) |> Base.url_decode64(),
-         [expires_at_str, _] <- String.split(decoded, ":"),
-         {expires_at, _} <- Integer.parse(expires_at_str) do
-      if expires_at < os_now() do
-        add_error(changeset, :invitation_token, "is expired", validation: :expired)
-      else
-        changeset
-      end
-    else
-      _ -> add_error(changeset, :invitation_token, "is invalid", validation: :format)
-    end
+    |> change(%{})
     |> validate_required(:invitation_token)
-  end
-
-  defp utc_now, do: DateTime.truncate(DateTime.utc_now(), :second)
-
-  defp os_now, do: :os.system_time(:seconds)
-
-  defp generate_token do
-    Base.url_encode64("#{os_now() + 12 * 60 * 60}:#{Ecto.UUID.generate()}")
+    |> put_invitation()
   end
 
   @doc false
-  def by_church(query, %Church{id: church_id}), do: by_church(query, church_id)
-  def by_church(query, church_id), do: where(query, [u], u.church_id == ^church_id)
+  def accept_changeset(%User{} = user, attrs) do
+    user
+    |> cast(attrs, [:name])
+    |> validate_required(:name)
+    |> put_invited_at()
+  end
 
   @doc false
   def by_token(query, token), do: where(query, [u], u.invitation_token == ^token)

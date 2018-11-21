@@ -28,6 +28,7 @@ defmodule BlessdWeb.Router do
     pipe_through :browser
 
     resources "/confirmation", ConfirmationController, only: [:show]
+    resources "/invitation", InvitationController, only: [:edit, :update]
   end
 
   scope "/:church_identifier", BlessdWeb do
@@ -36,6 +37,7 @@ defmodule BlessdWeb.Router do
     get "/", DashboardController, :index
 
     resources "/confirmation", ConfirmationController, only: [:create]
+    resources "/invitation", InvitationController, only: [:new, :create]
     resources "/church", ChurchController, only: [:edit, :update, :delete], singleton: true
     resources "/import", ImportController, only: [:create]
     resources "/people", PersonController, except: [:show]

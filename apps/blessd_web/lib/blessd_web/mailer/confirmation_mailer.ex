@@ -3,23 +3,20 @@ defmodule BlessdWeb.ConfirmationMailer do
   import BlessdWeb.Gettext
   import EExHTML
 
-  alias Blessd.Confirmation
   alias BlessdWeb.Endpoint
   alias BlessdWeb.Mailer
   alias BlessdWeb.Router.Helpers, as: Routes
 
   def send(user) do
-    with {:ok, user} <- Confirmation.generate_token(user) do
-      new_email()
-      |> to(user.email)
-      |> from("contact@blessd.app")
-      |> subject(gettext("Welcome to Blessd - Email Confirmation"))
-      |> html_body(email_html(user))
-      |> text_body(email_text(user))
-      |> Mailer.deliver_later()
+    new_email()
+    |> to(user.email)
+    |> from("contact@blessd.app")
+    |> subject(gettext("Welcome to Blessd - email confirmation"))
+    |> html_body(email_html(user))
+    |> text_body(email_text(user))
+    |> Mailer.deliver_later()
 
-      {:ok, user}
-    end
+    :ok
   end
 
   defp email_html(user) do
@@ -27,9 +24,8 @@ defmodule BlessdWeb.ConfirmationMailer do
     <h1><%= gettext("Welcome to Blessd, %{name}.", name: user.name) %></h1>
 
     <p>
-      <a href="<%= confirmation_url(user) %>">
-        <%= gettext("Click here") %>
-      </a>
+      <a href="<%= confirmation_url(user) %>"><%= gettext("Click here") %></a>
+
       <%= gettext("to confirm your account") %>
     </p>
 
