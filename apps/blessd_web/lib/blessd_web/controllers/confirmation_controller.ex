@@ -6,12 +6,12 @@ defmodule BlessdWeb.ConfirmationController do
   alias BlessdWeb.Session
 
   def create(conn, _params) do
-    case ConfirmationMailer.send(conn.assigns.current_user) do
-      {:ok, user} ->
-        conn
-        |> put_flash(:info, gettext("Confirmation email sent."))
-        |> redirect(to: Routes.dashboard_path(conn, :index, user.church.identifier))
-
+    with {:ok, user} <- Confirmation.generate_token(conn.assigns.current_user),
+         :ok = ConfirmationMailer.send(user) do
+      conn
+      |> put_flash(:info, gettext("Confirmation email sent."))
+      |> redirect(to: Routes.dashboard_path(conn, :index, user.church.identifier))
+    else
       {:error, reason} ->
         conn
         |> put_flash(:error, error_message(reason))
@@ -41,11 +41,10 @@ defmodule BlessdWeb.ConfirmationController do
   end
 
   defp error_message([{:confirmation_token, {_, [validation: :expired]}} | _]) do
-    gettext("The given confirmation token is expired, please request another confirmation email.")
-  end
-
-  defp error_message([{:confirmation_token, {_, [validation: :format]}} | _]) do
-    gettext("The given confirmation token is invalid.")
+    gettext("""
+    The given confirmation token is invalid or expired,
+    please request another confirmation email.
+    """)
   end
 
   defp error_message([_ | t]), do: error_message(t)

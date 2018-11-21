@@ -5,7 +5,11 @@
 // and connect at the socket path in "lib/web/endpoint.ex":
 import {Socket} from "phoenix"
 
-let socket = new Socket("/socket", {params: {token: window.currentUserToken}});
-socket.connect();
+let socket;
+
+if (window.currentUserToken != "") {
+  socket = new Socket("/socket", {params: {token: window.currentUserToken}});
+  socket.connect();
+}
 
 export default socket

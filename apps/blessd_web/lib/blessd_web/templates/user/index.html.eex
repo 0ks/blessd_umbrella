@@ -9,21 +9,28 @@
     </tr>
   </thead>
   <tbody>
-<%= for user <- @users do %>
     <tr>
-      <td><%= user.name %></td>
-      <td><%= user.email %></td>
+      <td>
+        <%= @current_user.name %>
+        <span class="tag is-info"><%= gettext("Me") %></span>
+      </td>
+      <td><%= @current_user.email %></td>
 
       <td>
         <div class="field has-addons is-pulled-right">
           <div class="control">
             <%= link gettext("Edit"),
-              to: Routes.user_path(@conn, :edit, @current_user.church.identifier, user),
+              to: Routes.user_path(@conn, :edit, @current_user.church.identifier, @current_user),
               class: "button is-small" %>
           </div>
           <div class="control">
             <%= link gettext("Delete"),
-              to: Routes.user_path(@conn, :delete, @current_user.church.identifier, user),
+              to: Routes.user_path(
+                @conn,
+                :delete,
+                @current_user.church.identifier,
+                @current_user
+              ),
               method: :delete,
               data: [confirm: gettext("Are you sure?")],
               class: "button is-danger is-small" %>
@@ -31,7 +38,56 @@
         </div>
       </td>
     </tr>
+<% current_user_id = @current_user.id %>
+<%= for %{id: user_id} = user when user_id != current_user_id <- @users do %>
+    <tr>
+      <td>
+        <%= cond do %>
+          <% Accounts.User.invitation_expired?(user) -> %>
+            <span class="tag is-danger"><%= gettext("Invitation expired") %></span>
+          <% Accounts.User.invitation_pending?(user) -> %>
+            <span class="tag is-warning"><%= gettext("Invitation pending") %></span>
+          <% true -> %>
+            <%= user.name %>
+        <% end %>
+      </td>
+      <td><%= user.email %></td>
+
+      <td>
+        <div class="field has-addons is-pulled-right">
+          <%= if Accounts.User.invitation_pending?(user) do %>
+            <div class="control">
+              <%= link gettext("Resend invitation"),
+                to: Routes.invitation_path(
+                  @conn,
+                  :create,
+                  @current_user.church.identifier,
+                  token: user.invitation_token
+                ),
+                method: :post,
+                class: "button is-small" %>
+            </div>
+          <% end %>
+          <%= if Accounts.authorized?(user, :delete, @current_user) do %>
+            <div class="control">
+              <%= link gettext("Delete"),
+                to: Routes.user_path(@conn, :delete, @current_user.church.identifier, user),
+                method: :delete,
+                data: [confirm: gettext("Are you sure?")],
+                class: "button is-danger is-small" %>
+            </div>
+          <% end %>
+        </div>
+      </td>
+    </tr>
 <% end %>
   </tbody>
 </table>
 
+<%= if Invitation.authorized?(Invitation.User, :invite, @current_user) do %>
+  <div class="buttons">
+    <%= link gettext("Invite User"),
+      to: Routes.invitation_path(@conn, :new, @current_user.church.identifier),
+      class: "button is-primary" %>
+  </div>
+<% end %>

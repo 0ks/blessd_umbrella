@@ -1,10 +1,13 @@
 <h1 class="title has-text-centered"><%= gettext("Sign in") %></h1>
 
-<% church_identifier = @conn.params["church_identifier"] %>
+<%
+  church_identifier = @conn.params["church_identifier"]
+  show_current_users? = !church_identifier and @users != []
+%>
 
-<div class="js-current-users columns is-multiline <%= if church_identifier, do: "is-hidden" %>">
+<div class="js-current-users columns is-multiline <%= unless show_current_users?, do: "is-hidden" %>">
   <%= for user <- @users do %>
-    <div class="column is-one-third">
+    <div class="column is-one-third is-one-quarter-widescreen">
       <div class="card">
         <header class="card-header">
           <p class="card-header-title">
@@ -12,8 +15,9 @@
           </p>
         </header>
         <div class="card-content">
-          <div class="content">
-            <%= gettext("Signed in as %{name}", name: user.name) %> <br />
+          <div class="content current-user-card-content">
+            <%= gettext("Signed in as %{name}", name: user.name) %></br>
+            <%= gettext("Email: %{email}", email: user.email) %>
           </div>
         </div>
         <footer class="card-footer">
@@ -25,7 +29,7 @@
     </div>
   <% end %>
 
-  <div class="column is-one-third">
+  <div class="column is-one-third is-one-quarter-widescreen">
     <div class="card">
       <header class="card-header">
         <p class="card-header-title">
@@ -34,52 +38,65 @@
       </header>
       <div class="card-content">
         <div class="content">
-          <%= gettext("Sign in to another church") %>
+          <%= gettext("Sign in to an existing, or create a new one") %>
         </div>
       </div>
       <footer class="card-footer">
         <%= link gettext("Sign in"),
           to: "#",
           class: "card-footer-item js-manual-church" %>
+        <%= link gettext("Sign up"),
+          to: Routes.signup_path(@conn, :new),
+          class: "card-footer-item js-manual-church" %>
       </footer>
     </div>
   </div>
 </div>
 
-<% form_class = if @users != [] and !church_identifier, do: "is-hidden js-form", else: "js-form" %>
+<% form_class = if show_current_users?, do: "is-hidden js-form", else: "js-form" %>
 
-<%= form_for @changeset, Routes.session_path(@conn, :create), [as: :session, class: form_class], fn f -> %>
-  <%= error_alert(f) %>
+<div class="columns">
+  <div class="column is-half is-offset-one-quarter">
+    <%= form_for @changeset, Routes.session_path(@conn, :create), [as: :session, class: form_class], fn f -> %>
+      <%= error_alert(f) %>
 
-  <div class="field">
-    <%= label f, :church_identifier, class: "label" %>
-    <div class="control">
-      <%= text_input f, :church_identifier, value: church_identifier %>
-    </div>
-    <%= error_tag f, :church_identifier %>
-  </div>
+      <div class="field">
+        <%= label f, :church_identifier, class: "label" %>
+        <div class="control">
+          <%= text_input f, :church_identifier, value: church_identifier %>
+        </div>
+        <%= error_tag f, :church_identifier %>
+      </div>
 
-  <div class="field">
-    <%= label f, :email, class: "label" %>
-    <div class="control">
-      <%= text_input f, :email %>
-    </div>
-    <%= error_tag f, :email %>
-  </div>
+      <div class="field">
+        <%= label f, :email, class: "label" %>
+        <div class="control">
+          <%= text_input f, :email %>
+        </div>
+        <%= error_tag f, :email %>
+      </div>
 
-  <div class="field">
-    <%= label f, :password, class: "label" %>
-    <div class="control">
-      <%= password_input f, :password %>
-    </div>
-    <%= error_tag f, :password %>
-  </div>
+      <div class="field">
+        <%= label f, :password, class: "label" %>
+        <div class="control">
+          <%= password_input f, :password %>
+        </div>
+        <%= error_tag f, :password %>
+      </div>
 
-  <div class="buttons">
-    <%= submit gettext("Submit"), class: "button is-primary" %>
+      <div class="buttons">
+        <%= submit gettext("Sign in"), class: "button is-primary is-fullwidth" %>
+      </div>
 
-    <%= if @users != [] do %>
-      <%= link gettext("Choose church"), to: "#", class: "button js-choose-church" %>
+      <div class="links has-text-centered">
+        <%= if @users != [] do %>
+          <%= link gettext("Choose a church you're already logged in"), to: "#", class: "js-choose-church" %>
+        <% end %>
+
+        <span>or</span></br>
+
+        <%= link gettext("sign up for a new church"), to: Routes.signup_path(@conn, :new) %>
+      </div>
     <% end %>
   </div>
-<% end %>
+</div>

@@ -12,6 +12,8 @@ defmodule Blessd.Signup.User do
 
     field(:name, :string)
     field(:email, :string)
+    field(:confirmation_token, :string)
+    field(:confirmed_at, :utc_datetime)
 
     has_many(:credentials, Credential)
 
@@ -22,6 +24,7 @@ defmodule Blessd.Signup.User do
   def changeset(%User{} = user, attrs) do
     user
     |> cast(attrs)
+    |> put_confirmation()
     |> validate_all()
   end
 

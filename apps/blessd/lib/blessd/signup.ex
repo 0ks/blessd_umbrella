@@ -29,21 +29,11 @@ defmodule Blessd.Signup do
       {:error, :registration, changeset, _} ->
         {:error, changeset}
 
-      {:error, :church, child_changeset, %{registration: changeset}} ->
-        put_assoc_error(changeset, child_changeset, :church)
-
-      {:error, :user, child_changeset, %{registration: changeset}} ->
-        put_assoc_error(changeset, child_changeset, :user)
-
-      {:error, :credential, child_changeset, %{registration: changeset}} ->
-        put_assoc_error(changeset, child_changeset, :credential)
+      {:error, assoc, child_changeset, %{registration: changeset}} ->
+        changeset
+        |> put_assoc(assoc, child_changeset)
+        |> apply_action(:insert)
     end
-  end
-
-  defp put_assoc_error(changeset, child_changeset, assoc) do
-    changeset
-    |> put_assoc(assoc, child_changeset)
-    |> apply_action(:insert)
   end
 
   defp validate_registration(_repo, _changes, attrs) do

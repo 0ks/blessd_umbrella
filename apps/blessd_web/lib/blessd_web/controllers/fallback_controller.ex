@@ -24,8 +24,8 @@ defmodule BlessdWeb.FallbackController do
     |> put_flash(
       :error,
       gettext("""
-      You must confirm your email first. Please check your inbox, request another email
-      or change to a correct email address if needed.
+      You must confirm your email first. Please check your inbox,
+      request another email or change to a correct email address.
       """)
     )
     |> redirect(

@@ -1,7 +1,11 @@
 import socket from "../socket"
 import Mousetrap from "mousetrap"
 
-const channel = socket.channel("attendance:lobby", {})
+let channel;
+
+if (socket) {
+  channel = socket.channel("attendance:lobby", {})
+}
 
 export default class AttendanceView {
   static index() {

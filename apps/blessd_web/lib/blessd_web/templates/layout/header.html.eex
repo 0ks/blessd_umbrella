@@ -58,7 +58,7 @@
               to: Routes.session_path(@conn, :new),
               class: "navbar-item",
               tabindex: -1 %>
-            <%= link gettext("Signout"),
+            <%= link gettext("Sign out"),
               to: Routes.session_path(@conn, :delete, church.identifier),
               method: :delete,
               class: "navbar-item",
@@ -69,11 +69,11 @@
       </div>
     <% else %>
       <div class="navbar-end">
-        <%= link gettext("Signup"),
+        <%= link gettext("Sign up"),
           to: Routes.signup_path(@conn, :new),
           class: "navbar-item",
           tabindex: -1 %>
-        <%= link gettext("Signin"),
+        <%= link gettext("Sign in"),
           to: Routes.session_path(@conn, :new),
           class: "navbar-item",
           tabindex: -1 %>

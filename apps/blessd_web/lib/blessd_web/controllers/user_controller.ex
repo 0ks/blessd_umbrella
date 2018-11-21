@@ -21,8 +21,8 @@ defmodule BlessdWeb.UserController do
   def update(conn, %{"id" => id, "user" => user_params}) do
     with current_user = conn.assigns.current_user,
          {:ok, user} <- Accounts.find_user(id, current_user),
-         {:ok, new_user} <- Accounts.update_user(user, user_params, current_user),
-         {:ok, _} = confirm_email_change(user, new_user) do
+         {:ok, user} <- Accounts.update_user(user, user_params, current_user),
+         :ok = send_confirmation(user) do
       conn
       |> put_flash(:info, gettext("User updated successfully."))
       |> redirect(to: Routes.user_path(conn, :index, current_user.church.identifier))
@@ -35,8 +35,8 @@ defmodule BlessdWeb.UserController do
     end
   end
 
-  defp confirm_email_change(%{email: email}, %{email: email} = user), do: {:ok, user}
-  defp confirm_email_change(_, user), do: ConfirmationMailer.send(user)
+  defp send_confirmation(%{confirmed_at: nil} = user), do: ConfirmationMailer.send(user)
+  defp send_confirmation(_), do: :ok
 
   def delete(conn, %{"id" => id}) do
     with current_user = conn.assigns.current_user,
