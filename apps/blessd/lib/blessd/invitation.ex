@@ -91,7 +91,7 @@ defmodule Blessd.Invitation do
     end
   end
 
-  def new_credential(user) do
+  defp new_credential(user) do
     {:ok, %Credential{church_id: user.church_id, user_id: user.id, source: "password"}}
   end
 

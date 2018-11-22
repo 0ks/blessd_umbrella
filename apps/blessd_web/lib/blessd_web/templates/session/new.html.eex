@@ -81,6 +81,9 @@
         <div class="control">
           <%= password_input f, :password %>
         </div>
+        <p class="help">
+          <%= link gettext("Forgot my password"), to: Routes.password_reset_path(@conn, :new) %>
+        </p>
         <%= error_tag f, :password %>
       </div>
 

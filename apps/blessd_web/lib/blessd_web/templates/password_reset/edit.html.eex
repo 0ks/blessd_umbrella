@@ -1,0 +1,31 @@
+<h1 class="title has-text-centered"><%= gettext("Accepting Invitation") %></h1>
+
+<div class="columns">
+  <div class="column is-half is-offset-one-quarter">
+    <%= form_for @changeset,
+      Routes.password_reset_path(
+        @conn,
+        :update,
+        @conn.params["church_identifier"],
+        @conn.params["id"]
+      ),
+      [as: :credential, method: :put],
+      fn f -> %>
+      <%= error_alert(f) %>
+
+      <%= hidden_input f, :source %>
+
+      <div class="field">
+        <%= label f, :token, gettext("Your new password"), class: "label" %>
+        <div class="control">
+          <%= password_input f, :token %>
+        </div>
+        <%= error_tag f, :token %>
+      </div>
+
+      <div class="buttons">
+        <%= submit gettext("Reset password"), class: "button is-primary is-fullwidth" %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -19,7 +19,7 @@ defmodule BlessdWeb.InvitationController do
          :ok = InvitationMailer.send(user, current_user) do
       conn
       |> put_flash(:info, gettext("User invited successfully."))
-      |> redirect(to: Routes.user_path(conn, :index, user.church.identifier))
+      |> redirect(to: Routes.user_path(conn, :index, user.church))
     else
       {:error, %Ecto.Changeset{} = changeset} -> render(conn, "new.html", changeset: changeset)
       {:error, reason} -> {:error, reason}
@@ -32,7 +32,7 @@ defmodule BlessdWeb.InvitationController do
          :ok = InvitationMailer.send(user, current_user) do
       conn
       |> put_flash(:info, gettext("User invited successfully."))
-      |> redirect(to: Routes.user_path(conn, :index, user.church.identifier))
+      |> redirect(to: Routes.user_path(conn, :index, user.church))
     else
       {:error, %Ecto.Changeset{} = changeset} -> render(conn, "new.html", changeset: changeset)
       {:error, reason} -> {:error, reason}
@@ -57,7 +57,7 @@ defmodule BlessdWeb.InvitationController do
       conn
       |> Session.put_user(user)
       |> put_flash(:info, gettext("Invitation accepted succesfully."))
-      |> redirect(to: Routes.dashboard_path(conn, :index, user.church.identifier))
+      |> redirect(to: Routes.dashboard_path(conn, :index, user.church))
     else
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", changeset: changeset)

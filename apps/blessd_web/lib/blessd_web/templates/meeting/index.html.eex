@@ -6,7 +6,7 @@
     <div class="field has-addons meeting-options">
       <div class="control">
         <%= link gettext("New Occurrence"),
-          class: "button is-primary is-small",
+          class: "button is-primary is-small new-occurrence",
           to: Routes.meeting_occurrence_path(
             @conn,
             :new,

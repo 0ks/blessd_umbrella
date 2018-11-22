@@ -22,6 +22,7 @@ defmodule BlessdWeb.Router do
 
     resources "/signup", SignupController, only: [:new, :create]
     resources "/sessions", SessionController, only: [:new, :create]
+    resources "/password_reset", PasswordResetController, only: [:new, :create]
   end
 
   scope "/:church_identifier", BlessdWeb do
@@ -29,6 +30,7 @@ defmodule BlessdWeb.Router do
 
     resources "/confirmation", ConfirmationController, only: [:show]
     resources "/invitation", InvitationController, only: [:edit, :update]
+    resources "/password_reset", PasswordResetController, only: [:edit, :update]
   end
 
   scope "/:church_identifier", BlessdWeb do

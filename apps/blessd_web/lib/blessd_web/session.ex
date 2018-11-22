@@ -7,7 +7,8 @@ defmodule BlessdWeb.Session do
     with {:ok, users} <- list_users(conn) do
       users
       |> Enum.find(fn user ->
-        user.church_id == church_identifier || user.church.identifier == church_identifier
+        to_string(user.church_id) == church_identifier or
+          user.church.identifier == church_identifier
       end)
       |> case do
         nil -> {:error, :not_found}
