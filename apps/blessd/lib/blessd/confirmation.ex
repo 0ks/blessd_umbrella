@@ -38,9 +38,8 @@ defmodule Blessd.Confirmation do
   defp find_user_by_token(token, church) do
     with {:ok, query} <- Auth.check_church(User, church) do
       query
-      |> User.by_token(token)
       |> User.preload()
-      |> Repo.single()
+      |> Repo.find_by(confirmation_token: token)
     end
   end
 end

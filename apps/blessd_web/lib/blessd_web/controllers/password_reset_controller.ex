@@ -15,20 +15,32 @@ defmodule BlessdWeb.PasswordResetController do
   def create(conn, %{"token_data" => token_data_params}) do
     with {:ok, user} <- PasswordReset.generate_token(token_data_params),
          :ok = PasswordResetMailer.send(user) do
-      email_sent_response(conn)
+      email_sent_response(conn, Routes.page_path(conn, :index))
     else
       {:error, %Ecto.Changeset{} = changeset} -> render(conn, "new.html", changeset: changeset)
-      {:error, _reason} -> email_sent_response(conn)
+      {:error, _reason} -> email_sent_response(conn, Routes.page_path(conn, :index))
     end
   end
 
-  defp email_sent_response(conn) do
+  def create(conn, %{"user_id" => user_id, "church_slug" => church_slug}) do
+    with {:ok, user} <- PasswordReset.generate_token(user_id, church_slug),
+         :ok = PasswordResetMailer.send(user) do
+      email_sent_response(conn, Routes.user_path(conn, :edit, user.church.slug, user))
+    else
+      {:error, reason} ->
+        conn
+        |> put_flash(:error, error_message(reason))
+        |> redirect(to: Routes.password_reset_path(conn, :new))
+    end
+  end
+
+  defp email_sent_response(conn, path) do
     conn
     |> put_flash(
       :info,
       gettext("We sent you an email with the instructions to reset your password.")
     )
-    |> redirect(to: Routes.page_path(conn, :index))
+    |> redirect(to: path)
   end
 
   def edit(conn, %{"church_slug" => slug, "id" => token}) do

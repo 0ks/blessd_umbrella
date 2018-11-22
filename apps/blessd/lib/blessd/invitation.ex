@@ -108,9 +108,8 @@ defmodule Blessd.Invitation do
   defp find_user(token, church_or_user) do
     with {:ok, query} <- authorize(User, :find, church_or_user) do
       query
-      |> User.by_token(token)
       |> User.preload()
-      |> Repo.single()
+      |> Repo.find_by(invitation_token: token)
     end
   end
 

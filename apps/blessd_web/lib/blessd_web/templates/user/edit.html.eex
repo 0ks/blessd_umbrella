@@ -22,6 +22,15 @@
 
   <div class="buttons">
     <%= submit gettext("Submit"), class: "button is-primary" %>
+    <%= link gettext("Change my password"),
+      to: Routes.password_reset_path(
+        @conn,
+        :create,
+        user_id: @changeset.data.id,
+        church_slug: @current_user.church.slug
+      ),
+      method: :post,
+      class: "button" %>
     <%= link gettext("Back"), to: Routes.user_path(@conn, :index, @current_user.church.slug), class: "button" %>
   </div>
 <% end %>
