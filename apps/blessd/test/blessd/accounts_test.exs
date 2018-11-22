@@ -8,8 +8,8 @@ defmodule Blessd.AccountsTest do
     alias Blessd.Auth.Church, as: AuthChurch
     alias Blessd.Auth.User, as: AuthUser
 
-    @update_attrs %{name: "some updated name", identifier: "some_updated_identifier"}
-    @invalid_attrs %{name: nil, identifier: nil}
+    @update_attrs %{name: "some updated name", slug: "some_updated_slug"}
+    @invalid_attrs %{name: nil, slug: nil}
 
     test "find_church/1 returns the church with given id" do
       %{church: church} = user = signup()
@@ -21,12 +21,12 @@ defmodule Blessd.AccountsTest do
       assert {:ok, found} = Accounts.find_church(church.id, current_user)
 
       assert found.name == church.name
-      assert found.identifier == church.identifier
+      assert found.slug == church.slug
 
-      assert {:ok, found} = Accounts.find_church(church.identifier, current_user)
+      assert {:ok, found} = Accounts.find_church(church.slug, current_user)
 
       assert found.name == church.name
-      assert found.identifier == church.identifier
+      assert found.slug == church.slug
     end
 
     test "update_church/2 with valid data updates the church" do
@@ -39,7 +39,7 @@ defmodule Blessd.AccountsTest do
       assert {:ok, church} = Accounts.update_church(church, @update_attrs, current_user)
       assert %Church{} = church
       assert church.name == "some updated name"
-      assert church.identifier == "some_updated_identifier"
+      assert church.slug == "some_updated_slug"
     end
 
     test "update_church/2 with invalid data returns error changeset" do
@@ -56,7 +56,7 @@ defmodule Blessd.AccountsTest do
       assert {:ok, found} = Accounts.find_church(church.id, current_user)
 
       assert found.name == church.name
-      assert found.identifier == church.identifier
+      assert found.slug == church.slug
     end
 
     test "delete_church/1 deletes the church" do

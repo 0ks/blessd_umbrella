@@ -1,4 +1,4 @@
-defmodule BlessdWeb.ConfirmationMailer do
+defmodule BlessdWeb.PasswordResetMailer do
   import Bamboo.Email
   import BlessdWeb.Gettext
   import EExHTML
@@ -11,7 +11,7 @@ defmodule BlessdWeb.ConfirmationMailer do
     new_email()
     |> to(user.email)
     |> from("contact@blessd.app")
-    |> subject(gettext("Welcome to Blessd - email confirmation"))
+    |> subject(gettext("Reset your Blessd password"))
     |> html_body(email_html(user))
     |> text_body(email_text(user))
     |> Mailer.deliver_later()
@@ -21,18 +21,18 @@ defmodule BlessdWeb.ConfirmationMailer do
 
   defp email_html(user) do
     to_string(~E"""
-    <h1><%= gettext("Welcome to Blessd, %{name}.", name: user.name) %></h1>
+    <h1><%= gettext("Forgot your password, %{name}?", name: user.name) %></h1>
 
     <p>
-      <a href="<%= confirmation_url(user) %>"><%= gettext("Click here") %></a>
+      <a href="<%= password_reset_url(user) %>"><%= gettext("Click here") %></a>
 
-      <%= gettext("to confirm your account") %>
+      <%= gettext("to reset it") %>
     </p>
 
     <p>
       <%= gettext(
         "If the link does not work, copy this and paste on your localtion bar: %{url}",
-        url: confirmation_url(user)
+        url: password_reset_url(user)
       ) %>
     </p>
     """)
@@ -40,16 +40,16 @@ defmodule BlessdWeb.ConfirmationMailer do
 
   defp email_text(user) do
     to_string(~E"""
-    <%= gettext("Welcome to Blessd, %{name}.", name: user.name) %>
+    <%= gettext("Forgot your password, %{name}?", name: user.name) %>
 
     <%= gettext(
-      "Here is your confirmation link: %{url}",
-      url: confirmation_url(user)
+      "Here is your password reset link: %{url}",
+      url: password_reset_url(user)
     ) %>
     """)
   end
 
-  defp confirmation_url(user) do
-    Routes.confirmation_url(Endpoint, :show, user.church.slug, user.confirmation_token)
+  defp password_reset_url(user) do
+    Routes.password_reset_url(Endpoint, :edit, user.church.slug, user.password_reset_token)
   end
 end

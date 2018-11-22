@@ -1,6 +1,6 @@
 <h1 class="title has-text-centered"><%= gettext("Invite User") %></h1>
 
-<%= form_for @changeset, Routes.invitation_path(@conn, :create, @current_user.church.identifier), fn f -> %>
+<%= form_for @changeset, Routes.invitation_path(@conn, :create, @current_user.church.slug), fn f -> %>
   <%= error_alert(f) %>
 
   <div class="field">
@@ -13,6 +13,6 @@
 
   <div class="buttons">
     <%= submit gettext("Submit"), class: "button is-primary" %>
-    <%= link gettext("Back"), to: Routes.user_path(@conn, :index, @current_user.church.identifier), class: "button" %>
+    <%= link gettext("Back"), to: Routes.user_path(@conn, :index, @current_user.church.slug), class: "button" %>
   </div>
 <% end %>

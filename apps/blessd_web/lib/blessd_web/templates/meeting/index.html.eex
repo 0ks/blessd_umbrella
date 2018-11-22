@@ -6,11 +6,11 @@
     <div class="field has-addons meeting-options">
       <div class="control">
         <%= link gettext("New Occurrence"),
-          class: "button is-primary is-small",
+          class: "button is-primary is-small new-occurrence",
           to: Routes.meeting_occurrence_path(
             @conn,
             :new,
-            @current_user.church.identifier,
+            @current_user.church.slug,
             meeting
           ) %>
       </div>
@@ -27,7 +27,7 @@
               to: Routes.meeting_path(
                 @conn,
                 :edit,
-                @current_user.church.identifier,
+                @current_user.church.slug,
                 meeting
               ) %>
             <%= link gettext("Delete"),
@@ -37,7 +37,7 @@
               to: Routes.meeting_path(
                 @conn,
                 :delete,
-                @current_user.church.identifier,
+                @current_user.church.slug,
                 meeting
               ) %>
           </div>
@@ -60,7 +60,7 @@
                   to: Routes.meeting_occurrence_attendance_path(
                     @conn,
                     :index,
-                    @current_user.church.identifier,
+                    @current_user.church.slug,
                     occurrence
                   ) %>
               </div>
@@ -70,7 +70,7 @@
                   to: Routes.meeting_occurrence_path(
                     @conn,
                     :edit,
-                    @current_user.church.identifier,
+                    @current_user.church.slug,
                     occurrence
                   ) %>
               </div>
@@ -82,7 +82,7 @@
                   to: Routes.meeting_occurrence_path(
                     @conn,
                     :delete,
-                    @current_user.church.identifier,
+                    @current_user.church.slug,
                     occurrence
                   ) %>
               </div>
@@ -94,4 +94,4 @@
   </table>
 <% end %>
 
-<%= link gettext("New Meeting"), to: Routes.meeting_path(@conn, :new, @current_user.church.identifier), class: "button is-primary" %>
+<%= link gettext("New Meeting"), to: Routes.meeting_path(@conn, :new, @current_user.church.slug), class: "button is-primary" %>

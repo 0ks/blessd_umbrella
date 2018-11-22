@@ -7,6 +7,6 @@
   action: Routes.meeting_occurrence_path(
     @conn,
     :update,
-    @current_user.church.identifier,
+    @current_user.church.slug,
     @changeset.data
   ) %>

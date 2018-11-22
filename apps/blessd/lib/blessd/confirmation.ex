@@ -19,8 +19,8 @@ defmodule Blessd.Confirmation do
     end
   end
 
-  def confirm(token, identifier) when is_binary(identifier) do
-    with {:ok, church} <- Auth.find_church(identifier), do: confirm(token, church)
+  def confirm(token, slug) when is_binary(slug) do
+    with {:ok, church} <- Auth.find_church(slug), do: confirm(token, church)
   end
 
   def confirm(token, church) do

@@ -11,7 +11,7 @@
 
   <div class="buttons">
     <%= submit gettext("Submit"), class: "button is-primary" %>
-    <%= link gettext("Back"), to: Routes.meeting_path(@conn, :index, @current_user.church.identifier), class: "button" %>
+    <%= link gettext("Back"), to: Routes.meeting_path(@conn, :index, @current_user.church.slug), class: "button" %>
   </div>
 <% end %>
 

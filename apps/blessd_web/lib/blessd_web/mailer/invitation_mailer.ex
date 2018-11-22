@@ -50,6 +50,6 @@ defmodule BlessdWeb.InvitationMailer do
   end
 
   defp invitation_url(user) do
-    Routes.invitation_url(Endpoint, :edit, user.church.identifier, user.invitation_token)
+    Routes.invitation_url(Endpoint, :edit, user.church.slug, user.invitation_token)
   end
 end

@@ -7,6 +7,7 @@
     "build": "webpack --mode development"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.5.0",
     "bulma": "^0.7.1",
     "moment": "^2.22.2",
     "mousetrap": "^1.6.2",
@@ -20,6 +21,7 @@
     "babel-loader": "^8.0.0",
     "copy-webpack-plugin": "^4.5.0",
     "css-loader": "^0.28.10",
+    "file-loader": "^2.0.0",
     "mini-css-extract-plugin": "^0.4.0",
     "node-sass": "^4.10.0",
     "optimize-css-assets-webpack-plugin": "^4.0.0",

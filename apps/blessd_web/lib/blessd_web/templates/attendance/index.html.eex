@@ -28,6 +28,6 @@
 
 <div class="field is-grouped">
   <div class="control">
-    <%= link gettext("Back"), to: Routes.meeting_path(@conn, :index, @current_user.church.identifier), class: "button" %>
+    <%= link gettext("Back"), to: Routes.meeting_path(@conn, :index, @current_user.church.slug), class: "button" %>
   </div>
 </div>

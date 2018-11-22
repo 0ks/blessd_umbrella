@@ -1,0 +1,36 @@
+<h1 class="title has-text-centered"><%= gettext("Forgot my Password") %></h1>
+
+<div class="columns">
+  <div class="column is-half is-offset-one-quarter">
+    <%= form_for @changeset, Routes.password_reset_path(@conn, :create), fn f -> %>
+      <%= error_alert(f) %>
+
+      <div class="field">
+        <%= label f, :church_slug, class: "label" %>
+        <div class="control">
+          <%= text_input f, :church_slug %>
+        </div>
+        <%= error_tag f, :church_slug %>
+      </div>
+
+      <div class="field">
+        <%= label f, :email, class: "label" %>
+        <div class="control">
+          <%= text_input f, :email %>
+        </div>
+        <%= error_tag f, :email %>
+      </div>
+
+      <div class="buttons columns">
+        <div class="column is-half">
+          <%= submit gettext("Submit"), class: "button is-primary is-fullwidth" %>
+        </div>
+        <div class="column is-half">
+          <%= link gettext("Back"),
+            to: Routes.session_path(@conn, :new),
+            class: "button is-fullwidth" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

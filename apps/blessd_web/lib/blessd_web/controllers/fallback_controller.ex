@@ -28,8 +28,6 @@ defmodule BlessdWeb.FallbackController do
       request another email or change to a correct email address.
       """)
     )
-    |> redirect(
-      to: Routes.dashboard_path(conn, :index, conn.assigns.current_user.church.identifier)
-    )
+    |> redirect(to: Routes.dashboard_path(conn, :index, conn.assigns.current_user.church.slug))
   end
 end

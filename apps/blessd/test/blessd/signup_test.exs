@@ -7,12 +7,12 @@ defmodule Blessd.SignupTest do
   alias Blessd.Signup.Credential
 
   @valid_attrs %{
-    "church" => %{name: "some name", identifier: "some_identifier"},
+    "church" => %{name: "some name", slug: "some_slug"},
     "user" => %{name: "some name", email: "some@email"},
     "credential" => %{source: "password", token: "password"}
   }
   @invalid_attrs %{
-    "church" => %{name: nil, identifier: nil},
+    "church" => %{name: nil, slug: nil},
     "user" => %{name: nil, email: nil},
     "credential" => %{source: nil, token: nil}
   }
@@ -25,7 +25,7 @@ defmodule Blessd.SignupTest do
             } = user} = Signup.register(@valid_attrs)
 
     assert church.name == "some name"
-    assert church.identifier == "some_identifier"
+    assert church.slug == "some_slug"
 
     assert user.name == "some name"
     assert user.email == "some@email"

@@ -8,14 +8,14 @@ defmodule Blessd.Auth do
   alias Ecto.Queryable
 
   @doc """
-  Gets a single church by id or identifier.
+  Gets a single church by id or slug.
 
   Raises `Ecto.NoResultsError` if the Church does not exist.
   """
-  def find_church(identifier) when is_binary(identifier) do
-    case Integer.parse(identifier) do
+  def find_church(slug) when is_binary(slug) do
+    case Integer.parse(slug) do
       {id, _} -> find_church(id)
-      :error -> Repo.find_by(Church, identifier: identifier)
+      :error -> Repo.find_by(Church, slug: slug)
     end
   end
 

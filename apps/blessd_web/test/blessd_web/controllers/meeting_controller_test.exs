@@ -19,7 +19,7 @@ defmodule BlessdWeb.MeetingControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> get(Routes.meeting_path(conn, :index, user.church.identifier))
+        |> get(Routes.meeting_path(conn, :index, user.church.slug))
 
       assert html_response(conn, 200) =~ "Listing Meetings"
     end
@@ -32,7 +32,7 @@ defmodule BlessdWeb.MeetingControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> get(Routes.meeting_path(conn, :new, user.church.identifier))
+        |> get(Routes.meeting_path(conn, :new, user.church.slug))
 
       assert html_response(conn, 200) =~ "New Meeting"
     end
@@ -45,9 +45,9 @@ defmodule BlessdWeb.MeetingControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> post(Routes.meeting_path(conn, :create, user.church.identifier), meeting: @create_attrs)
+        |> post(Routes.meeting_path(conn, :create, user.church.slug), meeting: @create_attrs)
 
-      assert redirected_to(conn) == Routes.meeting_path(conn, :index, user.church.identifier)
+      assert redirected_to(conn) == Routes.meeting_path(conn, :index, user.church.slug)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -56,7 +56,7 @@ defmodule BlessdWeb.MeetingControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> post(Routes.meeting_path(conn, :create, user.church.identifier),
+        |> post(Routes.meeting_path(conn, :create, user.church.slug),
           meeting: @invalid_attrs
         )
 
@@ -72,7 +72,7 @@ defmodule BlessdWeb.MeetingControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> get(Routes.meeting_path(conn, :edit, user.church.identifier, meeting))
+        |> get(Routes.meeting_path(conn, :edit, user.church.slug, meeting))
 
       assert html_response(conn, 200) =~ "Edit Meeting"
     end
@@ -86,16 +86,16 @@ defmodule BlessdWeb.MeetingControllerTest do
       resp =
         conn
         |> authenticate(user)
-        |> put(Routes.meeting_path(conn, :update, user.church.identifier, meeting),
+        |> put(Routes.meeting_path(conn, :update, user.church.slug, meeting),
           meeting: @update_attrs
         )
 
-      assert redirected_to(resp) == Routes.meeting_path(conn, :index, user.church.identifier)
+      assert redirected_to(resp) == Routes.meeting_path(conn, :index, user.church.slug)
 
       resp =
         conn
         |> authenticate(user)
-        |> get(Routes.meeting_path(conn, :index, user.church.identifier))
+        |> get(Routes.meeting_path(conn, :index, user.church.slug))
 
       assert html_response(resp, 200) =~ "updated name"
     end
@@ -107,7 +107,7 @@ defmodule BlessdWeb.MeetingControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> put(Routes.meeting_path(conn, :update, user.church.identifier, meeting),
+        |> put(Routes.meeting_path(conn, :update, user.church.slug, meeting),
           meeting: @invalid_attrs
         )
 
@@ -123,14 +123,14 @@ defmodule BlessdWeb.MeetingControllerTest do
       resp =
         conn
         |> authenticate(user)
-        |> delete(Routes.meeting_path(conn, :delete, user.church.identifier, meeting))
+        |> delete(Routes.meeting_path(conn, :delete, user.church.slug, meeting))
 
-      assert redirected_to(resp) == Routes.meeting_path(conn, :index, user.church.identifier)
+      assert redirected_to(resp) == Routes.meeting_path(conn, :index, user.church.slug)
 
       resp =
         conn
         |> authenticate(user)
-        |> get(Routes.meeting_path(conn, :edit, user.church.identifier, meeting))
+        |> get(Routes.meeting_path(conn, :edit, user.church.slug, meeting))
 
       assert resp.status == 404
     end

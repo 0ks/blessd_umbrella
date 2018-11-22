@@ -29,8 +29,8 @@ defmodule Blessd.Invitation do
     end
   end
 
-  def validate_token(token, identifier) do
-    with {:ok, user} <- find_user(token, identifier) do
+  def validate_token(token, slug) do
+    with {:ok, user} <- find_user(token, slug) do
       user
       |> change(%{})
       |> validate_invitation()
@@ -38,8 +38,8 @@ defmodule Blessd.Invitation do
     end
   end
 
-  def accept(token, attrs, identifier) do
-    with {:ok, user} <- find_user(token, identifier),
+  def accept(token, attrs, slug) do
+    with {:ok, user} <- find_user(token, slug),
          {:ok, credential} <- new_credential(user),
          {:ok, accept} <- new_accept(user, credential) do
       Multi.new()
@@ -91,7 +91,7 @@ defmodule Blessd.Invitation do
     end
   end
 
-  def new_credential(user) do
+  defp new_credential(user) do
     {:ok, %Credential{church_id: user.church_id, user_id: user.id, source: "password"}}
   end
 
@@ -101,8 +101,8 @@ defmodule Blessd.Invitation do
     end
   end
 
-  defp find_user(token, identifier) when is_binary(identifier) do
-    with {:ok, church} <- Auth.find_church(identifier), do: find_user(token, church)
+  defp find_user(token, slug) when is_binary(slug) do
+    with {:ok, church} <- Auth.find_church(slug), do: find_user(token, church)
   end
 
   defp find_user(token, church_or_user) do

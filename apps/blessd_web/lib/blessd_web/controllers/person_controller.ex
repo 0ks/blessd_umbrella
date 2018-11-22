@@ -22,7 +22,7 @@ defmodule BlessdWeb.PersonController do
          {:ok, _person} <- Memberships.create_person(person_params, user) do
       conn
       |> put_flash(:info, gettext("Person created successfully."))
-      |> redirect(to: Routes.person_path(conn, :index, user.church.identifier))
+      |> redirect(to: Routes.person_path(conn, :index, user.church.slug))
     else
       {:error, %Ecto.Changeset{} = changeset} -> render(conn, "new.html", changeset: changeset)
       {:error, reason} -> {:error, reason}
@@ -43,7 +43,7 @@ defmodule BlessdWeb.PersonController do
          {:ok, _person} <- Memberships.update_person(person, person_params, user) do
       conn
       |> put_flash(:info, gettext("Person updated successfully."))
-      |> redirect(to: Routes.person_path(conn, :index, user.church.identifier))
+      |> redirect(to: Routes.person_path(conn, :index, user.church.slug))
     else
       {:error, %Ecto.Changeset{} = changeset} -> render(conn, "edit.html", changeset: changeset)
       {:error, reason} -> {:error, reason}
@@ -56,7 +56,7 @@ defmodule BlessdWeb.PersonController do
          {:ok, _person} = Memberships.delete_person(person, user) do
       conn
       |> put_flash(:info, gettext("Person deleted successfully."))
-      |> redirect(to: Routes.person_path(conn, :index, user.church.identifier))
+      |> redirect(to: Routes.person_path(conn, :index, user.church.slug))
     end
   end
 end

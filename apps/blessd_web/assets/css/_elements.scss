@@ -21,10 +21,13 @@
 }
 
 // Only element inside .field.has-addons must have border radius
-.field.has-addons .control {
+.field.has-addons .control:first-child:last-child {
   .button, .input, .select select {
-    &:first-child:last-child {
-      border-radius: 2px;
-    }
+    border-radius: 2px;
   }
+}
+
+// Fullwidth control
+.control.is-fullwidth {
+  width: 100%;
 }

@@ -5,7 +5,7 @@
 <nav class="navbar">
   <div class="navbar-brand">
     <% home_path = if church do
-      Routes.dashboard_path(@conn, :index, church.identifier)
+      Routes.dashboard_path(@conn, :index, church.slug)
     else
       Routes.page_path(@conn, :index)
     end %>
@@ -23,13 +23,18 @@
   <div id="navMenu" class="navbar-menu">
     <%= if church do %>
       <div class="navbar-start">
+        <%= link gettext("Dashboard"),
+          to: Routes.dashboard_path(@conn, :index, church.slug),
+          class: "navbar-item",
+          tabindex: -1 %>
+
         <%= link gettext("People"),
-          to: Routes.person_path(@conn, :index, church.identifier),
+          to: Routes.person_path(@conn, :index, church.slug),
           class: "navbar-item",
           tabindex: -1 %>
 
         <%= link gettext("Meetings"),
-          to: Routes.meeting_path(@conn, :index, church.identifier),
+          to: Routes.meeting_path(@conn, :index, church.slug),
           class: "navbar-item",
           tabindex: -1 %>
       </div>
@@ -41,16 +46,16 @@
           </div>
           <div class="navbar-dropdown is-boxed navbar-dropdown-right">
             <%= link gettext("Profile"),
-              to: Routes.user_path(@conn, :edit, church.identifier, user),
+              to: Routes.user_path(@conn, :edit, church.slug, user),
               class: "navbar-item",
               tabindex: -1 %>
             <div class="navbar-divider"></div>
             <%= link gettext("Users"),
-              to: Routes.user_path(@conn, :index, church.identifier),
+              to: Routes.user_path(@conn, :index, church.slug),
               class: "navbar-item",
               tabindex: -1 %>
             <%= link gettext("Config"),
-              to: Routes.church_path(@conn, :edit, church.identifier),
+              to: Routes.church_path(@conn, :edit, church.slug),
               class: "navbar-item",
               tabindex: -1 %>
             <div class="navbar-divider"></div>
@@ -59,7 +64,7 @@
               class: "navbar-item",
               tabindex: -1 %>
             <%= link gettext("Sign out"),
-              to: Routes.session_path(@conn, :delete, church.identifier),
+              to: Routes.session_path(@conn, :delete, church.slug),
               method: :delete,
               class: "navbar-item",
               tabindex: -1 %>
