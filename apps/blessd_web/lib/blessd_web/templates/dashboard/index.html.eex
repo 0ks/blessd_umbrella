@@ -29,11 +29,11 @@
           </div>
           <footer class="card-footer">
             <%= link gettext("Resend email"),
-              to: Routes.confirmation_path(@conn, :create, @resources.user.church.identifier),
+              to: Routes.confirmation_path(@conn, :create, @resources.user.church.slug),
               method: :post,
               class: "card-footer-item" %>
             <%= link gettext("Check email"),
-              to: Routes.user_path(@conn, :edit, @resources.user.church.identifier, @resources.user),
+              to: Routes.user_path(@conn, :edit, @resources.user.church.slug, @resources.user),
               class: "card-footer-item" %>
           </footer>
         </div>

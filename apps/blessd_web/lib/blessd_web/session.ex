@@ -3,12 +3,11 @@ defmodule BlessdWeb.Session do
 
   alias Blessd.Auth
 
-  def find_user(%Plug.Conn{params: %{"church_identifier" => church_identifier}} = conn) do
+  def find_user(%Plug.Conn{params: %{"church_slug" => church_slug}} = conn) do
     with {:ok, users} <- list_users(conn) do
       users
       |> Enum.find(fn user ->
-        to_string(user.church_id) == church_identifier or
-          user.church.identifier == church_identifier
+        to_string(user.church_id) == church_slug or user.church.slug == church_slug
       end)
       |> case do
         nil -> {:error, :not_found}

@@ -13,16 +13,16 @@ defmodule Blessd.Accounts do
   alias Ecto.Queryable
 
   @doc """
-  Gets a single church by id or identifier.
+  Gets a single church by id or slug.
   """
-  def find_church(identifier, current_user) when is_binary(identifier) do
-    case Integer.parse(identifier) do
+  def find_church(slug, current_user) when is_binary(slug) do
+    case Integer.parse(slug) do
       {id, _} ->
         find_church(id, current_user)
 
       :error ->
         with {:ok, query} <- authorize(Church, :find, current_user) do
-          Repo.find_by(query, identifier: identifier)
+          Repo.find_by(query, slug: slug)
         end
     end
   end

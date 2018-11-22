@@ -6,11 +6,11 @@
       <%= error_alert(f) %>
 
       <div class="field">
-        <%= label f, :church_identifier, class: "label" %>
+        <%= label f, :church_slug, class: "label" %>
         <div class="control">
-          <%= text_input f, :church_identifier %>
+          <%= text_input f, :church_slug %>
         </div>
-        <%= error_tag f, :church_identifier %>
+        <%= error_tag f, :church_slug %>
       </div>
 
       <div class="field">

@@ -6,7 +6,7 @@
       Routes.password_reset_path(
         @conn,
         :update,
-        @conn.params["church_identifier"],
+        @conn.params["church_slug"],
         @conn.params["id"]
       ),
       [as: :credential, method: :put],

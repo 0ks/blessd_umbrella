@@ -1,6 +1,6 @@
 <h1 class="title has-text-centered"><%= gettext("Edit Church") %></h1>
 
-<%= form_for @changeset, Routes.church_path(@conn, :update, @changeset.data.identifier), fn f -> %>
+<%= form_for @changeset, Routes.church_path(@conn, :update, @changeset.data.slug), fn f -> %>
   <%= error_alert(f) %>
 
   <div class="field">
@@ -12,11 +12,11 @@
   </div>
 
   <div class="field">
-    <%= label f, :identifier, class: "label" %>
+    <%= label f, :slug, class: "label" %>
     <div class="control">
-      <%= text_input f, :identifier %>
+      <%= text_input f, :slug %>
     </div>
-    <%= error_tag f, :identifier %>
+    <%= error_tag f, :slug %>
   </div>
 
   <div class="buttons">

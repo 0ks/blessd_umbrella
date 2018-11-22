@@ -39,8 +39,8 @@ defmodule BlessdWeb.InvitationController do
     end
   end
 
-  def edit(conn, %{"church_identifier" => identifier, "id" => token}) do
-    with {:ok, user} <- Invitation.validate_token(token, identifier),
+  def edit(conn, %{"church_slug" => slug, "id" => token}) do
+    with {:ok, user} <- Invitation.validate_token(token, slug),
          {:ok, accept} <- Invitation.new_accept(user),
          {:ok, changeset} <- Invitation.change_accept(accept) do
       render(conn, "edit.html", changeset: changeset)
@@ -52,8 +52,8 @@ defmodule BlessdWeb.InvitationController do
     end
   end
 
-  def update(conn, %{"church_identifier" => identifier, "id" => token, "accept" => attrs}) do
-    with {:ok, user} <- Invitation.accept(token, attrs, identifier) do
+  def update(conn, %{"church_slug" => slug, "id" => token, "accept" => attrs}) do
+    with {:ok, user} <- Invitation.accept(token, attrs, slug) do
       conn
       |> Session.put_user(user)
       |> put_flash(:info, gettext("Invitation accepted succesfully."))

@@ -20,12 +20,12 @@
         <div class="field has-addons is-pulled-right">
           <div class="control">
             <%= link gettext("Edit"),
-              to: Routes.person_path(@conn, :edit, @current_user.church.identifier, person),
+              to: Routes.person_path(@conn, :edit, @current_user.church.slug, person),
               class: "button is-small" %>
           </div>
           <div class="control">
             <%= link gettext("Delete"),
-              to: Routes.person_path(@conn, :delete, @current_user.church.identifier, person),
+              to: Routes.person_path(@conn, :delete, @current_user.church.slug, person),
               method: :delete,
               data: [confirm: gettext("Are you sure?")],
               class: "button is-danger is-small" %>
@@ -38,7 +38,7 @@
 </table>
 
 <div class="buttons">
-  <%= link gettext("New Person"), to: Routes.person_path(@conn, :new, @current_user.church.identifier), class: "button is-primary" %>
+  <%= link gettext("New Person"), to: Routes.person_path(@conn, :new, @current_user.church.slug), class: "button is-primary" %>
   <%= link gettext("Import CSV"), to: "#", class: "button js-modal-button" %>
   <%= render "file_modal.html", current_user: @current_user, conn: @conn %>
 </div>

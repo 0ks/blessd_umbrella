@@ -22,7 +22,7 @@ defmodule BlessdWeb.MeetingController do
          {:ok, _meeting} <- Observance.create_meeting(meeting_params, user) do
       conn
       |> put_flash(:info, gettext("Meeting created successfully."))
-      |> redirect(to: Routes.meeting_path(conn, :index, user.church.identifier))
+      |> redirect(to: Routes.meeting_path(conn, :index, user.church.slug))
     else
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -46,7 +46,7 @@ defmodule BlessdWeb.MeetingController do
          {:ok, _meeting} <- Observance.update_meeting(meeting, meeting_params, user) do
       conn
       |> put_flash(:info, gettext("Meeting updated successfully."))
-      |> redirect(to: Routes.meeting_path(conn, :index, user.church.identifier))
+      |> redirect(to: Routes.meeting_path(conn, :index, user.church.slug))
     else
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", changeset: changeset)
@@ -62,7 +62,7 @@ defmodule BlessdWeb.MeetingController do
          {:ok, _meeting} = Observance.delete_meeting(meeting, user) do
       conn
       |> put_flash(:info, gettext("Meeting deleted successfully."))
-      |> redirect(to: Routes.meeting_path(conn, :index, user.church.identifier))
+      |> redirect(to: Routes.meeting_path(conn, :index, user.church.slug))
     end
   end
 end

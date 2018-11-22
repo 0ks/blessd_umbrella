@@ -25,7 +25,7 @@ defmodule BlessdWeb.Router do
     resources "/password_reset", PasswordResetController, only: [:new, :create]
   end
 
-  scope "/:church_identifier", BlessdWeb do
+  scope "/:church_slug", BlessdWeb do
     pipe_through :browser
 
     resources "/confirmation", ConfirmationController, only: [:show]
@@ -33,7 +33,7 @@ defmodule BlessdWeb.Router do
     resources "/password_reset", PasswordResetController, only: [:edit, :update]
   end
 
-  scope "/:church_identifier", BlessdWeb do
+  scope "/:church_slug", BlessdWeb do
     pipe_through [:browser, :authenticated]
 
     get "/", DashboardController, :index

@@ -27,7 +27,7 @@ defmodule BlessdWeb.MeetingOccurrenceControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> get(Routes.meeting_occurrence_path(conn, :new, user.church.identifier, meeting))
+        |> get(Routes.meeting_occurrence_path(conn, :new, user.church.slug, meeting))
 
       assert html_response(conn, 200) =~ "New Meeting Occurrence"
     end
@@ -41,11 +41,11 @@ defmodule BlessdWeb.MeetingOccurrenceControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> post(Routes.meeting_occurrence_path(conn, :create, user.church.identifier, meeting),
+        |> post(Routes.meeting_occurrence_path(conn, :create, user.church.slug, meeting),
           meeting_occurrence: @create_attrs
         )
 
-      assert redirected_to(conn) == Routes.meeting_path(conn, :index, user.church.identifier)
+      assert redirected_to(conn) == Routes.meeting_path(conn, :index, user.church.slug)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -55,7 +55,7 @@ defmodule BlessdWeb.MeetingOccurrenceControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> post(Routes.meeting_occurrence_path(conn, :create, user.church.identifier, meeting),
+        |> post(Routes.meeting_occurrence_path(conn, :create, user.church.slug, meeting),
           meeting_occurrence: @invalid_attrs
         )
 
@@ -72,7 +72,7 @@ defmodule BlessdWeb.MeetingOccurrenceControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> get(Routes.meeting_occurrence_path(conn, :edit, user.church.identifier, occurrence))
+        |> get(Routes.meeting_occurrence_path(conn, :edit, user.church.slug, occurrence))
 
       assert html_response(conn, 200) =~ "Edit Meeting Occurrence"
     end
@@ -87,16 +87,16 @@ defmodule BlessdWeb.MeetingOccurrenceControllerTest do
       resp =
         conn
         |> authenticate(user)
-        |> put(Routes.meeting_occurrence_path(conn, :update, user.church.identifier, occurrence),
+        |> put(Routes.meeting_occurrence_path(conn, :update, user.church.slug, occurrence),
           meeting_occurrence: @update_attrs
         )
 
-      assert redirected_to(resp) == Routes.meeting_path(conn, :index, user.church.identifier)
+      assert redirected_to(resp) == Routes.meeting_path(conn, :index, user.church.slug)
 
       resp =
         conn
         |> authenticate(user)
-        |> get(Routes.meeting_path(conn, :index, user.church.identifier))
+        |> get(Routes.meeting_path(conn, :index, user.church.slug))
 
       assert html_response(resp, 200) =~ "01/01/2000"
     end
@@ -109,7 +109,7 @@ defmodule BlessdWeb.MeetingOccurrenceControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> put(Routes.meeting_occurrence_path(conn, :update, user.church.identifier, occurrence),
+        |> put(Routes.meeting_occurrence_path(conn, :update, user.church.slug, occurrence),
           meeting_occurrence: @invalid_attrs
         )
 
@@ -126,16 +126,14 @@ defmodule BlessdWeb.MeetingOccurrenceControllerTest do
       resp =
         conn
         |> authenticate(user)
-        |> delete(
-          Routes.meeting_occurrence_path(conn, :delete, user.church.identifier, occurrence)
-        )
+        |> delete(Routes.meeting_occurrence_path(conn, :delete, user.church.slug, occurrence))
 
-      assert redirected_to(resp) == Routes.meeting_path(conn, :index, user.church.identifier)
+      assert redirected_to(resp) == Routes.meeting_path(conn, :index, user.church.slug)
 
       resp =
         conn
         |> authenticate(user)
-        |> get(Routes.meeting_occurrence_path(conn, :edit, user.church.identifier, occurrence))
+        |> get(Routes.meeting_occurrence_path(conn, :edit, user.church.slug, occurrence))
 
       assert resp.status == 404
     end

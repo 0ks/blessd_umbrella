@@ -10,7 +10,7 @@ defmodule BlessdWeb.ConfirmationController do
          :ok = ConfirmationMailer.send(user) do
       conn
       |> put_flash(:info, gettext("Confirmation email sent."))
-      |> redirect(to: Routes.dashboard_path(conn, :index, user.church.identifier))
+      |> redirect(to: Routes.dashboard_path(conn, :index, user.church.slug))
     else
       {:error, reason} ->
         conn
@@ -19,13 +19,13 @@ defmodule BlessdWeb.ConfirmationController do
     end
   end
 
-  def show(conn, %{"church_identifier" => identifier, "id" => token}) do
-    case Confirmation.confirm(token, identifier) do
+  def show(conn, %{"church_slug" => slug, "id" => token}) do
+    case Confirmation.confirm(token, slug) do
       {:ok, user} ->
         conn
         |> Session.put_user(user)
         |> put_flash(:info, gettext("Email confirmed successfully."))
-        |> redirect(to: Routes.dashboard_path(conn, :index, user.church.identifier))
+        |> redirect(to: Routes.dashboard_path(conn, :index, user.church.slug))
 
       {:error, reason} ->
         conn

@@ -7,35 +7,50 @@
 
       <%= inputs_for f, :church, fn ff -> %>
         <div class="field">
-          <%= label ff, :name, gettext("Church name"), class: "label" %>
-          <div class="control">
-            <%= text_input ff, :name %>
+          <div class="control has-icons-left">
+            <%= text_input ff, :name, placeholder: gettext("Church name") %>
+            <span class="icon is-left">
+              <i class="fas fa-church"></i>
+            </span>
           </div>
           <%= error_tag ff, :name %>
         </div>
 
         <div class="field">
-          <%= label ff, :identifier, gettext("Church identifier"), class: "label" %>
-          <div class="control">
-            <%= text_input ff, :identifier %>
+          <div class="field has-addons">
+            <p class="control">
+              <a class="button is-static">
+                <span class="icon">
+                  <i class="fas fa-link"></i>
+                </span>
+                <span>blessd.com/</span>
+              </a>
+            </p>
+            <div class="control is-fullwidth">
+              <%= text_input ff, :slug, placeholder: gettext("Church URL") %>
+            </div>
           </div>
-          <%= error_tag ff, :identifier %>
+          <%= error_tag ff, :slug %>
         </div>
       <% end %>
 
       <%= inputs_for f, :user, fn ff -> %>
         <div class="field">
-          <%= label ff, :name, gettext("User name"), class: "label" %>
-          <div class="control">
-            <%= text_input ff, :name %>
+          <div class="control has-icons-left">
+            <%= text_input ff, :name, placeholder: gettext("Your name") %>
+            <span class="icon is-left">
+              <i class="fas fa-user"></i>
+            </span>
           </div>
           <%= error_tag ff, :name %>
         </div>
 
         <div class="field">
-          <%= label ff, :email, gettext("User email"), class: "label" %>
-          <div class="control">
-            <%= text_input ff, :email %>
+          <div class="control has-icons-left">
+            <%= text_input ff, :email, placeholder: gettext("Your email") %>
+            <span class="icon is-left">
+              <i class="fas fa-envelope"></i>
+            </span>
           </div>
           <%= error_tag ff, :email %>
         </div>
@@ -45,9 +60,11 @@
         <%= hidden_input ff, :source %>
 
         <div class="field">
-          <%= label ff, :token, gettext("User password"), class: "label" %>
-          <div class="control">
-            <%= password_input ff, :token %>
+          <div class="control has-icons-left">
+            <%= password_input ff, :token, placeholder: gettext("Your password") %>
+            <span class="icon is-left">
+              <i class="fas fa-key"></i>
+            </span>
           </div>
           <%= error_tag ff, :token %>
         </div>

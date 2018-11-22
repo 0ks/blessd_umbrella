@@ -6,7 +6,7 @@ defmodule Blessd.AuthenticationTest do
   alias Blessd.Authentication.User
 
   @signup2_attrs %{
-    "church" => %{name: "Test Church 2", identifier: "test_church2"},
+    "church" => %{name: "Test Church 2", slug: "test_church2"},
     "user" => %{name: "Test User", email: "test_user@mail.com"},
     "credential" => %{source: "password", token: "password"}
   }
@@ -18,7 +18,7 @@ defmodule Blessd.AuthenticationTest do
              Authentication.authenticate(%{
                email: email,
                password: "password",
-               church_identifier: church.identifier
+               church_slug: church.slug
              })
 
     %{church: church2, id: id2, email: ^email} = signup(@signup2_attrs)
@@ -27,7 +27,7 @@ defmodule Blessd.AuthenticationTest do
              Authentication.authenticate(%{
                email: email,
                password: "password",
-               church_identifier: church2.identifier
+               church_slug: church2.slug
              })
   end
 
@@ -38,14 +38,14 @@ defmodule Blessd.AuthenticationTest do
              Authentication.authenticate(%{
                email: "bla@mail.com",
                password: "12341234",
-               church_identifier: church.identifier
+               church_slug: church.slug
              })
 
     assert {:error, %Ecto.Changeset{}} =
              Authentication.authenticate(%{
                email: email,
                password: "12341234",
-               church_identifier: church.identifier
+               church_slug: church.slug
              })
   end
 end

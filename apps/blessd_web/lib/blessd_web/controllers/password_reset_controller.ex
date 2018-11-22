@@ -31,8 +31,8 @@ defmodule BlessdWeb.PasswordResetController do
     |> redirect(to: Routes.page_path(conn, :index))
   end
 
-  def edit(conn, %{"church_identifier" => identifier, "id" => token}) do
-    with {:ok, user} <- PasswordReset.validate_token(token, identifier),
+  def edit(conn, %{"church_slug" => slug, "id" => token}) do
+    with {:ok, user} <- PasswordReset.validate_token(token, slug),
          {:ok, credential} <- PasswordReset.find_credential(user),
          {:ok, changeset} <- PasswordReset.change_credential(credential) do
       render(conn, "edit.html", changeset: changeset)
@@ -44,12 +44,12 @@ defmodule BlessdWeb.PasswordResetController do
     end
   end
 
-  def update(conn, %{"church_identifier" => identifier, "id" => token, "credential" => attrs}) do
-    with {:ok, credential} <- PasswordReset.reset(token, attrs, identifier) do
+  def update(conn, %{"church_slug" => slug, "id" => token, "credential" => attrs}) do
+    with {:ok, credential} <- PasswordReset.reset(token, attrs, slug) do
       conn
       |> Session.put_user(credential.user)
       |> put_flash(:info, gettext("Password reset succesfully."))
-      |> redirect(to: Routes.dashboard_path(conn, :index, credential.church.identifier))
+      |> redirect(to: Routes.dashboard_path(conn, :index, credential.church.slug))
     else
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", changeset: changeset)

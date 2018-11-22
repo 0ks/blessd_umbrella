@@ -14,7 +14,7 @@ defmodule Blessd.PasswordReset do
   alias Ecto.Multi
 
   def generate_token(attrs) do
-    with {:ok, user} <- find_user_by_email(attrs["email"], attrs["church_identifier"]) do
+    with {:ok, user} <- find_user_by_email(attrs["email"], attrs["church_slug"]) do
       Multi.new()
       |> Multi.run(:token_data, &validate_token_data(&1, &2, attrs))
       |> Multi.update(:user, User.token_changeset(user))
@@ -33,18 +33,18 @@ defmodule Blessd.PasswordReset do
   end
 
   def validate_token_data(_repo, _changes, attrs) do
-    case TokenData.changeset(%TokenData{church_identifier: nil, email: nil}, attrs) do
+    case TokenData.changeset(%TokenData{church_slug: nil, email: nil}, attrs) do
       %Ecto.Changeset{valid?: true} = changeset -> {:ok, changeset}
       %Ecto.Changeset{valid?: false} = changeset -> apply_action(changeset, :insert)
     end
   end
 
-  def new_token_data, do: {:ok, %TokenData{church_identifier: nil, email: nil}}
+  def new_token_data, do: {:ok, %TokenData{church_slug: nil, email: nil}}
 
   def change_token_data(token_data), do: {:ok, TokenData.changeset(token_data, %{})}
 
-  def validate_token(token, identifier) do
-    with {:ok, user} <- find_user_by_token(token, identifier) do
+  def validate_token(token, slug) do
+    with {:ok, user} <- find_user_by_token(token, slug) do
       user
       |> change(%{})
       |> validate_password_reset()
@@ -52,8 +52,8 @@ defmodule Blessd.PasswordReset do
     end
   end
 
-  def reset(token, attrs, identifier) do
-    with {:ok, user} <- find_user_by_token(token, identifier),
+  def reset(token, attrs, slug) do
+    with {:ok, user} <- find_user_by_token(token, slug),
          {:ok, credential} <- find_credential(user) do
       credential
       |> Credential.changeset(attrs)
@@ -71,8 +71,8 @@ defmodule Blessd.PasswordReset do
 
   def change_credential(credential), do: {:ok, Credential.changeset(credential, %{})}
 
-  defp find_user_by_token(token, identifier) when is_binary(identifier) do
-    with_church(identifier, &find_user_by_token(token, &1))
+  defp find_user_by_token(token, slug) when is_binary(slug) do
+    with_church(slug, &find_user_by_token(token, &1))
   end
 
   defp find_user_by_token(token, church_or_user) do
@@ -84,8 +84,8 @@ defmodule Blessd.PasswordReset do
     end
   end
 
-  defp find_user_by_email(email, identifier) when is_binary(identifier) do
-    with_church(identifier, &find_user_by_email(email, &1))
+  defp find_user_by_email(email, slug) when is_binary(slug) do
+    with_church(slug, &find_user_by_email(email, &1))
   end
 
   defp find_user_by_email(email, church_or_user) do
@@ -97,8 +97,8 @@ defmodule Blessd.PasswordReset do
     end
   end
 
-  defp with_church(identifier, func) do
-    with {:ok, church} <- Auth.find_church(identifier), do: func.(church)
+  defp with_church(slug, func) do
+    with {:ok, church} <- Auth.find_church(slug), do: func.(church)
   end
 
   @doc """

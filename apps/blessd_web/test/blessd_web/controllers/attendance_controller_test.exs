@@ -22,7 +22,7 @@ defmodule BlessdWeb.AttendanceControllerTest do
           Routes.meeting_occurrence_attendance_path(
             conn,
             :index,
-            user.church.identifier,
+            user.church.slug,
             occurrence
           )
         )

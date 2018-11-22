@@ -11,7 +11,7 @@ defmodule Blessd.Authentication.Session do
   alias Blessd.Repo
 
   embedded_schema do
-    field(:church_identifier, :string)
+    field(:church_slug, :string)
     field(:email, :string)
     field(:password, :string)
 
@@ -22,19 +22,19 @@ defmodule Blessd.Authentication.Session do
   @doc false
   def changeset(%Session{} = session, attrs) do
     session
-    |> cast(attrs, [:church_identifier, :email, :password])
-    |> validate_required([:church_identifier, :email, :password])
+    |> cast(attrs, [:church_slug, :email, :password])
+    |> validate_required([:church_slug, :email, :password])
     |> validate_church()
     |> validate_user()
   end
 
   defp validate_church(changeset) do
-    with %Ecto.Changeset{valid?: true, changes: %{church_identifier: identifier}} <- changeset,
-         {:ok, church} <- Repo.find_by(Church, identifier: identifier) do
+    with %Ecto.Changeset{valid?: true, changes: %{church_slug: slug}} <- changeset,
+         {:ok, church} <- Repo.find_by(Church, slug: slug) do
       put_assoc(changeset, :church, church)
     else
       %Ecto.Changeset{valid?: false} = changeset -> changeset
-      {:error, :not_found} -> add_error(changeset, :church_identifier, "does not exist")
+      {:error, :not_found} -> add_error(changeset, :church_slug, "does not exist")
     end
   end
 

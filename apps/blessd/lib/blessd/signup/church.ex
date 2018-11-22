@@ -6,7 +6,7 @@ defmodule Blessd.Signup.Church do
 
   schema "churches" do
     field(:name, :string)
-    field(:identifier, :string)
+    field(:slug, :string)
 
     timestamps()
   end

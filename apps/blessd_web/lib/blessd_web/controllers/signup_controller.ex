@@ -15,7 +15,7 @@ defmodule BlessdWeb.SignupController do
       conn
       |> Session.put_user(user)
       |> put_flash(:info, gettext("Signed up sucessfully"))
-      |> redirect(to: Routes.dashboard_path(conn, :index, user.church.identifier))
+      |> redirect(to: Routes.dashboard_path(conn, :index, user.church.slug))
     else
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

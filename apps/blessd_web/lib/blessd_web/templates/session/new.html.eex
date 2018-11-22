@@ -1,8 +1,8 @@
 <h1 class="title has-text-centered"><%= gettext("Sign in") %></h1>
 
 <%
-  church_identifier = @conn.params["church_identifier"]
-  show_current_users? = !church_identifier and @users != []
+  church_slug = @conn.params["church_slug"]
+  show_current_users? = !church_slug and @users != []
 %>
 
 <div class="js-current-users columns is-multiline <%= unless show_current_users?, do: "is-hidden" %>">
@@ -22,7 +22,7 @@
         </div>
         <footer class="card-footer">
           <%= link gettext("Open"),
-            to: Routes.dashboard_path(@conn, :index, user.church.identifier),
+            to: Routes.dashboard_path(@conn, :index, user.church.slug),
             class: "card-footer-item" %>
         </footer>
       </div>
@@ -61,25 +61,38 @@
       <%= error_alert(f) %>
 
       <div class="field">
-        <%= label f, :church_identifier, class: "label" %>
-        <div class="control">
-          <%= text_input f, :church_identifier, value: church_identifier %>
+        <div class="field has-addons">
+          <p class="control">
+            <a class="button is-static">
+              <span class="icon">
+                <i class="fas fa-link"></i>
+              </span>
+              <span>blessd.com/</span>
+            </a>
+          </p>
+          <div class="control is-fullwidth">
+            <%= text_input f, :slug, placeholder: gettext("Church URL") %>
+          </div>
         </div>
-        <%= error_tag f, :church_identifier %>
+        <%= error_tag f, :slug %>
       </div>
 
       <div class="field">
-        <%= label f, :email, class: "label" %>
-        <div class="control">
-          <%= text_input f, :email %>
+        <div class="control has-icons-left">
+          <%= text_input f, :email, placeholder: gettext("Email") %>
+          <span class="icon is-left">
+            <i class="fas fa-envelope"></i>
+          </span>
         </div>
         <%= error_tag f, :email %>
       </div>
 
       <div class="field">
-        <%= label f, :password, class: "label" %>
-        <div class="control">
-          <%= password_input f, :password %>
+        <div class="control has-icons-left">
+          <%= password_input f, :token, placeholder: gettext("Password") %>
+          <span class="icon is-left">
+            <i class="fas fa-key"></i>
+          </span>
         </div>
         <p class="help">
           <%= link gettext("Forgot my password"), to: Routes.password_reset_path(@conn, :new) %>

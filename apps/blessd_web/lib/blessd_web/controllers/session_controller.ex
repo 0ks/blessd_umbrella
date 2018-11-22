@@ -20,7 +20,7 @@ defmodule BlessdWeb.SessionController do
       {:ok, session} ->
         conn
         |> Session.put_user(session.user)
-        |> redirect(to: Routes.dashboard_path(conn, :index, session.church.identifier))
+        |> redirect(to: Routes.dashboard_path(conn, :index, session.church.slug))
 
       {:error, changeset} ->
         with {:ok, users} <- Session.list_users(conn) do

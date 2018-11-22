@@ -50,6 +50,6 @@ defmodule BlessdWeb.PasswordResetMailer do
   end
 
   defp password_reset_url(user) do
-    Routes.password_reset_url(Endpoint, :edit, user.church.identifier, user.password_reset_token)
+    Routes.password_reset_url(Endpoint, :edit, user.church.slug, user.password_reset_token)
   end
 end
