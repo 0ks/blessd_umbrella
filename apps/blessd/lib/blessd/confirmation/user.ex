@@ -34,9 +34,6 @@ defmodule Blessd.Confirmation.User do
   end
 
   @doc false
-  def by_token(query, token), do: where(query, [u], u.confirmation_token == ^token)
-
-  @doc false
   def preload(query) do
     preload(query, [u], :church)
   end

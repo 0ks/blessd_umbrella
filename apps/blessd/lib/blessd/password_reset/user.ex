@@ -33,11 +33,5 @@ defmodule Blessd.PasswordReset.User do
   end
 
   @doc false
-  def by_token(query, token), do: where(query, [u], u.password_reset_token == ^token)
-
-  @doc false
-  def by_email(query, email), do: where(query, [u], u.email == ^email)
-
-  @doc false
   def preload(query), do: preload(query, [u], :church)
 end

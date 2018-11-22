@@ -4,7 +4,7 @@ defmodule Blessd.PasswordReset do
   """
 
   import Ecto.Changeset
-  import Blessd.Changeset.User
+  import Blessd.Changeset.User, only: [validate_password_reset: 1]
 
   alias Blessd.Auth
   alias Blessd.PasswordReset.Credential
@@ -13,7 +13,15 @@ defmodule Blessd.PasswordReset do
   alias Blessd.Repo
   alias Ecto.Multi
 
-  def generate_token(attrs) do
+  def generate_token(user_id, slug) do
+    with {:ok, user} <- find_user(user_id, slug) do
+      user
+      |> User.token_changeset()
+      |> Repo.update()
+    end
+  end
+
+  def generate_token(%{} = attrs) do
     with {:ok, user} <- find_user_by_email(attrs["email"], attrs["church_slug"]) do
       Multi.new()
       |> Multi.run(:token_data, &validate_token_data(&1, &2, attrs))
@@ -71,6 +79,18 @@ defmodule Blessd.PasswordReset do
 
   def change_credential(credential), do: {:ok, Credential.changeset(credential, %{})}
 
+  defp find_user(id, slug) when is_binary(slug) do
+    with_church(slug, &find_user(id, &1))
+  end
+
+  defp find_user(id, church_or_user) do
+    with {:ok, query} <- authorize(User, :find, church_or_user) do
+      query
+      |> User.preload()
+      |> Repo.find(id)
+    end
+  end
+
   defp find_user_by_token(token, slug) when is_binary(slug) do
     with_church(slug, &find_user_by_token(token, &1))
   end
@@ -78,9 +98,8 @@ defmodule Blessd.PasswordReset do
   defp find_user_by_token(token, church_or_user) do
     with {:ok, query} <- authorize(User, :find, church_or_user) do
       query
-      |> User.by_token(token)
       |> User.preload()
-      |> Repo.single()
+      |> Repo.find_by(password_reset_token: token)
     end
   end
 
@@ -91,9 +110,8 @@ defmodule Blessd.PasswordReset do
   defp find_user_by_email(email, church_or_user) do
     with {:ok, query} <- authorize(User, :find, church_or_user) do
       query
-      |> User.by_email(email)
       |> User.preload()
-      |> Repo.single()
+      |> Repo.find_by(email: email)
     end
   end
 
