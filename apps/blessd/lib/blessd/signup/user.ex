@@ -1,7 +1,7 @@
 defmodule Blessd.Signup.User do
   use Ecto.Schema
 
-  import Blessd.Changeset.User
+  import Blessd.Shared.Users.User
 
   alias Blessd.Signup.Church
   alias Blessd.Signup.Credential

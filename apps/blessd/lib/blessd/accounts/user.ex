@@ -1,7 +1,7 @@
 defmodule Blessd.Accounts.User do
   use Ecto.Schema
 
-  import Blessd.Changeset.User
+  import Blessd.Shared.Users.User
   import Ecto.Query
 
   alias Blessd.Accounts.User

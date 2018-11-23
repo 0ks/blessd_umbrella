@@ -1,7 +1,7 @@
 defmodule Blessd.Invitation.Credential do
   use Ecto.Schema
 
-  import Blessd.Changeset.Credential
+  import Blessd.Shared.Credentials.Credential
 
   alias Blessd.Auth.Church
   alias Blessd.Invitation.Credential

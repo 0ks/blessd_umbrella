@@ -1,4 +1,4 @@
-defmodule Blessd.Changeset.Church do
+defmodule Blessd.Shared.Churches.Church do
   import Ecto.Changeset
 
   @doc false

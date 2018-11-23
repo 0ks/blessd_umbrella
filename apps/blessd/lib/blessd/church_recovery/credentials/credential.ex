@@ -1,7 +1,7 @@
 defmodule Blessd.ChurchRecovery.Credentials.Credential do
   use Ecto.Schema
 
-  import Blessd.Changeset.Credential
+  import Blessd.Shared.Credentials.Credential
   import Ecto.Changeset
 
   alias Blessd.Auth.Church

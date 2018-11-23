@@ -4,7 +4,7 @@ defmodule Blessd.PasswordReset do
   """
 
   import Ecto.Changeset
-  import Blessd.Changeset.User, only: [validate_password_reset: 1]
+  import Blessd.Shared.Users.User, only: [validate_password_reset: 1]
 
   alias Blessd.Auth
   alias Blessd.PasswordReset.Credential

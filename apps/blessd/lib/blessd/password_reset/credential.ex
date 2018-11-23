@@ -1,7 +1,7 @@
 defmodule Blessd.PasswordReset.Credential do
   use Ecto.Schema
 
-  import Blessd.Changeset.Credential
+  import Blessd.Shared.Credentials.Credential
   import Ecto.Query
 
   alias Blessd.Auth.Church

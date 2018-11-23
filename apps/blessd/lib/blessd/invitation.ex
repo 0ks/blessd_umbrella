@@ -3,8 +3,8 @@ defmodule Blessd.Invitation do
   The Invitation context.
   """
 
+  import Blessd.Shared.Users.User
   import Ecto.Changeset
-  import Blessd.Changeset.User
 
   alias Blessd.Auth
   alias Blessd.Invitation.Accept

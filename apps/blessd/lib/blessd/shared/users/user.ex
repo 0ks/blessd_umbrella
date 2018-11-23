@@ -1,7 +1,7 @@
-defmodule Blessd.Changeset.User do
+defmodule Blessd.Shared.Users.User do
   import Ecto.Changeset
 
-  alias Blessd.Changeset.Email
+  import Blessd.Shared.EmailValidator
 
   @doc false
   def cast(user, attrs) do
@@ -11,9 +11,9 @@ defmodule Blessd.Changeset.User do
   @doc false
   def validate_basic(changeset) do
     changeset
-    |> Email.normalize()
+    |> normalize_email(:email)
     |> validate_required([:name, :email])
-    |> Email.validate()
+    |> validate_email(:email)
   end
 
   @doc false
