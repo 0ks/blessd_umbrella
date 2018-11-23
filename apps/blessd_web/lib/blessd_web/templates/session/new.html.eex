@@ -74,6 +74,9 @@
             <%= text_input f, :slug, placeholder: gettext("Church URL") %>
           </div>
         </div>
+        <p class="help">
+          <%= link gettext("Forgot my church URL"), to: Routes.church_recovery_path(@conn, :new) %>
+        </p>
         <%= error_tag f, :slug %>
       </div>
 

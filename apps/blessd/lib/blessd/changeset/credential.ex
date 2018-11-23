@@ -3,7 +3,7 @@ defmodule Blessd.Changeset.Credential do
 
   alias Comeonin.Bcrypt
 
-  @valid_sources ~w(password)
+  @valid_sources ~w(password church_recovery)
 
   @doc false
   def cast(credential, attrs) do

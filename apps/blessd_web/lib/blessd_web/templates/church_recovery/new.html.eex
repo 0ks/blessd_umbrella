@@ -1,0 +1,30 @@
+<h1 class="title has-text-centered"><%= gettext("Forgot my Church URL") %></h1>
+
+<div class="columns">
+  <div class="column is-half is-offset-one-quarter">
+    <%= form_for @changeset, Routes.church_recovery_path(@conn, :create), fn f -> %>
+      <%= error_alert(f) %>
+
+      <div class="field">
+        <div class="control has-icons-left">
+          <%= text_input f, :email, placeholder: gettext("Email") %>
+          <span class="icon is-left">
+            <i class="fas fa-envelope"></i>
+          </span>
+        </div>
+        <%= error_tag f, :email %>
+      </div>
+
+      <div class="buttons columns">
+        <div class="column is-half">
+          <%= submit gettext("Send email"), class: "button is-primary is-fullwidth" %>
+        </div>
+        <div class="column is-half">
+          <%= link gettext("Back"),
+            to: Routes.session_path(@conn, :new),
+            class: "button is-fullwidth" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

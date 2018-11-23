@@ -1,0 +1,33 @@
+<h1 class="title has-text-centered"><%= gettext("These are your churches") %></h1>
+
+<div class="columns is-multiline">
+  <%= for user <- @users do %>
+    <div class="column is-one-third is-one-quarter-widescreen">
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">
+            <%= user.church.name %>
+          </p>
+        </header>
+        <div class="card-content">
+          <div class="content current-user-card-content">
+            <%= gettext("Member since %{time}", time: humanize(user.inserted_at)) %></br>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <%= link gettext("Sign in"),
+            to: Routes.church_recovery_path(
+              @conn,
+              :update,
+              @token,
+              user_id: user.id,
+              church_id: user.church_id
+            ),
+            method: :put,
+            class: "card-footer-item" %>
+        </footer>
+      </div>
+    </div>
+  <% end %>
+</div>
+

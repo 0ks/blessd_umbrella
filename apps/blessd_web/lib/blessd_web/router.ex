@@ -22,6 +22,7 @@ defmodule BlessdWeb.Router do
 
     resources "/signup", SignupController, only: [:new, :create]
     resources "/sessions", SessionController, only: [:new, :create]
+    resources "/church_recovery", ChurchRecoveryController, only: [:new, :create, :edit, :update]
     resources "/password_reset", PasswordResetController, only: [:new, :create]
   end
 
