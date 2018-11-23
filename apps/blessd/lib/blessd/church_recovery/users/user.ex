@@ -3,7 +3,7 @@ defmodule Blessd.ChurchRecovery.Users.User do
 
   import Ecto.Changeset
 
-  alias Blessd.Auth.Church
+  alias Blessd.Auth.Churches.Church
   alias Blessd.ChurchRecovery.Credentials.Credential
   alias Blessd.ChurchRecovery.Users.User
 

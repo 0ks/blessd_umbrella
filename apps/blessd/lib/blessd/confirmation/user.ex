@@ -5,7 +5,7 @@ defmodule Blessd.Confirmation.User do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Blessd.Auth.Church
+  alias Blessd.Auth.Churches.Church
   alias Blessd.Confirmation.User
 
   schema "users" do

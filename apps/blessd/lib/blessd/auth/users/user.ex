@@ -1,7 +1,7 @@
-defmodule Blessd.Auth.User do
+defmodule Blessd.Auth.Users.User do
   use Ecto.Schema
 
-  alias Blessd.Auth.Church
+  alias Blessd.Auth.Churches.Church
 
   schema "users" do
     belongs_to(:church, Church)

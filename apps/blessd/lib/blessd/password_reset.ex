@@ -7,6 +7,7 @@ defmodule Blessd.PasswordReset do
   import Blessd.Shared.Users.User, only: [validate_password_reset: 1]
 
   alias Blessd.Auth
+  alias Blessd.Auth.Churches.Church
   alias Blessd.PasswordReset.Credential
   alias Blessd.PasswordReset.User
   alias Blessd.PasswordReset.TokenData
@@ -123,8 +124,8 @@ defmodule Blessd.PasswordReset do
   Authorizes the given resource. If authorized, it returns
   `{:ok, resource}`, otherwise, returns `{:error, reason}`,
   """
-  def authorize(User, _action, %Auth.User{} = user), do: Auth.check(User, user)
-  def authorize(User, _action, %Auth.Church{} = church), do: Auth.check_church(User, church)
+  def authorize(User, _action, %Auth.Users.User{} = user), do: Auth.check_user(User, user)
+  def authorize(User, _action, %Church{} = church), do: Auth.check_church(User, church)
 
   @doc """
   Returns `true` if the given current_user is authorized

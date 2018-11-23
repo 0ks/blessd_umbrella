@@ -7,6 +7,7 @@ defmodule Blessd.Invitation do
   import Ecto.Changeset
 
   alias Blessd.Auth
+  alias Blessd.Auth.Churches.Church
   alias Blessd.Invitation.Accept
   alias Blessd.Invitation.Credential
   alias Blessd.Invitation.User
@@ -117,12 +118,13 @@ defmodule Blessd.Invitation do
   Authorizes the given resource. If authorized, it returns
   `{:ok, resource}`, otherwise, returns `{:error, reason}`,
   """
-  def authorize(User, _action, %Auth.User{} = user), do: Auth.check(User, user)
-  def authorize(User, _action, %Auth.Church{} = church), do: Auth.check_church(User, church)
-  def authorize(%User{} = user, _action, current_user), do: Auth.check(user, current_user)
+  def authorize(User, _action, %Auth.Users.User{} = user), do: Auth.check_user(User, user)
+  def authorize(User, _action, %Church{} = church), do: Auth.check_church(User, church)
+
+  def authorize(%User{} = user, _action, current_user), do: Auth.check_user(user, current_user)
 
   def authorize(%Credential{} = credential, _action, current_user) do
-    Auth.check(credential, current_user)
+    Auth.check_user(credential, current_user)
   end
 
   @doc """

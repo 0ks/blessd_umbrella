@@ -132,7 +132,7 @@ defmodule Blessd.Accounts do
   end
 
   def authorize(%Query{from: %{source: {_, User}}} = query, _, current_user) do
-    Auth.check(query, current_user)
+    Auth.check_user(query, current_user)
   end
 
   def authorize(%User{id: id} = user, action, %{id: id}) when action in [:update, :change] do
@@ -140,7 +140,7 @@ defmodule Blessd.Accounts do
   end
 
   def authorize(%User{} = user, :delete, current_user) do
-    Auth.check(user, current_user)
+    Auth.check_user(user, current_user)
   end
 
   def authorize(_resource, _action, _current_user), do: {:error, :unauthorized}

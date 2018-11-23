@@ -1,4 +1,4 @@
-defmodule Blessd.Auth.Church do
+defmodule Blessd.Auth.Churches.Church do
   use Ecto.Schema
 
   schema "churches" do

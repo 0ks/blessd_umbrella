@@ -5,8 +5,8 @@ defmodule Blessd.AccountsTest do
 
   describe "churches" do
     alias Blessd.Accounts.Church
-    alias Blessd.Auth.Church, as: AuthChurch
-    alias Blessd.Auth.User, as: AuthUser
+    alias Blessd.Auth.Churches.Church, as: AuthChurch
+    alias Blessd.Auth.Users.User, as: AuthUser
 
     @update_attrs %{name: "some updated name", slug: "some_updated_slug"}
     @invalid_attrs %{name: nil, slug: nil}

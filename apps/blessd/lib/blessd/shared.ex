@@ -12,4 +12,3 @@ defmodule Blessd.Shared do
   functions here.
   """
 end
-
