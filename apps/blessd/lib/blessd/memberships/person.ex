@@ -5,7 +5,7 @@ defmodule Blessd.Memberships.Person do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Blessd.Auth.Churches.Church
+  alias Blessd.Shared.Churches.Church
   alias Blessd.Memberships.Person
 
   schema "people" do

@@ -3,7 +3,7 @@ defmodule Blessd.Memberships do
   The Memberships context.
   """
 
-  alias Blessd.Auth
+  alias Blessd.Shared
   alias Blessd.Memberships.Person
   alias Blessd.Repo
   alias Ecto.Multi
@@ -12,7 +12,7 @@ defmodule Blessd.Memberships do
   Returns the list of people.
   """
   def list_people(current_user) do
-    with {:ok, query} <- Auth.check_user(Person, current_user) do
+    with {:ok, query} <- Shared.authorize(Person, current_user) do
       query
       |> Person.order()
       |> Repo.list()
@@ -23,7 +23,7 @@ defmodule Blessd.Memberships do
   Gets a single person.
   """
   def find_person(id, current_user) do
-    with {:ok, query} <- Auth.check_user(Person, current_user), do: Repo.find(query, id)
+    with {:ok, query} <- Shared.authorize(Person, current_user), do: Repo.find(query, id)
   end
 
   @doc """
@@ -76,7 +76,7 @@ defmodule Blessd.Memberships do
   Updates a person.
   """
   def update_person(%Person{} = person, attrs, current_user) do
-    with {:ok, person} <- Auth.check_user(person, current_user) do
+    with {:ok, person} <- Shared.authorize(person, current_user) do
       person
       |> Person.changeset(attrs)
       |> Repo.update()
@@ -87,21 +87,21 @@ defmodule Blessd.Memberships do
   Deletes a Person.
   """
   def delete_person(%Person{} = person, current_user) do
-    with {:ok, person} <- Auth.check_user(person, current_user), do: Repo.delete(person)
+    with {:ok, person} <- Shared.authorize(person, current_user), do: Repo.delete(person)
   end
 
   @doc """
   Builds a person to insert.
   """
   def new_person(current_user) do
-    Auth.check_user(%Person{church_id: current_user.church.id}, current_user)
+    Shared.authorize(%Person{church_id: current_user.church.id}, current_user)
   end
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking person changes.
   """
   def change_person(%Person{} = person, current_user) do
-    with {:ok, person} <- Auth.check_user(person, current_user) do
+    with {:ok, person} <- Shared.authorize(person, current_user) do
       {:ok, Person.changeset(person, %{})}
     end
   end

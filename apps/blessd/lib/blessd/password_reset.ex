@@ -6,8 +6,7 @@ defmodule Blessd.PasswordReset do
   import Ecto.Changeset
   import Blessd.Shared.Users.User, only: [validate_password_reset: 1]
 
-  alias Blessd.Auth
-  alias Blessd.Auth.Churches.Church
+  alias Blessd.Shared
   alias Blessd.PasswordReset.Credential
   alias Blessd.PasswordReset.User
   alias Blessd.PasswordReset.TokenData
@@ -117,15 +116,14 @@ defmodule Blessd.PasswordReset do
   end
 
   defp with_church(slug, func) do
-    with {:ok, church} <- Auth.find_church(slug), do: func.(church)
+    with {:ok, church} <- Shared.find_church(slug), do: func.(church)
   end
 
   @doc """
-  Authorizes the given resource. If authorized, it returns
+  Sharedorizes the given resource. If authorized, it returns
   `{:ok, resource}`, otherwise, returns `{:error, reason}`,
   """
-  def authorize(User, _action, %Auth.Users.User{} = user), do: Auth.check_user(User, user)
-  def authorize(User, _action, %Church{} = church), do: Auth.check_church(User, church)
+  def authorize(User, _action, church_or_user), do: Shared.authorize(User, church_or_user)
 
   @doc """
   Returns `true` if the given current_user is authorized

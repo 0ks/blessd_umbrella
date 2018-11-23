@@ -5,7 +5,7 @@ defmodule Blessd.Accounts.User do
   import Ecto.Query
 
   alias Blessd.Accounts.User
-  alias Blessd.Auth.Churches.Church
+  alias Blessd.Shared.Churches.Church
 
   schema "users" do
     belongs_to(:church, Church)

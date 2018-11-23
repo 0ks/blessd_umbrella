@@ -4,7 +4,7 @@ defmodule Blessd.PasswordReset.Credential do
   import Blessd.Shared.Credentials.Credential
   import Ecto.Query
 
-  alias Blessd.Auth.Churches.Church
+  alias Blessd.Shared.Churches.Church
   alias Blessd.PasswordReset.Credential
   alias Blessd.PasswordReset.User
 

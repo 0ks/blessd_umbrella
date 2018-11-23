@@ -4,7 +4,7 @@ defmodule Blessd.Authentication.Session do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Blessd.Auth.Churches.Church
+  alias Blessd.Shared.Churches.Church
   alias Blessd.Authentication.Credential
   alias Blessd.Authentication.Session
   alias Blessd.Authentication.User

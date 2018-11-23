@@ -3,7 +3,7 @@ defmodule Blessd.Signup.Credential do
 
   import Blessd.Shared.Credentials.Credential
 
-  alias Blessd.Auth.Churches.Church
+  alias Blessd.Shared.Churches.Church
   alias Blessd.Signup.Credential
   alias Blessd.Signup.User
 

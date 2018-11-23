@@ -65,8 +65,12 @@ defmodule Blessd.DataCase do
     {:ok, confirmation_user} = Confirmation.generate_token(user)
     {:ok, confirmed_user} = Confirmation.confirm(confirmation_user)
 
-    confirmed_user = %{confirmed_user | church: convert_struct!(user.church, Blessd.Auth.Churches.Church)}
-    convert_struct!(confirmed_user, Blessd.Auth.Users.User)
+    confirmed_user = %{
+      confirmed_user
+      | church: convert_struct!(user.church, Blessd.Shared.Churches.Church)
+    }
+
+    convert_struct!(confirmed_user, Blessd.Shared.Users.User)
   end
 
   def convert_struct!(struct, target_module) do

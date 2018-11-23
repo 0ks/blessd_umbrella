@@ -1,9 +1,9 @@
-defmodule Blessd.Auth.Churches do
+defmodule Blessd.Shared.Churches do
   @moduledoc false
 
   import Ecto.Query
 
-  alias Blessd.Auth.Churches.Church
+  alias Blessd.Shared.Churches.Church
   alias Blessd.Repo
   alias Ecto.Query
   alias Ecto.Queryable
@@ -21,16 +21,16 @@ defmodule Blessd.Auth.Churches do
   end
 
   @doc false
-  def check(module, %Church{} = church) when is_atom(module) do
+  def authorize(module, %Church{} = church) when is_atom(module) do
     module
     |> Queryable.to_query()
-    |> check(church)
+    |> authorize(church)
   end
 
-  def check(%Query{} = query, %Church{id: church_id}) do
+  def authorize(%Query{} = query, %Church{id: church_id}) do
     {:ok, where(query, [t], t.church_id == ^church_id)}
   end
 
-  def check(%{church_id: id} = resource, %Church{id: id}), do: {:ok, resource}
-  def check(_, %Church{}), do: {:error, :unauthorized}
+  def authorize(%{church_id: id} = resource, %Church{id: id}), do: {:ok, resource}
+  def authorize(_, %Church{}), do: {:error, :unauthorized}
 end

@@ -1,7 +1,18 @@
 defmodule Blessd.Shared.Users.User do
-  import Ecto.Changeset
+  use Ecto.Schema
 
+  import Ecto.Changeset
   import Blessd.Shared.EmailValidator
+
+  alias Blessd.Shared.Churches.Church
+
+  schema "users" do
+    belongs_to(:church, Church)
+
+    field(:name, :string)
+    field(:email, :string)
+    field(:confirmed_at, :utc_datetime)
+  end
 
   @doc false
   def cast(user, attrs) do

@@ -4,7 +4,7 @@ defmodule Blessd.Observance.Attendant do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Blessd.Auth.Churches.Church
+  alias Blessd.Shared.Churches.Church
   alias Blessd.Observance.Person
   alias Blessd.Observance.MeetingOccurrence
 

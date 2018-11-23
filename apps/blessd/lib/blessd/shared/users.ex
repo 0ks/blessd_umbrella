@@ -1,9 +1,9 @@
-defmodule Blessd.Auth.Users do
+defmodule Blessd.Shared.Users do
   @moduledoc false
 
-  alias Blessd.Auth.Churches
-  alias Blessd.Auth.Churches.Church
-  alias Blessd.Auth.Users.User
+  alias Blessd.Shared.Churches
+  alias Blessd.Shared.Churches.Church
+  alias Blessd.Shared.Users.User
   alias Blessd.Repo
 
   @doc false
@@ -12,13 +12,13 @@ defmodule Blessd.Auth.Users do
   end
 
   def find(id, %Church{} = church) do
-    with {:ok, query} <- Churches.check(User, church),
+    with {:ok, query} <- Churches.authorize(User, church),
          {:ok, user} <- Repo.find(query, id) do
       {:ok, Map.put(user, :church, church)}
     end
   end
 
   @doc false
-  def check(_, %User{confirmed_at: nil}), do: {:error, :unconfirmed}
-  def check(checkable, %User{church: church}), do: Churches.check(checkable, church)
+  def authorize(_, %User{confirmed_at: nil}), do: {:error, :unconfirmed}
+  def authorize(resource, %User{church: church}), do: Churches.authorize(resource, church)
 end

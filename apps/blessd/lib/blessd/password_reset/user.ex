@@ -5,7 +5,7 @@ defmodule Blessd.PasswordReset.User do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Blessd.Auth.Churches.Church
+  alias Blessd.Shared.Churches.Church
   alias Blessd.PasswordReset.User
 
   schema "users" do

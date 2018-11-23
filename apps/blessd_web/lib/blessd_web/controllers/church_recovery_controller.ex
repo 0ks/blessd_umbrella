@@ -1,7 +1,7 @@
 defmodule BlessdWeb.ChurchRecoveryController do
   use BlessdWeb, :controller
 
-  alias Blessd.Auth
+  alias Blessd.Shared
   alias Blessd.ChurchRecovery
   alias BlessdWeb.ChurchRecoveryMailer
   alias BlessdWeb.Session
@@ -33,7 +33,7 @@ defmodule BlessdWeb.ChurchRecoveryController do
 
   def update(conn, %{"id" => token, "user_id" => user_id, "church_id" => church_id}) do
     with {:ok, _credential} <- ChurchRecovery.recover(token),
-         {:ok, user} <- Auth.find_user(user_id, church_id) do
+         {:ok, user} <- Shared.find_user(user_id, church_id) do
       conn
       |> Session.put_user(user)
       |> put_flash(:info, "Church recovered successfully.")

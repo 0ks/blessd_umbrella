@@ -1,7 +1,7 @@
 defmodule Blessd.Authentication.Credential do
   use Ecto.Schema
 
-  alias Blessd.Auth.Churches.Church
+  alias Blessd.Shared.Churches.Church
   alias Blessd.Authentication.User
 
   schema "credentials" do

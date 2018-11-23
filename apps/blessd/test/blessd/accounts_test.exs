@@ -5,8 +5,8 @@ defmodule Blessd.AccountsTest do
 
   describe "churches" do
     alias Blessd.Accounts.Church
-    alias Blessd.Auth.Churches.Church, as: AuthChurch
-    alias Blessd.Auth.Users.User, as: AuthUser
+    alias Blessd.Shared.Churches.Church, as: SharedChurch
+    alias Blessd.Shared.Users.User, as: SharedUser
 
     @update_attrs %{name: "some updated name", slug: "some_updated_slug"}
     @invalid_attrs %{name: nil, slug: nil}
@@ -15,7 +15,7 @@ defmodule Blessd.AccountsTest do
       %{church: church} = user = signup()
 
       current_user =
-        convert_struct!(%{user | church: convert_struct!(church, AuthChurch)}, AuthUser)
+        convert_struct!(%{user | church: convert_struct!(church, SharedChurch)}, SharedUser)
 
       church = convert_struct!(church, Church)
       assert {:ok, found} = Accounts.find_church(church.id, current_user)
@@ -33,7 +33,7 @@ defmodule Blessd.AccountsTest do
       %{church: church} = user = signup()
 
       current_user =
-        convert_struct!(%{user | church: convert_struct!(church, AuthChurch)}, AuthUser)
+        convert_struct!(%{user | church: convert_struct!(church, SharedChurch)}, SharedUser)
 
       church = convert_struct!(church, Church)
       assert {:ok, church} = Accounts.update_church(church, @update_attrs, current_user)
@@ -46,7 +46,7 @@ defmodule Blessd.AccountsTest do
       %{church: church} = user = signup()
 
       current_user =
-        convert_struct!(%{user | church: convert_struct!(church, AuthChurch)}, AuthUser)
+        convert_struct!(%{user | church: convert_struct!(church, SharedChurch)}, SharedUser)
 
       church = convert_struct!(church, Church)
 
@@ -63,7 +63,7 @@ defmodule Blessd.AccountsTest do
       %{church: church} = user = signup()
 
       current_user =
-        convert_struct!(%{user | church: convert_struct!(church, AuthChurch)}, AuthUser)
+        convert_struct!(%{user | church: convert_struct!(church, SharedChurch)}, SharedUser)
 
       church = convert_struct!(church, Church)
       assert {:ok, %Church{}} = Accounts.delete_church(church, current_user)
@@ -74,7 +74,7 @@ defmodule Blessd.AccountsTest do
       %{church: church} = user = signup()
 
       current_user =
-        convert_struct!(%{user | church: convert_struct!(church, AuthChurch)}, AuthUser)
+        convert_struct!(%{user | church: convert_struct!(church, SharedChurch)}, SharedUser)
 
       church = convert_struct!(church, Church)
       assert {:ok, %Ecto.Changeset{}} = Accounts.change_church(church, current_user)

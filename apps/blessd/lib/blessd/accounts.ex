@@ -7,7 +7,7 @@ defmodule Blessd.Accounts do
 
   alias Blessd.Accounts.Church
   alias Blessd.Accounts.User
-  alias Blessd.Auth
+  alias Blessd.Shared
   alias Blessd.Repo
   alias Ecto.Query
   alias Ecto.Queryable
@@ -106,7 +106,7 @@ defmodule Blessd.Accounts do
   end
 
   @doc """
-  Authorizes the given resource. If authorized, it returns
+  Sharedorizes the given resource. If authorized, it returns
   `{:ok, resource}`, otherwise, returns `{:error, reason}`,
   """
   def authorize(Church, action, current_user) do
@@ -132,7 +132,7 @@ defmodule Blessd.Accounts do
   end
 
   def authorize(%Query{from: %{source: {_, User}}} = query, _, current_user) do
-    Auth.check_user(query, current_user)
+    Shared.authorize(query, current_user)
   end
 
   def authorize(%User{id: id} = user, action, %{id: id}) when action in [:update, :change] do
@@ -140,7 +140,7 @@ defmodule Blessd.Accounts do
   end
 
   def authorize(%User{} = user, :delete, current_user) do
-    Auth.check_user(user, current_user)
+    Shared.authorize(user, current_user)
   end
 
   def authorize(_resource, _action, _current_user), do: {:error, :unauthorized}
