@@ -1,4 +1,6 @@
 defmodule Blessd.Observance.Meeting do
+  @moduledoc false
+
   use Ecto.Schema
 
   import Ecto.Changeset

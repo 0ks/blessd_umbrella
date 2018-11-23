@@ -1,5 +1,5 @@
 defmodule Blessd.Custom do
   @moduledoc """
-  Functions for dealing with custom fields and data.
+  Functions for dealing with customizations in the system.
   """
 end
