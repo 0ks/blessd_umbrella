@@ -279,7 +279,7 @@ msgstr ""
 msgid "The person of the line #%{line} could not be imported."
 msgstr ""
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/blessd_web/templates/person/file_modal.html.eex:5
 #: lib/blessd_web/templates/person/file_modal.html.eex:5
 msgid "Import people from CSV"

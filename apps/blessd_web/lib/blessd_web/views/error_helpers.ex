@@ -47,12 +47,16 @@ defmodule BlessdWeb.ErrorHelpers do
     form.errors != [] || has_errors?(form.source)
   end
 
+  def has_errors?(%Ecto.Changeset{valid?: false, action: action}) when action != nil do
+    true
+  end
+
   def has_errors?(%Ecto.Changeset{changes: changes}) do
     changes
     |> Enum.map(&elem(&1, 1))
     |> List.flatten()
     |> Enum.any?(fn
-      %Ecto.Changeset{valid?: valid?} -> !valid?
+      %Ecto.Changeset{} = changeset -> has_errors?(changeset)
       _ -> false
     end)
   end

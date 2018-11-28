@@ -40,6 +40,7 @@ defmodule BlessdWeb.Router do
     get "/", DashboardController, :index
 
     resources "/confirmation", ConfirmationController, only: [:create]
+    resources "/custom_fields", CustomFieldController, except: [:show]
     resources "/invitation", InvitationController, only: [:new, :create]
     resources "/church", ChurchController, only: [:edit, :update, :delete], singleton: true
     resources "/import", ImportController, only: [:create]

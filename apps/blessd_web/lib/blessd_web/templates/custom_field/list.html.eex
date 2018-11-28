@@ -1,0 +1,14 @@
+<ul>
+  <%= for field <- @fields do %>
+    <li>
+      <%= link gettext("New field"),
+        to: Routes.custom_field_path(@conn, :edit, @current_user.church.slug, field) %>
+    </li>
+  <% end %>
+
+  <li>
+    <%= link gettext("New field"),
+      to: Routes.custom_field_path(@conn, :new, @current_user.church.slug) %>
+  </li>
+</ul>
+

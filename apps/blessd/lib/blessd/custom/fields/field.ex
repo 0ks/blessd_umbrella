@@ -3,6 +3,9 @@ defmodule Blessd.Custom.Fields.Field do
 
   use Ecto.Schema
 
+  import Ecto.Changeset
+
+  alias Blessd.Custom.Fields.Field
   alias Blessd.Shared.Churches.Church
   alias Blessd.Shared.Fields.Field.Validations
 
@@ -15,6 +18,35 @@ defmodule Blessd.Custom.Fields.Field do
 
     embeds_one :validations, Validations
   end
+
+  @doc false
+  def new_changeset(%Field{} = field, attrs) do
+    field
+    |> cast(attrs, [:resource_type, :name, :type])
+    |> cast_embed(:validations, required: true)
+    |> validate_all()
+  end
+
+  @doc false
+  def edit_changeset(%Field{} = field, attrs) do
+    field
+    |> cast(attrs, [:name, :type])
+    |> cast_embed(:validations, required: true)
+    |> validate_all()
+  end
+
+  defp validate_all(changeset) do
+    changeset
+    |> validate_required([:resource_type, :name, :type])
+    |> validate_inclusion(:resource_type, valid_resource_types())
+    |> validate_inclusion(:type, valid_types())
+  end
+
+  @doc false
+  def valid_resource_types, do: ~w(person)
+
+  @doc false
+  def valid_types, do: ~w(string date)
 end
 
 defmodule Blessd.Shared.Fields.Field.Validations do
@@ -22,7 +54,18 @@ defmodule Blessd.Shared.Fields.Field.Validations do
 
   use Ecto.Schema
 
+  import Ecto.Changeset
+
+  alias Blessd.Shared.Fields.Field.Validations
+
   embedded_schema do
     field :required, :boolean
+  end
+
+  @doc false
+  def changeset(%Validations{} = field, attrs) do
+    field
+    |> cast(attrs, [:required])
+    |> validate_required(:required)
   end
 end

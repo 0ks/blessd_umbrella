@@ -1,0 +1,58 @@
+<h1 class="title has-text-centered"><%= gettext("New Custom Field") %></h1>
+
+<div class="columns">
+  <div class="column is-one-fifth">
+    <%= render SharedView, "config_menu.html",
+      conn: @conn,
+      active: :custom_fields,
+      current_user: @current_user %>
+  </div>
+
+  <div class="column is-two-fifth">
+    <%= render "list.html", conn: @conn, current_user: @current_user, fields: @fields %>
+  </div>
+
+  <div class="column is-two-fifths">
+    <%= form_for @changeset, Routes.custom_field_path(@conn, :create, @current_user.church.slug), fn f -> %>
+      <%= error_alert(f) %>
+
+      <%= hidden_input f, :resource_type, value: "person" %>
+
+      <div class="field">
+        <%= label f, :name, class: "label" %>
+        <div class="control">
+          <%= text_input f, :name %>
+        </div>
+        <%= error_tag f, :name %>
+      </div>
+
+      <div class="field">
+        <%= label f, :type, class: "label" %>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <%= select f, :type, type_options() %>
+          </div>
+        </div>
+        <%= error_tag f, :type %>
+      </div>
+
+      <%= inputs_for f, :validations, fn ff -> %>
+        <h2 class="subtitle has-text-centered"><%= gettext("Validations") %></h2>
+        <div class="field">
+          <div class="control">
+            <%= label ff, :required, class: "checkbox" do %>
+              <%= checkbox ff, :required %>
+              <%= gettext("This field is required") %>
+            <% end %>
+          </div>
+          <%= error_tag ff, :required %>
+        </div>
+      <% end %>
+
+      <div class="buttons">
+        <%= submit gettext("Submit"), class: "button is-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+

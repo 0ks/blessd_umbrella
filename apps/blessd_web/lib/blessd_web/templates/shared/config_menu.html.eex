@@ -1,0 +1,28 @@
+<aside class="menu">
+  <p class="menu-label">
+    <%= gettext("General") %>
+  </p>
+  <ul class="menu-list">
+    <li>
+      <%= link gettext("Profile"),
+        to: Routes.user_path(@conn, :edit, @current_user.church.slug, @current_user),
+        class: if @active == :profile, do: "is-active" %>
+      <%= link gettext("Users"),
+        to: Routes.user_path(@conn, :index, @current_user.church.slug),
+        class: if @active == :users, do: "is-active" %>
+      <%= link gettext("Church config"),
+        to: Routes.church_path(@conn, :edit, @current_user.church.slug),
+        class: if @active == :church_config, do: "is-active" %>
+    </li>
+  </ul>
+  <p class="menu-label">
+    <%= gettext("Customization") %>
+  </p>
+  <ul class="menu-list">
+    <li>
+      <%= link gettext("Fields"),
+        to: Routes.custom_field_path(@conn, :index, @current_user.church.slug),
+        class: if @active == :custom_fields, do: "is-active" %>
+    </li>
+  </ul>
+</aside>

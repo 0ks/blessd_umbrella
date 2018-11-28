@@ -3,4 +3,5 @@ defmodule BlessdWeb.UserView do
 
   alias Blessd.Accounts
   alias Blessd.Invitation
+  alias BlessdWeb.SharedView
 end
