@@ -15,24 +15,44 @@ defmodule Blessd.Custom.Fields.Field do
     field :resource_type, :string
     field :name, :string
     field :type, :string
+    field :position, :integer
 
     embeds_one :validations, Validations
+
+    timestamps()
   end
 
   @doc false
   def new_changeset(%Field{} = field, attrs) do
     field
-    |> cast(attrs, [:resource_type, :name, :type])
-    |> cast_embed(:validations, required: true)
+    |> cast_all(attrs)
     |> validate_all()
   end
 
   @doc false
   def edit_changeset(%Field{} = field, attrs) do
     field
+    |> cast_basic(attrs)
+    |> validate_all()
+  end
+
+  @doc false
+  def reorder_changeset(%Field{} = field, attrs) do
+    field
+    |> cast(attrs, [:position])
+    |> validate_required(:position)
+  end
+
+  defp cast_basic(field, attrs) do
+    field
     |> cast(attrs, [:name, :type])
     |> cast_embed(:validations, required: true)
-    |> validate_all()
+  end
+
+  defp cast_all(field, attrs) do
+    field
+    |> cast_basic(attrs)
+    |> cast(attrs, [:resource_type])
   end
 
   defp validate_all(changeset) do

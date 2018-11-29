@@ -23,15 +23,24 @@ defmodule Blessd.Custom do
   @doc """
   Builds a custom field changeset ready to use update.
   """
-  def edit_field_changeset(field, current_user), do: Fields.edit_changeset(field, current_user)
+  def edit_field_changeset(field_id, current_user) do
+    Fields.edit_changeset(field_id, current_user)
+  end
 
   @doc """
   Updates a field.
   """
-  def update_field(field, attrs, current_user), do: Fields.update(field, attrs, current_user)
+  def update_field(field_id, attrs, current_user) do
+    Fields.update(field_id, attrs, current_user)
+  end
+
+  @doc """
+  Reorder the given fields to the given sequence
+  """
+  def reorder_fields(field_ids, current_user), do: Fields.reorder(field_ids, current_user)
 
   @doc """
   Deletes a field.
   """
-  def delete_field(field, current_user), do: Fields.delete(field, current_user)
+  def delete_field(field_id, current_user), do: Fields.delete(field_id, current_user)
 end
