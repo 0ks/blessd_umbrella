@@ -21,12 +21,14 @@ import "./file";
 import "./modal";
 
 import AttendanceView from "./views/attendance";
+import CustomFieldView from "./views/custom_field";
 import SessionView from "./views/session";
 
 window.views = {
   Elixir: {
     BlessdWeb: {
       AttendanceView: AttendanceView,
+      CustomFieldView: CustomFieldView,
       SessionView: SessionView
     }
   }

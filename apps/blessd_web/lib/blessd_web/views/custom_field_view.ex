@@ -12,4 +12,3 @@ defmodule BlessdWeb.CustomFieldView do
     Gettext.dgettext(BlessdWeb.Gettext, "field_types", type)
   end
 end
-

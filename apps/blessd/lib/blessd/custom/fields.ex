@@ -12,7 +12,7 @@ defmodule Blessd.Custom.Fields do
     end
   end
 
-  @doc
+  @doc false
   def find(id, current_user) do
     with {:ok, query} <- Shared.authorize(Field, current_user) do
       Repo.find(query, id)
@@ -22,7 +22,7 @@ defmodule Blessd.Custom.Fields do
   @doc false
   def new_changeset(current_user) do
     with {:ok, field} <- current_user |> build() |> Shared.authorize(current_user) do
-      {:ok, Field.new_changeset(field, current_user)}
+      {:ok, Field.new_changeset(field, %{})}
     end
   end
 
@@ -30,7 +30,7 @@ defmodule Blessd.Custom.Fields do
   def create(attrs, current_user) do
     with {:ok, field} <- current_user |> build() |> Shared.authorize(current_user) do
       field
-      |> Field.new_changeset(current_user)
+      |> Field.new_changeset(attrs)
       |> Repo.insert()
     end
   end
@@ -38,7 +38,7 @@ defmodule Blessd.Custom.Fields do
   @doc false
   def edit_changeset(%Field{} = field, current_user) do
     with {:ok, field} <- Shared.authorize(field, current_user) do
-      {:ok, Field.edit_changeset(field, current_user)}
+      {:ok, Field.edit_changeset(field, %{})}
     end
   end
 
@@ -52,7 +52,7 @@ defmodule Blessd.Custom.Fields do
   def update(%Field{} = field, attrs, current_user) do
     with {:ok, field} <- Shared.authorize(field, current_user) do
       field
-      |> Field.edit_changeset(current_user)
+      |> Field.edit_changeset(attrs)
       |> Repo.update()
     end
   end
@@ -78,4 +78,3 @@ defmodule Blessd.Custom.Fields do
 
   defp build(current_user), do: %Field{church_id: current_user.church_id}
 end
-

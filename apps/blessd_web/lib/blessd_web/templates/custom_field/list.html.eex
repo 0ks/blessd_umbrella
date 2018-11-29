@@ -1,14 +1,16 @@
-<ul>
+<ul class="content">
   <%= for field <- @fields do %>
     <li>
-      <%= link gettext("New field"),
-        to: Routes.custom_field_path(@conn, :edit, @current_user.church.slug, field) %>
+      <%= link field.name,
+        to: Routes.custom_field_path(@conn, :edit, @current_user.church.slug, field),
+        class: "box is-small #{if @active == field.id, do: "is-active"}" %>
     </li>
   <% end %>
 
   <li>
     <%= link gettext("New field"),
-      to: Routes.custom_field_path(@conn, :new, @current_user.church.slug) %>
+      to: Routes.custom_field_path(@conn, :new, @current_user.church.slug),
+      class: "box is-small #{if @active == "new", do: "is-active"}" %>
   </li>
 </ul>
 

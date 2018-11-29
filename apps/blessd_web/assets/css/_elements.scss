@@ -31,3 +31,22 @@
 .control.is-fullwidth {
   width: 100%;
 }
+
+// Box mutations
+.box{
+  &.is-active {
+    background-color: $blue;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px $blue;
+    color: $white;
+  }
+
+  &.is-small {
+    border-radius: 2px;
+    padding: 0.5em 0.75em;
+  }
+}
+
+// Ignore margin right for is-fullwidth buttons
+.buttons .button.is-fullwidth:not(:last-child) {
+  margin-right: 0;
+}

@@ -1,6 +1,4 @@
 defmodule BlessdWeb.FormHelpers do
-  import Phoenix.HTML.Tag
-
   alias Phoenix.HTML.Form
   alias BlessdWeb.ErrorHelpers
 
