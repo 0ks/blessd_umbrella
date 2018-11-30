@@ -7,8 +7,8 @@ defmodule BlessdWeb.CustomFieldChannel do
     {:ok, socket}
   end
 
-  def handle_in("reorder", %{"ids" => ids}, socket) do
-    case Custom.reorder_fields(ids, socket.assigns.current_user) do
+  def handle_in("reorder", %{"resource" => resource, "ids" => ids}, socket) do
+    case Custom.reorder_fields(resource, ids, socket.assigns.current_user) do
       {:ok, _fields} ->
         {:reply, :ok, socket}
 

@@ -40,7 +40,6 @@ defmodule BlessdWeb.Router do
     get "/", DashboardController, :index
 
     resources "/confirmation", ConfirmationController, only: [:create]
-    resources "/custom_fields", CustomFieldController, except: [:show]
     resources "/invitation", InvitationController, only: [:new, :create]
     resources "/church", ChurchController, only: [:edit, :update, :delete], singleton: true
     resources "/import", ImportController, only: [:create]
@@ -56,6 +55,10 @@ defmodule BlessdWeb.Router do
 
     resources "/meeting_occurrences", MeetingOccurrenceController, only: [:edit, :update, :delete] do
       resources "/attendance", AttendanceController, only: [:index]
+    end
+
+    scope "/:resource" do
+      resources "/custom_fields", CustomFieldController, except: [:show]
     end
   end
 end

@@ -12,7 +12,7 @@ defmodule Blessd.Custom.Fields.Field do
   schema "custom_fields" do
     belongs_to(:church, Church)
 
-    field :resource_type, :string
+    field :resource, :string
     field :name, :string
     field :type, :string
     field :position, :integer
@@ -23,16 +23,9 @@ defmodule Blessd.Custom.Fields.Field do
   end
 
   @doc false
-  def new_changeset(%Field{} = field, attrs) do
+  def changeset(%Field{} = field, attrs) do
     field
     |> cast_all(attrs)
-    |> validate_all()
-  end
-
-  @doc false
-  def edit_changeset(%Field{} = field, attrs) do
-    field
-    |> cast_basic(attrs)
     |> validate_all()
   end
 
@@ -43,27 +36,21 @@ defmodule Blessd.Custom.Fields.Field do
     |> validate_required(:position)
   end
 
-  defp cast_basic(field, attrs) do
+  defp cast_all(field, attrs) do
     field
     |> cast(attrs, [:name, :type])
     |> cast_embed(:validations, required: true)
   end
 
-  defp cast_all(field, attrs) do
-    field
-    |> cast_basic(attrs)
-    |> cast(attrs, [:resource_type])
-  end
-
   defp validate_all(changeset) do
     changeset
-    |> validate_required([:resource_type, :name, :type])
-    |> validate_inclusion(:resource_type, valid_resource_types())
+    |> validate_required([:resource, :name, :type])
+    |> validate_inclusion(:resource, valid_resources())
     |> validate_inclusion(:type, valid_types())
   end
 
   @doc false
-  def valid_resource_types, do: ~w(person)
+  def valid_resources, do: ~w(person)
 
   @doc false
   def valid_types, do: ~w(string date)

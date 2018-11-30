@@ -8,17 +8,19 @@ defmodule Blessd.Custom do
   @doc """
   Returns the list of fields.
   """
-  def list_fields(current_user), do: Fields.list(current_user)
+  def list_fields(resource, current_user), do: Fields.list(resource, current_user)
 
   @doc """
   Builds a custom field changeset ready to insert.
   """
-  def new_field_changeset(current_user), do: Fields.new_changeset(current_user)
+  def new_field_changeset(resource, current_user),
+    do: Fields.new_changeset(resource, current_user)
 
   @doc """
   Creates a field.
   """
-  def create_field(attrs, current_user), do: Fields.create(attrs, current_user)
+  def create_field(resource, attrs, current_user),
+    do: Fields.create(resource, attrs, current_user)
 
   @doc """
   Builds a custom field changeset ready to use update.
@@ -37,7 +39,9 @@ defmodule Blessd.Custom do
   @doc """
   Reorder the given fields to the given sequence
   """
-  def reorder_fields(field_ids, current_user), do: Fields.reorder(field_ids, current_user)
+  def reorder_fields(resource, field_ids, current_user) do
+    Fields.reorder(resource, field_ids, current_user)
+  end
 
   @doc """
   Deletes a field.

@@ -16,12 +16,12 @@
     </li>
   </ul>
   <p class="menu-label">
-    <%= gettext("Customization") %>
+    <%= gettext("Custom fields") %>
   </p>
   <ul class="menu-list">
     <li>
-      <%= link gettext("Fields"),
-        to: Routes.custom_field_path(@conn, :index, @current_user.church.slug),
+      <%= link gettext("People"),
+        to: Routes.custom_field_path(@conn, :index, @current_user.church.slug, "person"),
         class: if @active == :custom_fields, do: "is-active" %>
     </li>
   </ul>

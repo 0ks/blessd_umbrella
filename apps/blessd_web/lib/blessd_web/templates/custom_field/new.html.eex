@@ -19,7 +19,12 @@
   <div class="column is-two-fifths">
     <%= render "form.html",
       changeset: @changeset,
-      action: Routes.custom_field_path(@conn, :create, @current_user.church.slug),
+      action: Routes.custom_field_path(
+        @conn,
+        :create,
+        @current_user.church.slug,
+        @changeset.data.resource
+      ),
       delete?: false %>
   </div>
 </div>

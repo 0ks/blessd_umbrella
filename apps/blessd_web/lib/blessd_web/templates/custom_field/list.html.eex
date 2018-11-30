@@ -1,14 +1,15 @@
-<ul class="content js-field-list">
+<% resource = @conn.params["resource"] %>
+<ul class="content js-field-list" data-resource="<%= resource %>">
   <%= for field <- @fields do %>
     <li data-id="<%= field.id %>">
       <%= link field.name,
-        to: Routes.custom_field_path(@conn, :edit, @current_user.church.slug, field),
+        to: Routes.custom_field_path(@conn, :edit, @current_user.church.slug, resource, field),
         class: "box is-small #{if @active == field.id, do: "is-active"}" %>
     </li>
   <% end %>
 </ul>
 
 <%= link gettext("New field"),
-  to: Routes.custom_field_path(@conn, :new, @current_user.church.slug),
+  to: Routes.custom_field_path(@conn, :new, @current_user.church.slug, resource),
   class: "box is-small #{if @active == "new", do: "is-active"}" %>
 

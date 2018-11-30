@@ -23,6 +23,7 @@
         @conn,
         :update,
         @current_user.church.slug,
+        @changeset.data.resource,
         @changeset.data
       ),
       delete?: true,
