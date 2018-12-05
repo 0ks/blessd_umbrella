@@ -2,6 +2,7 @@ defmodule BlessdWeb.PersonController do
   use BlessdWeb, :controller
 
   alias Blessd.Memberships
+  alias Blessd.Shared
 
   def index(conn, _params) do
     with {:ok, people} <- Memberships.list_people(conn.assigns.current_user) do
@@ -12,41 +13,55 @@ defmodule BlessdWeb.PersonController do
   def new(conn, _params) do
     with user = conn.assigns.current_user,
          {:ok, person} <- Memberships.new_person(user),
-         {:ok, changeset} <- Memberships.change_person(person, user) do
-      render(conn, "new.html", changeset: changeset)
+         {:ok, changeset} <- Memberships.change_person(person, user),
+         {:ok, fields} <- Shared.list_custom_fields("person", user) do
+      render(conn, "new.html", changeset: changeset, fields: fields)
     end
   end
 
   def create(conn, %{"person" => person_params}) do
-    with user = conn.assigns.current_user,
-         {:ok, _person} <- Memberships.create_person(person_params, user) do
+    user = conn.assigns.current_user
+
+    with {:ok, _person} <- Memberships.create_person(person_params, user) do
       conn
       |> put_flash(:info, gettext("Person created successfully."))
       |> redirect(to: Routes.person_path(conn, :index, user.church.slug))
     else
-      {:error, %Ecto.Changeset{} = changeset} -> render(conn, "new.html", changeset: changeset)
-      {:error, reason} -> {:error, reason}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        with {:ok, fields} <- Shared.list_custom_fields("person", user) do
+          render(conn, "new.html", changeset: changeset, fields: fields)
+        end
+
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 
   def edit(conn, %{"id" => id}) do
     with user = conn.assigns.current_user,
          {:ok, person} <- Memberships.find_person(id, user),
-         {:ok, changeset} <- Memberships.change_person(person, user) do
-      render(conn, "edit.html", changeset: changeset)
+         {:ok, changeset} <- Memberships.change_person(person, user),
+         {:ok, fields} <- Shared.list_custom_fields("person", user) do
+      render(conn, "edit.html", changeset: changeset, fields: fields)
     end
   end
 
   def update(conn, %{"id" => id, "person" => person_params}) do
-    with user = conn.assigns.current_user,
-         {:ok, person} <- Memberships.find_person(id, user),
+    user = conn.assigns.current_user
+
+    with {:ok, person} <- Memberships.find_person(id, user),
          {:ok, _person} <- Memberships.update_person(person, person_params, user) do
       conn
       |> put_flash(:info, gettext("Person updated successfully."))
       |> redirect(to: Routes.person_path(conn, :index, user.church.slug))
     else
-      {:error, %Ecto.Changeset{} = changeset} -> render(conn, "edit.html", changeset: changeset)
-      {:error, reason} -> {:error, reason}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        with {:ok, fields} <- Shared.list_custom_fields("person", user) do
+          render(conn, "edit.html", changeset: changeset, fields: fields)
+        end
+
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 

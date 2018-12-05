@@ -1,12 +1,12 @@
 defmodule Blessd.Custom.Fields do
   @moduledoc false
 
+  import Blessd.Shared.Fields, only: [by_resource: 2, order: 1]
+
   alias Blessd.Custom.Fields.Field
   alias Blessd.Repo
   alias Blessd.Shared
   alias Ecto.Multi
-
-  import Ecto.Query
 
   @doc false
   def list(resource, current_user) do
@@ -17,10 +17,6 @@ defmodule Blessd.Custom.Fields do
       |> Repo.list()
     end
   end
-
-  defp by_resource(query, resource), do: where(query, [f], f.resource == ^resource)
-
-  defp order(query), do: order_by(query, [f], [f.position, f.inserted_at])
 
   @doc false
   def find(id, current_user) do

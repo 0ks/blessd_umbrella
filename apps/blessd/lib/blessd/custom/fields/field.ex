@@ -6,8 +6,8 @@ defmodule Blessd.Custom.Fields.Field do
   import Ecto.Changeset
 
   alias Blessd.Custom.Fields.Field
+  alias Blessd.Custom.Fields.Field.Validations
   alias Blessd.Shared.Churches.Church
-  alias Blessd.Shared.Fields.Field.Validations
 
   schema "custom_fields" do
     belongs_to(:church, Church)
@@ -56,14 +56,14 @@ defmodule Blessd.Custom.Fields.Field do
   def valid_types, do: ~w(string date)
 end
 
-defmodule Blessd.Shared.Fields.Field.Validations do
+defmodule Blessd.Custom.Fields.Field.Validations do
   @moduledoc false
 
   use Ecto.Schema
 
   import Ecto.Changeset
 
-  alias Blessd.Shared.Fields.Field.Validations
+  alias Blessd.Custom.Fields.Field.Validations
 
   embedded_schema do
     field :required, :boolean
