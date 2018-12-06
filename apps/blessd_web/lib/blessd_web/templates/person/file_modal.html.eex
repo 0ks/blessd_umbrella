@@ -3,9 +3,52 @@
   <div class="modal-card">
     <header class="modal-card-head">
       <p class="modal-card-title"><%= gettext("Import people from CSV") %></p>
+      <%= link gettext("Help"), to: "#", class: "js-import-help-link" %>
     </header>
     <%= form_for @conn, Routes.import_path(@conn, :create, @current_user.church.slug), [as: :import, multipart: true], fn f -> %>
       <section class="modal-card-body">
+        <div class="message is-info is-hidden js-import-help">
+          <div class="message-header">
+            <p><%= gettext("Help") %></p>
+            <button class="delete" aria-label="delete"></button>
+          </div>
+          <div class="message-body content">
+            <p>
+              <%= gettext("""
+              The first line of the CSV should be the field name of
+              that position. Here are the field names we will be considering
+              to import data:
+              """) %>
+            </p>
+
+            <ul>
+              <li><%= gettext("Basic fields") %></li>
+              <ul>
+                <li><code>name</code> - <%= gettext("Name") %></li>
+                <li><code>email</code> - <%= gettext("Email") %></li>
+                <li><code>is_member</code> - <%= gettext("User is member") %></li>
+              </ul>
+
+              <li><%= gettext("Custom fields") %></li>
+              <ul>
+                <%= for field <- @fields do %>
+                  <li>
+                    <code>
+                      custom_data.<%= Shared.custom_field_name(field) %>
+                    </code> - <%= field.name %>
+                  </li>
+                <% end %>
+              </ul>
+            </ul>
+
+            <p>
+              <%= raw gettext("""
+              Dates should be formated <code>YYYY-MM-DD</code>,
+              and booleans should be <code>1</code> or <code>0</code>.
+              """) %>
+            </p>
+          </div>
+        </div>
         <div class="field">
           <div class="file is-fullwidth is-right has-name">
             <label class="file-label">

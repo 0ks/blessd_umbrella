@@ -5,8 +5,10 @@ defmodule BlessdWeb.PersonController do
   alias Blessd.Shared
 
   def index(conn, _params) do
-    with {:ok, people} <- Memberships.list_people(conn.assigns.current_user) do
-      render(conn, "index.html", people: people)
+    with user = conn.assigns.current_user,
+         {:ok, people} <- Memberships.list_people(user),
+         {:ok, fields} <- Shared.list_custom_fields("person", user) do
+      render(conn, "index.html", people: people, fields: fields)
     end
   end
 

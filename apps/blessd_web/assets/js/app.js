@@ -19,9 +19,11 @@ import "./datepicker";
 import "./header";
 import "./file";
 import "./modal";
+import "./message";
 
 import AttendanceView from "./views/attendance";
 import CustomFieldView from "./views/custom_field";
+import PersonView from "./views/person";
 import SessionView from "./views/session";
 
 window.views = {
@@ -29,6 +31,7 @@ window.views = {
     BlessdWeb: {
       AttendanceView: AttendanceView,
       CustomFieldView: CustomFieldView,
+      PersonView: PersonView,
       SessionView: SessionView
     }
   }

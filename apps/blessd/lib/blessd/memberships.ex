@@ -41,10 +41,22 @@ defmodule Blessd.Memberships do
   Imports a list of people from a file.
   """
   def import_people(stream, current_user) do
-    with enum = CSV.decode!(stream, headers: true),
-         {:ok, people} <- create_people(enum, current_user) do
-      {:ok, people}
-    else
+    stream
+    |> CSV.decode!(headers: true)
+    |> Stream.map(fn map ->
+      Enum.reduce(map, %{}, fn {key, value}, result ->
+        case String.split(key, ".") do
+          [k] ->
+            Map.put(result, k, value)
+
+          [k1, k2] ->
+            Map.update(result, k1, %{k2 => value}, &Map.put(&1, k2, value))
+        end
+      end)
+    end)
+    |> create_people(current_user)
+    |> case do
+      {:ok, people} -> {:ok, people}
       {:error, index, changeset} -> {:error, index + 2, changeset}
       {:error, reason} -> {:error, reason}
     end

@@ -45,6 +45,19 @@
         <%= error_tag ff, Shared.custom_field_name(field) %>
       </div>
     <% end %>
+
+    <div class="columns">
+      <div class="column is-one-third is-offset-one-third">
+        <%= link gettext("Add more fields..."),
+          to: Routes.custom_field_path(
+            @conn,
+            :new,
+            @current_user.church.slug,
+            "person"
+          ),
+          class: "button is-primary is-fullwidth" %>
+      </div>
+    </div>
   <% end %>
 
   <div class="buttons">

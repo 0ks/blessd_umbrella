@@ -24,7 +24,12 @@ defmodule BlessdWeb.ErrorHelpers do
         """)
 
       content_tag :div, class: "message is-danger" do
-        content_tag(:div, error_message, class: "message-body")
+        content_tag :div, class: "message-body" do
+          [
+            error_message,
+            content_tag(:button, "", class: "delete", "aria-label": "delete")
+          ]
+        end
       end
     end
   end
