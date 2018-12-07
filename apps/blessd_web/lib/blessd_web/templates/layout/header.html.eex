@@ -45,17 +45,8 @@
             <%= user.name %>
           </div>
           <div class="navbar-dropdown is-boxed navbar-dropdown-right">
-            <%= link gettext("Profile"),
-              to: Routes.user_path(@conn, :edit, church.slug, user),
-              class: "navbar-item",
-              tabindex: -1 %>
-            <div class="navbar-divider"></div>
-            <%= link gettext("Users"),
-              to: Routes.user_path(@conn, :index, church.slug),
-              class: "navbar-item",
-              tabindex: -1 %>
             <%= link gettext("Config"),
-              to: Routes.church_path(@conn, :edit, church.slug),
+              to: Routes.user_path(@conn, :edit, church.slug, user),
               class: "navbar-item",
               tabindex: -1 %>
             <div class="navbar-divider"></div>

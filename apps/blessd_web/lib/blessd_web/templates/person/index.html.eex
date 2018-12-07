@@ -40,6 +40,6 @@
 <div class="buttons">
   <%= link gettext("New Person"), to: Routes.person_path(@conn, :new, @current_user.church.slug), class: "button is-primary" %>
   <%= link gettext("Import CSV"), to: "#", class: "button js-modal-button" %>
-  <%= render "file_modal.html", current_user: @current_user, conn: @conn %>
+  <%= render "file_modal.html", fields: @fields, current_user: @current_user, conn: @conn %>
 </div>
 

@@ -1,4 +1,4 @@
-defmodule Blessd.Changeset.Credential do
+defmodule Blessd.Shared.Credentials.Credential do
   import Ecto.Changeset
 
   alias Comeonin.Bcrypt

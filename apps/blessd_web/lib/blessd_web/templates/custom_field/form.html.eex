@@ -1,0 +1,68 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= error_alert(f) %>
+
+  <div class="field">
+    <%= label f, :name, class: "label" %>
+    <div class="control">
+      <%= text_input f, :name %>
+    </div>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="field">
+    <%= label f, :type, class: "label" %>
+    <div class="control">
+      <div class="select is-fullwidth">
+        <%= select f, :type, type_options() %>
+      </div>
+    </div>
+    <%= error_tag f, :type %>
+  </div>
+
+  <%= inputs_for f, :validations, fn ff -> %>
+    <div class="js-validations content">
+      <h3 class="has-text-centered"><%= gettext("Validations") %></h3>
+      <div class="field">
+        <div class="control">
+          <%= label ff, :required, class: "checkbox" do %>
+            <%= checkbox ff, :required %>
+            <%= gettext("This field is required") %>
+          <% end %>
+        </div>
+        <%= error_tag ff, :required %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="message is-warning is-hidden js-warning">
+    <div class="message-header">
+      <%= gettext("Careful") %>
+    </div>
+    <div class="message-body content">
+      <%= gettext("""
+      Changing the type or validations of fields can make the current
+      data invalid and you can lose it forever.
+      """) %>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <%= submit gettext("Submit"), class: "button is-primary is-fullwidth js-normal-submit" %>
+    <%= submit gettext("Submit"),
+      data: [confirm: gettext("Are you sure? Changing the field type or validations can make the current data invalid and you might even lose if forever.")],
+      class: "button is-primary is-fullwidth js-warning-submit is-hidden" %>
+    <%= if @delete? do %>
+      <%= link gettext("Delete"),
+        to: Routes.custom_field_path(
+          @conn,
+          :delete,
+          @current_user.church.slug,
+          @changeset.data.resource,
+          @changeset.data.id
+        ),
+        method: :delete,
+        data: [confirm: gettext("Are you sure? There is no way to recover this field in the future, as well as all the data set to it on the registers.")],
+        class: "button is-danger is-fullwidth" %>
+    <% end %>
+  </div>
+<% end %>

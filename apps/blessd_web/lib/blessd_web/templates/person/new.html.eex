@@ -4,4 +4,5 @@
   conn: @conn,
   changeset: @changeset,
   current_user: @current_user,
+  fields: @fields,
   action: :create %>

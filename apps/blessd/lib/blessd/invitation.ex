@@ -3,10 +3,10 @@ defmodule Blessd.Invitation do
   The Invitation context.
   """
 
+  import Blessd.Shared.Users.User
   import Ecto.Changeset
-  import Blessd.Changeset.User
 
-  alias Blessd.Auth
+  alias Blessd.Shared
   alias Blessd.Invitation.Accept
   alias Blessd.Invitation.Credential
   alias Blessd.Invitation.User
@@ -102,7 +102,7 @@ defmodule Blessd.Invitation do
   end
 
   defp find_user(token, slug) when is_binary(slug) do
-    with {:ok, church} <- Auth.find_church(slug), do: find_user(token, church)
+    with {:ok, church} <- Shared.find_church(slug), do: find_user(token, church)
   end
 
   defp find_user(token, church_or_user) do
@@ -114,15 +114,15 @@ defmodule Blessd.Invitation do
   end
 
   @doc """
-  Authorizes the given resource. If authorized, it returns
+  Sharedorizes the given resource. If authorized, it returns
   `{:ok, resource}`, otherwise, returns `{:error, reason}`,
   """
-  def authorize(User, _action, %Auth.User{} = user), do: Auth.check(User, user)
-  def authorize(User, _action, %Auth.Church{} = church), do: Auth.check_church(User, church)
-  def authorize(%User{} = user, _action, current_user), do: Auth.check(user, current_user)
+  def authorize(User, _action, church_or_user), do: Shared.authorize(User, church_or_user)
+
+  def authorize(%User{} = user, _action, current_user), do: Shared.authorize(user, current_user)
 
   def authorize(%Credential{} = credential, _action, current_user) do
-    Auth.check(credential, current_user)
+    Shared.authorize(credential, current_user)
   end
 
   @doc """

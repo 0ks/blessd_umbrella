@@ -75,7 +75,9 @@
       </div>
 
       <div class="links has-text-centered">
-        <%= link gettext("Sign in to an existing church"), to: Routes.session_path(@conn, :new) %>
+        <span>or</span></br>
+
+        <%= link gettext("sign in to an existing church"), to: Routes.session_path(@conn, :new) %>
       </div>
     <% end %>
   </div>

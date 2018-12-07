@@ -1,0 +1,22 @@
+<h1 class="title has-text-centered"><%= gettext("New Custom Field") %></h1>
+
+<div class="columns">
+  <div class="column is-one-fifth">
+    <%= render SharedView, "config_menu.html",
+      conn: @conn,
+      active: :custom_fields,
+      current_user: @current_user %>
+  </div>
+
+  <div class="column is-two-fifth">
+    <%= render "list.html",
+      conn: @conn,
+      current_user: @current_user,
+      fields: @fields,
+      active: "none" %>
+  </div>
+
+  <div class="column is-two-fifths">
+  </div>
+</div>
+

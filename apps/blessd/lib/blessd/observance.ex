@@ -5,7 +5,7 @@ defmodule Blessd.Observance do
 
   import Ecto.Changeset
 
-  alias Blessd.Auth
+  alias Blessd.Shared
   alias Blessd.Observance.Person
   alias Blessd.Observance.Meeting
   alias Blessd.Observance.MeetingOccurrence
@@ -17,7 +17,7 @@ defmodule Blessd.Observance do
   Returns the list of meetings.
   """
   def list_meetings(current_user) do
-    with {:ok, query} <- Auth.check(Meeting, current_user) do
+    with {:ok, query} <- Shared.authorize(Meeting, current_user) do
       query
       |> Meeting.preload()
       |> Meeting.order()
@@ -29,7 +29,7 @@ defmodule Blessd.Observance do
   Gets a single meeting.
   """
   def find_meeting(id, current_user) do
-    with {:ok, query} <- Auth.check(Meeting, current_user), do: Repo.find(query, id)
+    with {:ok, query} <- Shared.authorize(Meeting, current_user), do: Repo.find(query, id)
   end
 
   @doc """
@@ -67,7 +67,7 @@ defmodule Blessd.Observance do
   Updates a meeting.
   """
   def update_meeting(%Meeting{} = meeting, attrs, current_user) do
-    with {:ok, meeting} <- Auth.check(meeting, current_user) do
+    with {:ok, meeting} <- Shared.authorize(meeting, current_user) do
       meeting
       |> Meeting.changeset(attrs)
       |> Repo.update()
@@ -78,7 +78,7 @@ defmodule Blessd.Observance do
   Deletes a Meeting.
   """
   def delete_meeting(%Meeting{} = meeting, current_user) do
-    with {:ok, meeting} <- Auth.check(meeting, current_user), do: Repo.delete(meeting)
+    with {:ok, meeting} <- Shared.authorize(meeting, current_user), do: Repo.delete(meeting)
   end
 
   @doc """
@@ -91,7 +91,7 @@ defmodule Blessd.Observance do
   end
 
   def new_meeting(current_user, occurrences) do
-    Auth.check(
+    Shared.authorize(
       %Meeting{
         church_id: current_user.church.id,
         occurrences: occurrences
@@ -104,7 +104,7 @@ defmodule Blessd.Observance do
   Returns an `%Ecto.Changeset{}` for tracking meeting changes.
   """
   def change_meeting(%Meeting{} = meeting, current_user) do
-    with {:ok, meeting} <- Auth.check(meeting, current_user) do
+    with {:ok, meeting} <- Shared.authorize(meeting, current_user) do
       {:ok, Meeting.changeset(meeting, %{})}
     end
   end
@@ -113,7 +113,7 @@ defmodule Blessd.Observance do
   Gets a single meeting occurrence.
   """
   def find_occurrence(id, current_user) do
-    with {:ok, query} <- Auth.check(MeetingOccurrence, current_user) do
+    with {:ok, query} <- Shared.authorize(MeetingOccurrence, current_user) do
       query
       |> MeetingOccurrence.preload()
       |> Repo.find(id)
@@ -143,7 +143,7 @@ defmodule Blessd.Observance do
   Updates a meeting occurrence.
   """
   def update_occurrence(%MeetingOccurrence{} = occurrence, attrs, current_user) do
-    with {:ok, occurrence} <- Auth.check(occurrence, current_user) do
+    with {:ok, occurrence} <- Shared.authorize(occurrence, current_user) do
       occurrence
       |> MeetingOccurrence.changeset(attrs)
       |> Repo.update()
@@ -154,14 +154,15 @@ defmodule Blessd.Observance do
   Deletes a Meeting occurrence.
   """
   def delete_occurrence(%MeetingOccurrence{} = occurrence, current_user) do
-    with {:ok, occurrence} <- Auth.check(occurrence, current_user), do: Repo.delete(occurrence)
+    with {:ok, occurrence} <- Shared.authorize(occurrence, current_user),
+         do: Repo.delete(occurrence)
   end
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking meeting occurrence changes.
   """
   def change_occurrence(%MeetingOccurrence{} = occurrence, current_user) do
-    with {:ok, occurrence} <- Auth.check(occurrence, current_user) do
+    with {:ok, occurrence} <- Shared.authorize(occurrence, current_user) do
       {:ok, MeetingOccurrence.changeset(occurrence, %{})}
     end
   end
@@ -171,7 +172,7 @@ defmodule Blessd.Observance do
   """
   # TODO - we should consider user's timezone here
   def new_occurrence(current_user, meeting_id \\ nil, date \\ Date.utc_today()) do
-    Auth.check(
+    Shared.authorize(
       %MeetingOccurrence{
         church_id: current_user.church.id,
         meeting_id: meeting_id,
@@ -185,7 +186,7 @@ defmodule Blessd.Observance do
   Returns the list of people with their attendants preloaded.
   """
   def list_people(current_user) do
-    with {:ok, query} <- Auth.check(Person, current_user) do
+    with {:ok, query} <- Shared.authorize(Person, current_user) do
       query
       |> Person.preload()
       |> Person.order()
@@ -197,7 +198,7 @@ defmodule Blessd.Observance do
   Search for people and preload their attendants.
   """
   def search_people(query_str, current_user) do
-    with {:ok, query} <- Auth.check(Person, current_user) do
+    with {:ok, query} <- Shared.authorize(Person, current_user) do
       query
       |> Person.preload()
       |> Person.order()
@@ -212,7 +213,8 @@ defmodule Blessd.Observance do
   def toggle_attendant(person_id, occurrence_id, current_user) do
     case Repo.find_by(Attendant, person_id: person_id, meeting_occurrence_id: occurrence_id) do
       {:ok, attendant} ->
-        with {:ok, attendant} <- Auth.check(attendant, current_user), do: Repo.delete(attendant)
+        with {:ok, attendant} <- Shared.authorize(attendant, current_user),
+             do: Repo.delete(attendant)
 
       {:error, :not_found} ->
         with {:ok, attendant} <- new_attendant(current_user) do
@@ -227,6 +229,6 @@ defmodule Blessd.Observance do
   Builds an attendant to insert.
   """
   def new_attendant(current_user) do
-    Auth.check(%Attendant{church_id: current_user.church.id}, current_user)
+    Shared.authorize(%Attendant{church_id: current_user.church.id}, current_user)
   end
 end

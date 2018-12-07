@@ -273,13 +273,13 @@ msgstr "Culto atualizado com sucesso."
 msgid "Sorry! The file provided could not be imported."
 msgstr "Desculpe! O arquivo que você proveu não pôde ser importado."
 
-#, elixir-format
+#, elixir-format, fuzzy
 #: lib/blessd_web/controllers/import_controller.ex:36
 #: lib/blessd_web/controllers/import_controller.ex:36
-msgid "The person of the line #%{line} could not be created."
+msgid "The person of the line #%{line} could not be imported."
 msgstr "A pessoa da linha #%{line} não pode ser criada."
 
-#, elixir-format, fuzzy
+#, elixir-format
 #: lib/blessd_web/templates/person/file_modal.html.eex:5
 #: lib/blessd_web/templates/person/file_modal.html.eex:5
 msgid "Import people from CSV"

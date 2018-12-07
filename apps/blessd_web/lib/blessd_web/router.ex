@@ -56,5 +56,9 @@ defmodule BlessdWeb.Router do
     resources "/meeting_occurrences", MeetingOccurrenceController, only: [:edit, :update, :delete] do
       resources "/attendance", AttendanceController, only: [:index]
     end
+
+    scope "/:resource" do
+      resources "/custom_fields", CustomFieldController, except: [:show]
+    end
   end
 end

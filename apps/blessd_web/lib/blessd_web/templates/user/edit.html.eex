@@ -1,36 +1,47 @@
-<h1 class="title has-text-centered"><%= gettext("Edit User") %></h1>
+<h1 class="title has-text-centered"><%= gettext("Profile") %></h1>
 
-<% path_func = &Routes.user_path(@conn, &1, @current_user.church.slug, &2) %>
-<%= form_for @changeset, form_action(:update, @changeset, path_func), fn f -> %>
-  <%= error_alert(f) %>
-
-  <div class="field">
-    <%= label f, :name, class: "label" %>
-    <div class="control">
-      <%= text_input f, :name %>
-    </div>
-    <%= error_tag f, :name %>
+<div class="columns">
+  <div class="column is-one-fifth">
+    <%= render SharedView, "config_menu.html",
+      conn: @conn,
+      active: :profile,
+      current_user: @current_user %>
   </div>
 
-  <div class="field">
-    <%= label f, :email, class: "label" %>
-    <div class="control">
-      <%= text_input f, :email %>
-    </div>
-    <%= error_tag f, :email %>
-  </div>
+  <div class="column is-four-fifths">
+    <% path_func = &Routes.user_path(@conn, &1, @current_user.church.slug, &2) %>
+    <%= form_for @changeset, form_action(:update, @changeset, path_func), fn f -> %>
+      <%= error_alert(f) %>
 
-  <div class="buttons">
-    <%= submit gettext("Submit"), class: "button is-primary" %>
-    <%= link gettext("Change my password"),
-      to: Routes.password_reset_path(
-        @conn,
-        :create,
-        user_id: @changeset.data.id,
-        church_slug: @current_user.church.slug
-      ),
-      method: :post,
-      class: "button" %>
-    <%= link gettext("Back"), to: Routes.user_path(@conn, :index, @current_user.church.slug), class: "button" %>
+      <div class="field">
+        <%= label f, :name, class: "label" %>
+        <div class="control">
+          <%= text_input f, :name %>
+        </div>
+        <%= error_tag f, :name %>
+      </div>
+
+      <div class="field">
+        <%= label f, :email, class: "label" %>
+        <div class="control">
+          <%= text_input f, :email %>
+        </div>
+        <%= error_tag f, :email %>
+      </div>
+
+      <div class="buttons">
+        <%= submit gettext("Submit"), class: "button is-primary" %>
+        <%= link gettext("Change my password"),
+          to: Routes.password_reset_path(
+            @conn,
+            :create,
+            user_id: @changeset.data.id,
+            church_slug: @current_user.church.slug
+          ),
+          method: :post,
+          class: "button" %>
+        <%= link gettext("Back"), to: Routes.user_path(@conn, :index, @current_user.church.slug), class: "button" %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>

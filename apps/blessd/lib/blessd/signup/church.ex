@@ -2,7 +2,7 @@ defmodule Blessd.Signup.Church do
   use Ecto.Schema
 
   alias Blessd.Signup.Church
-  alias Blessd.Changeset.Church, as: ChurchChangeset
+  alias Blessd.Shared.Churches.Church, as: SharedChurch
 
   schema "churches" do
     field(:name, :string)
@@ -12,7 +12,5 @@ defmodule Blessd.Signup.Church do
   end
 
   @doc false
-  def changeset(%Church{} = church, attrs) do
-    ChurchChangeset.changeset(church, attrs)
-  end
+  def changeset(%Church{} = church, attrs), do: SharedChurch.changeset(church, attrs)
 end

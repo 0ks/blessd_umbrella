@@ -1,7 +1,7 @@
 defmodule BlessdWeb.Session do
   import Plug.Conn
 
-  alias Blessd.Auth
+  alias Blessd.Shared
 
   def find_user(%Plug.Conn{params: %{"church_slug" => church_slug}} = conn) do
     with {:ok, users} <- list_users(conn) do
@@ -26,7 +26,7 @@ defmodule BlessdWeb.Session do
           users
           |> Stream.filter(&elem(&1, 1))
           |> Stream.map(fn {church_id, user_id} ->
-            Auth.find_user(user_id, church_id)
+            Shared.find_user(user_id, church_id)
           end)
           |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
           |> Map.get(:ok, [])

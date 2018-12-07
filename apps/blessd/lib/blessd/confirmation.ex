@@ -3,7 +3,7 @@ defmodule Blessd.Confirmation do
   The Confirmation context.
   """
 
-  alias Blessd.Auth
+  alias Blessd.Shared
   alias Blessd.Confirmation.User
   alias Blessd.Repo
 
@@ -20,7 +20,7 @@ defmodule Blessd.Confirmation do
   end
 
   def confirm(token, slug) when is_binary(slug) do
-    with {:ok, church} <- Auth.find_church(slug), do: confirm(token, church)
+    with {:ok, church} <- Shared.find_church(slug), do: confirm(token, church)
   end
 
   def confirm(token, church) do
@@ -36,7 +36,7 @@ defmodule Blessd.Confirmation do
   end
 
   defp find_user_by_token(token, church) do
-    with {:ok, query} <- Auth.check_church(User, church) do
+    with {:ok, query} <- Shared.authorize(User, church) do
       query
       |> User.preload()
       |> Repo.find_by(confirmation_token: token)

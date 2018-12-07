@@ -2,7 +2,7 @@
 
 <%
   church_slug = @conn.params["church_slug"]
-  show_current_users? = !church_slug and @users != []
+  show_current_users? = !church_slug and @users != [] and not has_errors?(@changeset)
 %>
 
 <div class="js-current-users columns is-multiline <%= unless show_current_users?, do: "is-hidden" %>">
@@ -71,7 +71,7 @@
             </a>
           </p>
           <div class="control is-fullwidth">
-            <%= text_input f, :church_slug, placeholder: gettext("Church URL") %>
+            <%= text_input f, :church_slug, placeholder: gettext("Church URL"), value: church_slug %>
           </div>
         </div>
         <p class="help">

@@ -4,14 +4,13 @@ defmodule Blessd.PasswordReset do
   """
 
   import Ecto.Changeset
-  import Blessd.Changeset.User, only: [validate_password_reset: 1]
+  import Blessd.Shared.Users.User, only: [validate_password_reset: 1]
 
-  alias Blessd.Auth
+  alias Blessd.Shared
   alias Blessd.PasswordReset.Credential
   alias Blessd.PasswordReset.User
   alias Blessd.PasswordReset.TokenData
   alias Blessd.Repo
-  alias Ecto.Multi
 
   def generate_token(user_id, slug) do
     with {:ok, user} <- find_user(user_id, slug) do
@@ -22,29 +21,22 @@ defmodule Blessd.PasswordReset do
   end
 
   def generate_token(%{} = attrs) do
-    with {:ok, user} <- find_user_by_email(attrs["email"], attrs["church_slug"]) do
-      Multi.new()
-      |> Multi.run(:token_data, &validate_token_data(&1, &2, attrs))
-      |> Multi.update(:user, User.token_changeset(user))
-      |> Repo.transaction()
+    with {:ok, token_data} <- validate_token_data(attrs),
+         {:ok, user} <- find_user_by_email(token_data) do
+      user
+      |> User.token_changeset()
+      |> Repo.update()
       |> case do
-        {:ok, %{user: user}} ->
-          {:ok, user}
-
-        {:error, :token_data, changeset, _} ->
-          {:error, changeset}
-
-        {:error, :user, _, _} ->
-          {:error, :token_not_generated}
+        {:ok, user} -> {:ok, user}
+        {:error, %Ecto.Changeset{}} -> {:error, :token_generation_failed}
       end
     end
   end
 
-  def validate_token_data(_repo, _changes, attrs) do
-    case TokenData.changeset(%TokenData{church_slug: nil, email: nil}, attrs) do
-      %Ecto.Changeset{valid?: true} = changeset -> {:ok, changeset}
-      %Ecto.Changeset{valid?: false} = changeset -> apply_action(changeset, :insert)
-    end
+  defp validate_token_data(attrs) do
+    %TokenData{church_slug: nil, email: nil}
+    |> TokenData.changeset(attrs)
+    |> apply_action(:insert)
   end
 
   def new_token_data, do: {:ok, %TokenData{church_slug: nil, email: nil}}
@@ -103,6 +95,10 @@ defmodule Blessd.PasswordReset do
     end
   end
 
+  defp find_user_by_email(%TokenData{email: email, church_slug: slug}) do
+    find_user_by_email(email, slug)
+  end
+
   defp find_user_by_email(email, slug) when is_binary(slug) do
     with_church(slug, &find_user_by_email(email, &1))
   end
@@ -116,15 +112,14 @@ defmodule Blessd.PasswordReset do
   end
 
   defp with_church(slug, func) do
-    with {:ok, church} <- Auth.find_church(slug), do: func.(church)
+    with {:ok, church} <- Shared.find_church(slug), do: func.(church)
   end
 
   @doc """
-  Authorizes the given resource. If authorized, it returns
+  Sharedorizes the given resource. If authorized, it returns
   `{:ok, resource}`, otherwise, returns `{:error, reason}`,
   """
-  def authorize(User, _action, %Auth.User{} = user), do: Auth.check(User, user)
-  def authorize(User, _action, %Auth.Church{} = church), do: Auth.check_church(User, church)
+  def authorize(User, _action, church_or_user), do: Shared.authorize(User, church_or_user)
 
   @doc """
   Returns `true` if the given current_user is authorized

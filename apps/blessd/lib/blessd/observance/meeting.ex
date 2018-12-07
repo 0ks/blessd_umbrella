@@ -1,10 +1,12 @@
 defmodule Blessd.Observance.Meeting do
+  @moduledoc false
+
   use Ecto.Schema
 
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Blessd.Auth.Church
+  alias Blessd.Shared.Churches.Church
   alias Blessd.Observance.MeetingOccurrence
 
   schema "meetings" do
