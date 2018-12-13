@@ -15,13 +15,14 @@ export default class AttendanceView {
 
         const table = document.querySelector(".js-people");
         const search = document.querySelector(".js-search");
+        const name = document.getElementById("person_name");
         const tableBody = table.querySelector(".js-people-body");
-        AttendanceView.addCheckboxesListener(tableBody)
-        AttendanceView.addSearchListener(search, tableBody)
+        AttendanceView.addCheckboxesListener(tableBody);
+        AttendanceView.addSearchListener(search, name, tableBody);
 
-        AttendanceView.bindKeys(tableBody)
-        AttendanceView.bindRowHover(tableBody)
-        AttendanceView.bindRowClick(tableBody)
+        AttendanceView.bindKeys(tableBody);
+        AttendanceView.bindRowHover(tableBody);
+        AttendanceView.bindRowClick(tableBody);
       })
       .receive("error", resp => { console.error("Unable to join", resp) });
   }
@@ -48,7 +49,7 @@ export default class AttendanceView {
       .receive("timeout", _ => console.error("Networking issue..."));
   }
 
-  static addSearchListener(input, tableBody) {
+  static addSearchListener(input, nameInput, tableBody) {
     input.addEventListener("keydown", event => {
       if ([13, 38, 40].includes(event.keyCode)) event.preventDefault();
     });
@@ -56,6 +57,8 @@ export default class AttendanceView {
     input.addEventListener("keyup", event => {
       if (![13, 38, 40].includes(event.keyCode)) {
         const occurrenceId = tableBody.getAttribute("data-occurrence-id");
+
+        nameInput.value = input.value;
 
         AttendanceView.searchPeople(occurrenceId, input.value, resp => {
           tableBody.innerHTML = resp.table_body;
@@ -66,6 +69,9 @@ export default class AttendanceView {
         });
       }
     })
+  }
+
+  static addVisitorListeners(visitorToggle, visitorForm, tableBody) {
   }
 
   static searchPeople(occurrenceId, query, callback) {
@@ -108,7 +114,11 @@ export default class AttendanceView {
   static keyEnter(tableBody) {
     const row = AttendanceView.getRow(tableBody);
     const occurrenceId = tableBody.getAttribute("data-occurrence-id");
-    if (row) AttendanceView.toggleRowCheckbox(row, occurrenceId);
+    if (row) {
+      AttendanceView.toggleRowCheckbox(row, occurrenceId);
+    } else {
+      document.getElementById("visitor_modal").classList.add("is-active");
+    }
   }
 
   static bindKeys(tableBody) {

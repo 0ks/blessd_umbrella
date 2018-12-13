@@ -6,12 +6,56 @@
   ) %>
 </h1>
 
-<div class="field">
-  <label class="label" for="meeting_name">Search</label>
+<div class="field has-addons">
+  <div class="control has-icons-left is-fullwidth">
+    <input class="input js-search"
+      type="text"
+      placeholder="<%= gettext("Search") %>"
+      value="<%= @query %>"
+      autofocus>
+    <span class="icon is-small is-left">
+      <i class="fas fa-search"></i>
+    </span>
+  </div>
   <div class="control">
-    <input class="input js-search" type="text">
+    <%= link gettext("Add visitor"), to: "#", class: "js-modal-button button is-primary", data_modal_id: "visitor_modal" %>
   </div>
 </div>
+
+<%= form_for @changeset,
+  Routes.meeting_occurrence_attendance_path(
+    @conn,
+    :create,
+    @current_user.church.slug,
+    @occurrence
+  ),
+  [class: "modal js-modal #{if has_errors?(@changeset), do: "is-active"}", id: "visitor_modal"],
+  fn f -> %>
+  <div class="modal-background js-close-modal"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title"><%= gettext("Add visitor") %></p>
+    </header>
+    <section class="modal-card-body">
+      <%= render PersonView, "basic_fields.html", f: f %>
+
+      <%= render PersonView,
+        "custom_fields.html",
+        f: f,
+        fields: @fields,
+        conn: @conn,
+        current_user: @current_user %>
+    </section>
+
+    <footer class="modal-card-foot">
+      <div class="buttons">
+        <%= submit gettext("Submit"), class: "button is-primary" %>
+        <%= link gettext("Back"), to: "#", class: "js-close-modal button" %>
+      </div>
+    </footer>
+  </div>
+  <button class="modal-close is-large js-close-modal" aria-label="close"></button>
+<% end %>
 
 <table class="table js-people">
   <thead>
@@ -28,6 +72,8 @@
 
 <div class="field is-grouped">
   <div class="control">
-    <%= link gettext("Back"), to: Routes.meeting_path(@conn, :index, @current_user.church.slug), class: "button" %>
+    <%= link gettext("Back"),
+      to: Routes.meeting_path(@conn, :index, @current_user.church.slug),
+      class: "button" %>
   </div>
 </div>

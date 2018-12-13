@@ -1,0 +1,26 @@
+<div class="field">
+  <%= label @f, :name, class: "label" %>
+  <div class="control">
+    <%= text_input @f, :name %>
+  </div>
+  <%= error_tag @f, :name %>
+</div>
+
+<div class="field">
+  <%= label @f, :email, class: "label" %>
+  <div class="control">
+    <%= text_input @f, :email %>
+  </div>
+  <%= error_tag @f, :email %>
+</div>
+
+<div class="field">
+  <div class="control">
+    <%= label @f, :is_member, class: "checkbox" do %>
+      <%= checkbox @f, :is_member %>
+      <%= gettext("This is a church member") %>
+    <% end %>
+  </div>
+  <%= error_tag @f, :is_member %>
+</div>
+
