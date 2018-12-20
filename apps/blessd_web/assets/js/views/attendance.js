@@ -1,92 +1,80 @@
-import socket from "../socket"
 import Mousetrap from "mousetrap"
-
-let channel;
-
-if (socket) {
-  channel = socket.channel("attendance:lobby", {})
-}
+import BlessdSocket from "../socket"
 
 export default class AttendanceView {
-  static index() {
-    channel.join()
+  constructor() {
+    this.socket = new BlessdSocket();
+    this.channel = this.socket.channel("attendance:lobby", {});
+    this.searchEl = document.querySelector(".js-search");
+    this.nameEl = document.getElementById("person_name");
+    this.tableEl = document.querySelector(".js-people");
+    this.tableBodyEl = this.tableEl.querySelector(".js-people-body");
+  }
+
+  index() {
+    this.socket.connect();
+    this.channel.join()
       .receive("ok", _ => {
-        console.log("Joined successfully")
+        console.info("Joined channel successfully")
 
-        const table = document.querySelector(".js-people");
-        const search = document.querySelector(".js-search");
-        const name = document.getElementById("person_name");
-        const tableBody = table.querySelector(".js-people-body");
-        AttendanceView.addCheckboxesListener(tableBody);
-        AttendanceView.addSearchListener(search, name, tableBody);
-
-        AttendanceView.bindKeys(tableBody);
-        AttendanceView.bindRowHover(tableBody);
-        AttendanceView.bindRowClick(tableBody);
+        this.addSearchListener();
+        this.bindKeys();
+        this.bindRowHover();
+        this.bindRowClick();
       })
-      .receive("error", resp => { console.error("Unable to join", resp) });
+      .receive("error", resp => console.error("Unable to join", resp));
   }
 
-  static addCheckboxesListener(tableBody) {
-    tableBody.addEventListener("change", event => {
-      const checkbox = event.target;
-
-      AttendanceView.toggleAttendant(
-        checkbox.getAttribute("data-person-id"),
-        tableBody.getAttribute("data-occurrence-id")
-      );
-    });
+  getStateFromButton(button) {
+    if (button.classList.contains("js-person-unknown")) return "unknown";
+    if (button.classList.contains("js-person-present")) return "present";
+    if (button.classList.contains("js-person-absent")) return "absent";
+    return;
   }
 
-  static toggleAttendant(personId, occurrenceId) {
-    channel
-      .push("toggle", {
-        person_id: personId,
-        meeting_occurrence_id: occurrenceId
+  updateState(row, occurrenceId, state) {
+    this.channel
+      .push("update_state", {
+        person_id: row.getAttribute("data-id"),
+        meeting_occurrence_id: occurrenceId,
+        state: state
       })
-      .receive("ok", _ => console.log("Toggled attendant", _))
-      .receive("error", reason => console.error("Unable to toggle attendant", reason))
+      .receive("ok", resp => row.innerHTML = resp.table_row)
+      .receive("error", reason => console.error("Unable to update attendant state", reason))
       .receive("timeout", _ => console.error("Networking issue..."));
   }
 
-  static addSearchListener(input, nameInput, tableBody) {
-    input.addEventListener("keydown", event => {
+  addSearchListener() {
+    this.searchEl.addEventListener("keydown", event => {
       if ([13, 38, 40].includes(event.keyCode)) event.preventDefault();
     });
 
-    input.addEventListener("keyup", event => {
+    this.searchEl.addEventListener("keyup", event => {
       if (![13, 38, 40].includes(event.keyCode)) {
-        const occurrenceId = tableBody.getAttribute("data-occurrence-id");
+        const occurrenceId = this.tableBodyEl.getAttribute("data-occurrence-id");
 
-        nameInput.value = input.value;
+        this.nameEl.value = this.searchEl.value;
 
-        AttendanceView.searchPeople(occurrenceId, input.value, resp => {
-          tableBody.innerHTML = resp.table_body;
-          AttendanceView.selectRow(tableBody, 0);
+        this.channel
+          .push("search", {
+            meeting_occurrence_id: occurrenceId,
+            query: this.searchEl.value
+          })
+          .receive("ok", resp => {
+            this.tableBodyEl.innerHTML = resp.table_body;
+            this.selectRow(0);
 
-          // needs to be rebound because it depends on the inner content
-          AttendanceView.bindRowHover(tableBody);
-        });
-      }
+            // needs to be rebound because it depends on the inner content
+            this.bindRowHover();
+          })
+          .receive("error", reason => console.error("Unable to search people", reason))
+          .receive("timeout", _ => console.error("Networking issue..."));
+          }
     })
   }
 
-  static addVisitorListeners(visitorToggle, visitorForm, tableBody) {
-  }
-
-  static searchPeople(occurrenceId, query, callback) {
-    channel
-      .push("search", {
-        meeting_occurrence_id: occurrenceId,
-        query: query
-      })
-      .receive("ok", callback)
-      .receive("error", reason => console.error("Unable to search people", reason))
-      .receive("timeout", _ => console.error("Networking issue..."));
-  }
-
-  static keyUp(tableBody) {
-    const row = AttendanceView.getRow(tableBody);
+  keyUp() {
+    const row = this.getRow();
     if (row) {
       const prev = row.previousElementSibling;
       if (prev) {
@@ -94,12 +82,12 @@ export default class AttendanceView {
         prev.classList.add("nav-focus");
       }
     } else {
-      AttendanceView.selectRow(tableBody, tableBody.children.length-1);
+      this.selectRow(this.tableBodyEl.children.length-1);
     }
   }
 
-  static keyDown(tableBody) {
-    const row = AttendanceView.getRow(tableBody);
+  keyDown() {
+    const row = this.getRow();
     if (row) {
       const next = row.nextElementSibling;
       if (next) {
@@ -107,64 +95,104 @@ export default class AttendanceView {
         next.classList.add("nav-focus");
       }
     } else {
-      AttendanceView.selectRow(tableBody, 0);
+      this.selectRow(0);
     }
   }
 
-  static keyEnter(tableBody) {
-    const row = AttendanceView.getRow(tableBody);
-    const occurrenceId = tableBody.getAttribute("data-occurrence-id");
+  keyEnter() {
+    const row = this.getRow();
+    const occurrenceId = this.tableBodyEl.getAttribute("data-occurrence-id");
     if (row) {
-      AttendanceView.toggleRowCheckbox(row, occurrenceId);
+      this.toggleRow(row, occurrenceId);
     } else {
       document.getElementById("visitor_modal").classList.add("is-active");
     }
   }
 
-  static bindKeys(tableBody) {
+  bindKeys() {
     const mousetrap = new Mousetrap(document.body);
-    mousetrap.bind("up", _ => AttendanceView.keyUp(tableBody));
-    mousetrap.bind("down", _ => AttendanceView.keyDown(tableBody));
-    mousetrap.bind("enter", _ => AttendanceView.keyEnter(tableBody));
+    mousetrap.bind("up", _ => this.keyUp());
+    mousetrap.bind("down", _ => this.keyDown());
+    mousetrap.bind("enter", _ => this.keyEnter());
   }
 
-  static bindRowHover(tableBody) {
-    const rows = tableBody.querySelectorAll(".js-person");
+  bindRowHover() {
+    const rows = this.tableBodyEl.querySelectorAll(".js-person");
 
     for (let row of rows) {
       row.addEventListener("mouseenter", event => {
-        const selectedRow = AttendanceView.getRow(tableBody);
+        const selectedRow = this.getRow();
         if (selectedRow) selectedRow.classList.remove("nav-focus");
         event.target.classList.add("nav-focus");
       });
     }
   }
 
-  static selectRow(tableBody, index) {
-    const row = AttendanceView.getRow(tableBody);
+  selectRow(index) {
+    const row = this.getRow();
     if (row) row.classList.remove("nav-focus");
 
-    const firstRow = tableBody.children[index];
+    const firstRow = this.tableBodyEl.children[index];
     if (firstRow) firstRow.classList.add("nav-focus");
   }
 
-  static getRow(tableBody) {
-    return tableBody.querySelector(".nav-focus");
+  getRow() {
+    return this.tableBodyEl.querySelector(".nav-focus");
   }
 
-  static bindRowClick(tableBody) {
-    tableBody.addEventListener("click", event => {
-      const occurrenceId = tableBody.getAttribute("data-occurrence-id");
-      AttendanceView.toggleRowCheckbox(event.target.parentElement, occurrenceId)
+  bindRowClick() {
+    this.tableBodyEl.addEventListener("click", event => {
+      const parentButton = this.parentsQuerySelector(event.target, "js-person-button");
+      const row = this.parentsQuerySelector(event.target, "js-person");
+      if (parentButton) {
+        this.updateState(
+          row,
+          this.tableBodyEl.getAttribute("data-occurrence-id"),
+          this.getStateFromButton(parentButton)
+        );
+      } else {
+        const occurrenceId = this.tableBodyEl.getAttribute("data-occurrence-id");
+        this.toggleRow(row, occurrenceId)
+      }
     });
   }
 
-  static toggleRowCheckbox(tr, occurrenceId) {
-    const checkbox = tr.querySelector(".js-person-is-present");
-    checkbox.checked = !checkbox.checked;
-    AttendanceView.toggleAttendant(
-      checkbox.getAttribute("data-person-id"),
-      occurrenceId
-    );
+  parentsQuerySelector(target, className) {
+    if (target == null) return null;
+    if (target.classList.contains(className)) return target;
+
+    return this.parentsQuerySelector(target.parentElement, className);
+  }
+
+  toggleRow(tr, occurrenceId) {
+    const unknown = tr.querySelector(".js-person-unknown");
+    const present = tr.querySelector(".js-person-present");
+    const absent = tr.querySelector(".js-person-absent");
+
+    if (unknown.classList.contains("is-warning")) {
+      return this.updateState(
+        tr,
+        occurrenceId,
+        "present"
+      );
+    }
+
+    if (present.classList.contains("is-success")) {
+      return this.updateState(
+        tr,
+        occurrenceId,
+        "absent"
+      );
+    }
+
+    if (absent.classList.contains("is-danger")) {
+      return this.updateState(
+        tr,
+        occurrenceId,
+        "unknown"
+      );
+    }
+
+    return;
   }
 }

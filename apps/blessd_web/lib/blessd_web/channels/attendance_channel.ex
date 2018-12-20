@@ -23,13 +23,13 @@ defmodule BlessdWeb.AttendanceChannel do
       {:reply, {:ok, %{table_body: html}}, socket}
     else
       {:error, :not_found} ->
-        {:reply, {:error, "Occurrence not found"}, socket}
+        {:reply, {:error, %{message: "Occurrence not found"}}, socket}
 
       {:error, :unauthorized} ->
-        {:reply, {:error, "Unauthorized user"}, socket}
+        {:reply, {:error, %{message: "Unauthorized user"}}, socket}
 
       {:error, :unconfirmed} ->
-        {:reply, {:error, "Unconfirmed user"}, socket}
+        {:reply, {:error, %{message: "Unconfirmed user"}}, socket}
     end
   end
 
@@ -54,35 +54,46 @@ defmodule BlessdWeb.AttendanceChannel do
         {:reply, {:error, errors_from_changeset(changeset)}, socket}
 
       {:error, :not_found} ->
-        {:reply, {:error, "Occurrence not found"}, socket}
+        {:reply, {:error, %{message: "Occurrence not found"}}, socket}
 
       {:error, :unauthorized} ->
-        {:reply, {:error, "Unauthorized user"}, socket}
+        {:reply, {:error, %{message: "Unauthorized user"}}, socket}
 
       {:error, :unconfirmed} ->
-        {:reply, {:error, "Unconfirmed user"}, socket}
+        {:reply, {:error, %{message: "Unconfirmed user"}}, socket}
     end
   end
 
   def handle_in(
-        "toggle",
-        %{"person_id" => person_id, "meeting_occurrence_id" => occurrence_id},
+        "update_state",
+        %{"person_id" => person_id, "meeting_occurrence_id" => occurrence_id, "state" => state},
         socket
       ) do
-    user = socket.assigns.current_user
+    with user = socket.assigns.current_user,
+         {:ok, occurrence} <- Observance.find_occurrence(occurrence_id, user),
+         {:ok, person} <-
+           Observance.update_attendant_state(
+             person_id,
+             occurrence_id,
+             state,
+             user
+           ) do
+      html =
+        View.render_to_string(AttendanceView, "table_row.html",
+          person: person,
+          occurrence: occurrence
+        )
 
-    case Observance.toggle_attendant(person_id, occurrence_id, user) do
-      {:ok, _attendant} ->
-        {:reply, :ok, socket}
-
-      {:error, %Ecto.Changeset{}} ->
-        {:reply, {:error, "Failed to toggle attendant"}, socket}
+      {:reply, {:ok, %{table_row: html}}, socket}
+    else
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:reply, {:error, errors_from_changeset(changeset)}, socket}
 
       {:error, :unauthorized} ->
-        {:reply, {:error, "Unauthorized user"}, socket}
+        {:reply, {:error, %{message: "Unauthorized user"}}, socket}
 
       {:error, :unconfirmed} ->
-        {:reply, {:error, "Unconfirmed user"}, socket}
+        {:reply, {:error, %{message: "Unconfirmed user"}}, socket}
     end
   end
 

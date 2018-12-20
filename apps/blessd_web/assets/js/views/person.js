@@ -1,11 +1,13 @@
 export default class PersonView {
-  static index() {
-    const help = document.querySelector(".js-import-help")
+  constructor() {
+    this.help = document.querySelector(".js-import-help")
+  }
+  index() {
     document
       .querySelector(".js-import-help-link")
       .addEventListener("click", e => {
         e.preventDefault();
-        help.classList.remove("is-hidden");
+        this.help.classList.remove("is-hidden");
       })
   }
 }

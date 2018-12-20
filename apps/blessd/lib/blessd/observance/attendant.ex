@@ -14,18 +14,25 @@ defmodule Blessd.Observance.Attendant do
     belongs_to(:meeting_occurrence, MeetingOccurrence)
     belongs_to(:person, Person)
 
+    field(:present, :boolean)
+    field(:first_time_visitor, :boolean)
+
     timestamps()
   end
 
   @doc false
   def changeset(attendant, attrs) do
     attendant
-    |> cast(attrs, [:meeting_occurrence_id, :person_id])
+    |> cast(attrs, [:meeting_occurrence_id, :person_id, :present, :first_time_visitor])
     |> basic_validations()
   end
 
   defp basic_validations(changeset) do
-    validate_required(changeset, [:meeting_occurrence_id, :person_id])
+    validate_required(changeset, [
+      :meeting_occurrence_id,
+      :person_id,
+      :present
+    ])
   end
 
   def order(query) do

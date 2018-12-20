@@ -1,13 +1,5 @@
 <%= for person <- @people do %>
-  <tr class="js-person">
-    <td class="person-present-column">
-      <input
-        type="checkbox"
-        class="js-person-is-present"
-        data-person-id="<%= person.id %>"
-        <%= if Person.present?(person, @occurrence), do: "checked" %> />
-    </td>
-    <td><%= person.name %></td>
-    <td><%= person.email %></td>
+  <tr class="js-person" data-id="<%= person.id %>">
+    <%= render "table_row.html", person: person, occurrence: @occurrence %>
   </tr>
 <% end %>

@@ -5,11 +5,34 @@
 // and connect at the socket path in "lib/web/endpoint.ex":
 import {Socket} from "phoenix"
 
-let socket;
+export default class BlessdSocket {
+  constructor() {
+    this.socket = new Socket("/socket", {params: {token: window.currentUserToken}});
+    this.message = document.querySelector(".js-socket-disconnect-msg");
 
-if (window.currentUserToken != "") {
-  socket = new Socket("/socket", {params: {token: window.currentUserToken}});
-  socket.connect();
+    const self = this;
+
+    this.socket.onError(_ => {
+      self.message.classList.remove("is-hidden");
+      console.error("There was an error on the websocket connection");
+    });
+
+    this.socket.onClose(_ => {
+      self.message.classList.remove("is-hidden");
+      console.error("Socket was disconnected gracefully");
+    });
+
+    this.socket.onOpen(_ => {
+      self.message.classList.add("is-hidden");
+      console.info("Connected to socket");
+    });
+  }
+
+  connect() {
+    return this.socket.connect();
+  }
+
+  channel(topic, params) {
+    return this.socket.channel(topic, params);
+  }
 }
-
-export default socket
