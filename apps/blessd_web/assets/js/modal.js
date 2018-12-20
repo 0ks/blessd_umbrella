@@ -1,8 +1,16 @@
+function getModal(modalButton) {
+  if (modalId = modalButton.getAttribute("data-modal-id")) {
+    return document.getElementById(modalId);
+  }
+
+  return modalButton.parentElement.querySelector(".js-modal");
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const modalButtons = document.querySelectorAll(".js-modal-button");
 
   for (let modalButton of modalButtons) {
-    const modal = modalButton.parentElement.querySelector(".js-modal");
+    const modal = getModal(modalButton);
 
     modalButton.addEventListener("click", e => {
       e.preventDefault()

@@ -2,3 +2,27 @@
   margin-top: 2px;
   float: right;
 }
+
+.panel-block .columns {
+  margin-left: 0;
+}
+
+.modal-card.is-danger {
+  .modal-card-head {
+    background-color: $red;
+  }
+
+  .modal-card-title {
+    color: $white;
+  }
+
+  .modal-card-body {
+    background-color: lighten($red, max((100% - lightness($red)) - 2%, 0%));
+    color: $red;
+  }
+
+  .modal-card-foot {
+    background-color: lighten($red, max((100% - lightness($red)) - 2%, 0%));
+    border-top: none;
+  }
+}

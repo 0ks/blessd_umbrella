@@ -1,0 +1,32 @@
+<h2 class="subtitle has-text-centered"><%= gettext("Custom fields") %></h2>
+<%= custom_data_fields @f, fn ff -> %>
+  <%= for field <- @fields do %>
+    <div class="field">
+      <%= label ff, Shared.custom_field_name(field), field.name, class: "label" %>
+      <div class="control">
+        <%= case field.type do
+          "date" ->
+            date_input ff, Shared.custom_field_name(field), class: "js-date", readonly: true
+
+          "string" ->
+            text_input ff, Shared.custom_field_name(field)
+        end %>
+      </div>
+      <%= error_tag ff, Shared.custom_field_name(field) %>
+    </div>
+  <% end %>
+
+  <div class="columns">
+    <div class="column is-one-third is-offset-one-third">
+      <%= link gettext("Add more fields..."),
+        to: Routes.custom_field_path(
+          @conn,
+          :new,
+          @current_user.church.slug,
+          "person"
+        ),
+        class: "button is-primary is-fullwidth" %>
+    </div>
+  </div>
+<% end %>
+

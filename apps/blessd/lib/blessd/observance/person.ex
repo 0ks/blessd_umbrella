@@ -4,8 +4,8 @@ defmodule Blessd.Observance.Person do
   import Ecto.Query
 
   alias Blessd.Observance.Attendant
-  alias Blessd.Observance.Person
   alias Blessd.Observance.MeetingOccurrence
+  alias Blessd.Observance.Person
 
   schema "people" do
     field(:church_id, :id)
@@ -25,8 +25,17 @@ defmodule Blessd.Observance.Person do
     |> preload([p, attendants: a], attendants: a)
   end
 
-  def present?(%Person{attendants: attendants}, %MeetingOccurrence{id: occurrence_id}) do
-    Enum.any?(attendants, &(&1.meeting_occurrence_id == occurrence_id))
+  def first_time_visitor?(%Person{attendants: attendants}, %MeetingOccurrence{id: occurrence_id}) do
+    attendants
+    |> Enum.find(%{first_time_visitor: false}, &(&1.meeting_occurrence_id == occurrence_id))
+    |> Map.get(:first_time_visitor)
+  end
+
+  def state(%Person{attendants: attendants}, %MeetingOccurrence{id: occurrence_id}) do
+    case Enum.find(attendants, &(&1.meeting_occurrence_id == occurrence_id)) do
+      nil -> :unknown
+      attendant -> if attendant.present, do: :present, else: :absent
+    end
   end
 
   def search(query, query_str) do

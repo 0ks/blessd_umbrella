@@ -2,63 +2,13 @@
 <%= form_for @changeset, form_action(@action, @changeset, path_func), fn f -> %>
   <%= error_alert(f) %>
 
-  <div class="field">
-    <%= label f, :name, class: "label" %>
-    <div class="control">
-      <%= text_input f, :name %>
-    </div>
-    <%= error_tag f, :name %>
-  </div>
+  <%= render "basic_fields.html", f: f %>
 
-  <div class="field">
-    <%= label f, :email, class: "label" %>
-    <div class="control">
-      <%= text_input f, :email %>
-    </div>
-    <%= error_tag f, :email %>
-  </div>
-
-  <div class="field">
-    <div class="control">
-      <%= label f, :is_member, class: "checkbox" do %>
-        <%= checkbox f, :is_member %>
-        <%= gettext("This is a church member") %>
-      <% end %>
-    </div>
-    <%= error_tag f, :is_member %>
-  </div>
-
-  <h2 class="subtitle has-text-centered"><%= gettext("Custom fields") %></h2>
-  <%= custom_data_fields f, fn ff -> %>
-    <%= for field <- @fields do %>
-      <div class="field">
-        <%= label ff, Shared.custom_field_name(field), field.name, class: "label" %>
-        <div class="control">
-          <%= case field.type do
-            "date" ->
-              date_input ff, Shared.custom_field_name(field), class: "js-date", readonly: true
-
-            "string" ->
-              text_input ff, Shared.custom_field_name(field)
-          end %>
-        </div>
-        <%= error_tag ff, Shared.custom_field_name(field) %>
-      </div>
-    <% end %>
-
-    <div class="columns">
-      <div class="column is-one-third is-offset-one-third">
-        <%= link gettext("Add more fields..."),
-          to: Routes.custom_field_path(
-            @conn,
-            :new,
-            @current_user.church.slug,
-            "person"
-          ),
-          class: "button is-primary is-fullwidth" %>
-      </div>
-    </div>
-  <% end %>
+  <%= render "custom_fields.html",
+    f: f,
+    fields: @fields,
+    conn: @conn,
+    current_user: @current_user %>
 
   <div class="buttons">
     <%= submit gettext("Submit"), class: "button is-primary" %>

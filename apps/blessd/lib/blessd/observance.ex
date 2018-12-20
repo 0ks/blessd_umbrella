@@ -4,6 +4,7 @@ defmodule Blessd.Observance do
   """
 
   import Ecto.Changeset
+  import Ecto.Query
 
   alias Blessd.Shared
   alias Blessd.Observance.Person
@@ -208,20 +209,62 @@ defmodule Blessd.Observance do
   end
 
   @doc """
-  Creates an attendant if it does not exists and removes it if it exists.
+  Returns a person by its id.
   """
-  def toggle_attendant(person_id, occurrence_id, current_user) do
+  def find_person(id, current_user) do
+    with {:ok, query} <- Shared.authorize(Person, current_user) do
+      query
+      |> Person.preload()
+      |> Repo.find(id)
+    end
+  end
+
+  @doc """
+  Updates the state of the given attendant, and returns its person.
+  """
+  def update_attendant_state(person_id, occurrence_id, "unknown", current_user) do
+    with {:ok, attendant} <-
+           Repo.find_by(
+             Attendant,
+             person_id: person_id,
+             meeting_occurrence_id: occurrence_id
+           ),
+         {:ok, attendant} <- Shared.authorize(attendant, current_user),
+         {:ok, _} <- Repo.delete(attendant) do
+      find_person(person_id, current_user)
+    end
+  end
+
+  def update_attendant_state(person_id, occurrence_id, state, current_user) do
     case Repo.find_by(Attendant, person_id: person_id, meeting_occurrence_id: occurrence_id) do
       {:ok, attendant} ->
-        with {:ok, attendant} <- Shared.authorize(attendant, current_user),
-             do: Repo.delete(attendant)
+        with {:ok, meeting} <- Shared.authorize(attendant, current_user),
+             changeset = Attendant.changeset(meeting, %{present: state == "present"}),
+             {:ok, _} <- Repo.update(changeset) do
+          find_person(person_id, current_user)
+        end
 
       {:error, :not_found} ->
-        with {:ok, attendant} <- new_attendant(current_user) do
-          attendant
-          |> Attendant.changeset(%{person_id: person_id, meeting_occurrence_id: occurrence_id})
-          |> Repo.insert()
+        with {:ok, attendant} <- new_attendant(current_user),
+             changeset =
+               Attendant.changeset(attendant, %{
+                 person_id: person_id,
+                 meeting_occurrence_id: occurrence_id,
+                 present: state == "present"
+               }),
+             {:ok, _} <- Repo.insert(changeset) do
+          find_person(person_id, current_user)
         end
+    end
+  end
+
+  def toggle_first_time_visitor(person_id, occurrence_id, current_user) do
+    with {:ok, attendant} <-
+           Repo.find_by(Attendant, person_id: person_id, meeting_occurrence_id: occurrence_id),
+         changeset =
+           Attendant.first_time_visitor_changeset(attendant, !attendant.first_time_visitor),
+         {:ok, _} <- Repo.update(changeset) do
+      find_person(person_id, current_user)
     end
   end
 
@@ -230,5 +273,34 @@ defmodule Blessd.Observance do
   """
   def new_attendant(current_user) do
     Shared.authorize(%Attendant{church_id: current_user.church.id}, current_user)
+  end
+
+  @doc """
+  Returns if the given person can be a first time to the given meeting
+  """
+  def can_be_first_time_visitor?(
+        %Person{id: person_id},
+        %MeetingOccurrence{meeting_id: meeting_id, id: occurrence_id}
+      ) do
+    case Repo.find_by(Attendant, person_id: person_id, meeting_occurrence_id: occurrence_id) do
+      {:ok, %{id: attendant_id}} ->
+        first_attendant_id =
+          Attendant
+          |> join(:left, [a], p in assoc(a, :person))
+          |> join(:left, [a, p], o in assoc(a, :meeting_occurrence))
+          |> where(
+            [a, p, o],
+            a.present == true and o.meeting_id == ^meeting_id and p.id == ^person_id
+          )
+          |> order_by([a, p, o], o.date)
+          |> limit(1)
+          |> select([a, p, o], a.id)
+          |> Repo.one()
+
+        attendant_id == first_attendant_id
+
+      {:error, :not_found} ->
+        false
+    end
   end
 end

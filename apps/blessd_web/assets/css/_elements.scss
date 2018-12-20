@@ -27,11 +27,6 @@
   }
 }
 
-// Fullwidth control
-.control.is-fullwidth {
-  width: 100%;
-}
-
 // Box mutations
 .box{
   &.is-active {
@@ -49,4 +44,9 @@
 // Ignore margin right for is-fullwidth buttons
 .buttons .button.is-fullwidth:not(:last-child) {
   margin-right: 0;
+}
+
+// Full width modifier to all elements
+.is-fullwidth {
+  width: 100%;
 }

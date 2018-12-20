@@ -41,21 +41,25 @@ defmodule BlessdWeb.AttendanceChannelTest do
 
   test "toggle replies with ok", %{socket: socket, occurrence: occurrence, people: people} do
     person = List.first(people)
-    refute Person.present?(person, occurrence)
+    assert Person.state(person, occurrence) == :unknown
 
     ref =
-      push(socket, "toggle", %{"person_id" => person.id, "meeting_occurrence_id" => occurrence.id})
+      push(socket, "update_state", %{
+        "person_id" => person.id,
+        "meeting_occurrence_id" => occurrence.id,
+        "state" => "present"
+      })
 
     assert_reply(ref, :ok)
 
     ref = push(socket, "search", %{"meeting_occurrence_id" => occurrence.id, "query" => "1"})
     assert_reply(ref, :ok, %{table_body: body})
     assert String.contains?(body, "person 1")
-    assert String.contains?(body, "checked")
+    assert String.contains?(body, "is-success")
 
     ref = push(socket, "search", %{"meeting_occurrence_id" => occurrence.id, "query" => "2"})
     assert_reply(ref, :ok, %{table_body: body})
     assert String.contains?(body, "person 2")
-    refute String.contains?(body, "checked")
+    refute String.contains?(body, "is-success")
   end
 end

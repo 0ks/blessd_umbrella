@@ -20,16 +20,40 @@
       <%= render @view_module, @view_template, assigns %>
     </main>
 
+    <div class="modal js-socket-disconnect-modal">
+      <div class="modal-background"></div>
+      <div class="modal-card is-danger">
+        <header class="modal-card-head">
+          <p class="modal-card-title"><%= gettext("You are disconnected from the server") %></p>
+        </header>
+        <section class="modal-card-body">
+          <%= gettext("""
+              This view must be always connected to the server to work properly.
+              Please refresh the page to reconnect.
+              """) %>
+        </section>
+        <footer class="modal-card-foot">
+          <%= link gettext("Refresh"),
+              to: {:javascript, "window.location.reload(true)"},
+              class: "button is-fullwidth is-danger" %>
+        </footer>
+      </div>
+    </div>
+
     <script>window.currentUserToken = "<%= @conn.assigns[:current_user_token] %>";</script>
     <script src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
     <script>
       <% template_name = @view_template |> String.split(".") |> List.first() %>
       document.addEventListener('DOMContentLoaded', function() {
-        window.currentView = window.views.<%= @view_module %>;
-        if (window.currentView) {
-          window.currentTemplateFunc = window.currentView.<%= template_name %> ||
-            window.currentView.any;
-          if (window.currentTemplateFunc) window.currentTemplateFunc()
+        window.currentViewClass = window.views.<%= @view_module %>;
+        if (window.currentViewClass) {
+          window.currentView = new window.views.<%= @view_module %>();
+
+          if (window.currentView.<%= template_name %>)
+            return window.currentView.<%= template_name %>()
+
+          if (window.currentView.any)
+            return window.currentView.any()
         }
       });
     </script>

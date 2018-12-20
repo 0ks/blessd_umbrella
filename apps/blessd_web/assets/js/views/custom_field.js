@@ -1,29 +1,29 @@
-import socket from "../socket"
 import Sortable from "sortablejs";
-
-let channel;
-
-if (socket) {
-  channel = socket.channel("custom_field:lobby", {})
-}
+import BlessdSocket from "../socket"
 
 export default class CustomFieldView {
-  static index() {
-    CustomFieldView.sortable();
+  constructor() {
+    this.socket = new BlessdSocket();
+    this.channel = this.socket.channel("custom_field:lobby", {});
   }
 
-  static new() {
-    CustomFieldView.sortable();
+  index() {
+    this.sortable();
   }
 
-  static edit() {
-    CustomFieldView.sortable();
-    document.getElementById("field_type").addEventListener("change", CustomFieldView.showWarning);
-    document.querySelector(".js-validations").addEventListener("change", CustomFieldView.showWarning);
+  new() {
+    this.sortable();
   }
 
-  static sortable() {
-    channel.join()
+  edit() {
+    this.sortable();
+    document.getElementById("field_type").addEventListener("change", this.showWarning);
+    document.querySelector(".js-validations").addEventListener("change", this.showWarning);
+  }
+
+  sortable() {
+    this.socket.connect();
+    this.channel.join()
       .receive("ok", _ => {
         console.log("Joined successfully")
 
@@ -34,7 +34,7 @@ export default class CustomFieldView {
             const ids = Array.from(fieldList.children).map(field => {
               return parseInt(field.getAttribute("data-id"));
             });
-            channel
+            this.channel
               .push("reorder", {resource: resource, ids: ids})
               .receive("ok", _ => console.log("Reordered fields successfully", _))
               .receive("error", reason => console.error("Unable to reorder fields", reason))
@@ -45,7 +45,7 @@ export default class CustomFieldView {
       .receive("error", resp => { console.error("Unable to join", resp) });
   }
 
-  static showWarning() {
+  showWarning() {
     document.querySelector(".js-warning").classList.remove("is-hidden");
     document.querySelector(".js-warning-submit").classList.remove("is-hidden");
     document.querySelector(".js-normal-submit").classList.add("is-hidden");
