@@ -4,6 +4,7 @@ defmodule Blessd.Observance do
   """
 
   import Ecto.Changeset
+  import Ecto.Query
 
   alias Blessd.Shared
   alias Blessd.Observance.Person
@@ -257,10 +258,49 @@ defmodule Blessd.Observance do
     end
   end
 
+  def toggle_first_time_visitor(person_id, occurrence_id, current_user) do
+    with {:ok, attendant} <-
+           Repo.find_by(Attendant, person_id: person_id, meeting_occurrence_id: occurrence_id),
+         changeset =
+           Attendant.first_time_visitor_changeset(attendant, !attendant.first_time_visitor),
+         {:ok, _} <- Repo.update(changeset) do
+      find_person(person_id, current_user)
+    end
+  end
+
   @doc """
   Builds an attendant to insert.
   """
   def new_attendant(current_user) do
     Shared.authorize(%Attendant{church_id: current_user.church.id}, current_user)
+  end
+
+  @doc """
+  Returns if the given person can be a first time to the given meeting
+  """
+  def can_be_first_time_visitor?(
+        %Person{id: person_id},
+        %MeetingOccurrence{meeting_id: meeting_id, id: occurrence_id}
+      ) do
+    case Repo.find_by(Attendant, person_id: person_id, meeting_occurrence_id: occurrence_id) do
+      {:ok, %{id: attendant_id}} ->
+        first_attendant_id =
+          Attendant
+          |> join(:left, [a], p in assoc(a, :person))
+          |> join(:left, [a, p], o in assoc(a, :meeting_occurrence))
+          |> where(
+            [a, p, o],
+            a.present == true and o.meeting_id == ^meeting_id and p.id == ^person_id
+          )
+          |> order_by([a, p, o], o.date)
+          |> limit(1)
+          |> select([a, p, o], a.id)
+          |> Repo.one()
+
+        attendant_id == first_attendant_id
+
+      {:error, :not_found} ->
+        false
+    end
   end
 end

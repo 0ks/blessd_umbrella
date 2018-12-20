@@ -44,6 +44,17 @@ export default class AttendanceView {
       .receive("timeout", _ => console.error("Networking issue..."));
   }
 
+  toggleFirstTimeVisitor(row, occurrenceId) {
+    this.channel
+      .push("toggle_first_time_visitor", {
+        person_id: row.getAttribute("data-id"),
+        meeting_occurrence_id: occurrenceId
+      })
+      .receive("ok", resp => row.innerHTML = resp.table_row)
+      .receive("error", reason => console.error("Unable to update attendant state", reason))
+      .receive("timeout", _ => console.error("Networking issue..."));
+  }
+
   addSearchListener() {
     this.searchEl.addEventListener("keydown", event => {
       if ([13, 38, 40].includes(event.keyCode)) event.preventDefault();
@@ -142,18 +153,27 @@ export default class AttendanceView {
 
   bindRowClick() {
     this.tableBodyEl.addEventListener("click", event => {
-      const parentButton = this.parentsQuerySelector(event.target, "js-person-button");
       const row = this.parentsQuerySelector(event.target, "js-person");
+
+      const parentButton = this.parentsQuerySelector(event.target, "js-person-button");
       if (parentButton) {
-        this.updateState(
+        return this.updateState(
           row,
           this.tableBodyEl.getAttribute("data-occurrence-id"),
           this.getStateFromButton(parentButton)
         );
-      } else {
-        const occurrenceId = this.tableBodyEl.getAttribute("data-occurrence-id");
-        this.toggleRow(row, occurrenceId)
       }
+
+      const firstTime = this.parentsQuerySelector(event.target, "js-person-first-time");
+      if (firstTime) {
+        return this.toggleFirstTimeVisitor(
+          row,
+          this.tableBodyEl.getAttribute("data-occurrence-id")
+        );
+      }
+
+      const occurrenceId = this.tableBodyEl.getAttribute("data-occurrence-id");
+      return this.toggleRow(row, occurrenceId)
     });
   }
 

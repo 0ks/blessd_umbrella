@@ -27,6 +27,17 @@
           </span>
         </button>
       </div>
+      <%= if Observance.can_be_first_time_visitor?(@person, @occurrence) do %>
+        <div class="control">
+          <button class="button is-small js-person-first-time
+            <%= if Person.first_time_visitor?(@person, @occurrence), do: "is-danger" %>
+            ">
+            <span class="icon is-small">
+              <i class="fas fa-heart"></i>
+            </span>
+          </button>
+        </div>
+      <% end %>
     </div>
   </td>
   <td><%= @person.name %></td>

@@ -18,7 +18,7 @@
     </span>
   </div>
   <div class="control">
-    <%= link gettext("Add visitor"), to: "#", class: "js-modal-button button is-primary", data_modal_id: "visitor_modal" %>
+    <%= link gettext("Add person"), to: "#", class: "js-modal-button button is-primary", data_modal_id: "person_modal" %>
   </div>
 </div>
 
@@ -29,12 +29,12 @@
     @current_user.church.slug,
     @occurrence
   ),
-  [class: "modal js-modal #{if has_errors?(@changeset), do: "is-active"}", id: "visitor_modal"],
+  [class: "modal js-modal #{if has_errors?(@changeset), do: "is-active"}", id: "person_modal"],
   fn f -> %>
   <div class="modal-background js-close-modal"></div>
   <div class="modal-card">
     <header class="modal-card-head">
-      <p class="modal-card-title"><%= gettext("Add visitor") %></p>
+      <p class="modal-card-title"><%= gettext("Add person") %></p>
     </header>
     <section class="modal-card-body">
       <%= render PersonView, "basic_fields.html", f: f %>
