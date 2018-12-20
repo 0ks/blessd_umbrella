@@ -8,22 +8,22 @@ import {Socket} from "phoenix"
 export default class BlessdSocket {
   constructor() {
     this.socket = new Socket("/socket", {params: {token: window.currentUserToken}});
-    this.message = document.querySelector(".js-socket-disconnect-msg");
+    this.modal = document.querySelector(".js-socket-disconnect-modal");
 
     const self = this;
 
     this.socket.onError(_ => {
-      self.message.classList.remove("is-hidden");
+      self.modal.classList.add("is-active");
       console.error("There was an error on the websocket connection");
     });
 
     this.socket.onClose(_ => {
-      self.message.classList.remove("is-hidden");
-      console.error("Socket was disconnected gracefully");
+      self.modal.classList.add("is-active");
+      console.info("Socket was disconnected gracefully");
     });
 
     this.socket.onOpen(_ => {
-      self.message.classList.add("is-hidden");
+      self.modal.classList.remove("is-active");
       console.info("Connected to socket");
     });
   }
