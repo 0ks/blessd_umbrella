@@ -87,16 +87,16 @@ defmodule Blessd.Observance.Person do
   end
 
   def apply_filter(query, "unknown", occ) do
-    unknown(query, occ)
+    unknown_attendance(query, occ)
   end
 
   def apply_filter(query, "missing", %MeetingOccurrence{id: occ_id} = occ) do
     query
-    |> unknown(occ)
+    |> unknown_attendance(occ)
     |> or_where([attendants: a], a.meeting_occurrence_id == ^occ_id and a.present == false)
   end
 
-  def unknown(query, %MeetingOccurrence{id: occ_id}) do
+  def unknown_attendance(query, %MeetingOccurrence{id: occ_id}) do
     where(
       query,
       [p],

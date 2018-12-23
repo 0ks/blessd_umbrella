@@ -6,6 +6,19 @@
   ) %>
 </h1>
 
+<div class="columns">
+  <div class="column is-one-third is-offset-one-third">
+    <%= link gettext("Attendance"),
+      to: Routes.meeting_occurrence_attendance_path(
+        @conn,
+        :index,
+        @current_user.church.slug,
+        @occurrence
+      ),
+      class: "button is-fullwidth is-large" %>
+  </div>
+</div>
+
 <div class="columns occurrence-stats">
   <div class="column has-text-centered">
     <%= link to: Routes.meeting_occurrence_path(
@@ -152,5 +165,5 @@
 </table>
 
 <div class="buttons">
-  <%= link gettext("Attendance"), to: Routes.meeting_occurrence_attendance_path(@conn, :index, @current_user.church.slug, @occurrence), class: "button" %>
+  <%= link gettext("Back"), to: Routes.meeting_path(@conn, :index, @current_user.church.slug), class: "button" %>
 </div>
