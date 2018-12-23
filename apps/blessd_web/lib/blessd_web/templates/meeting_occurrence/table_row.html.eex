@@ -2,16 +2,6 @@
     <div class="field has-addons">
       <div class="control">
         <button
-          class="button is-small person-button is-unknown
-                 <%= if Person.state(@person, @occurrence) == :unknown, do: "is-active" %>"
-          title="<%= gettext("Unknown") %>">
-          <span class="icon is-small">
-            <i class="fas fa-question"></i>
-          </span>
-        </button>
-      </div>
-      <div class="control">
-        <button
           class="button is-small person-button is-present
                  <%= if Person.state(@person, @occurrence) == :present, do: "is-active" %>"
           title="<%= gettext("Present") %>">
@@ -39,6 +29,16 @@
           title="<%= gettext("Absent") %>">
           <span class="icon is-small">
             <i class="fas fa-times"></i>
+          </span>
+        </button>
+      </div>
+      <div class="control">
+        <button
+          class="button is-small person-button is-unknown
+                 <%= if Person.state(@person, @occurrence) == :unknown, do: "is-active" %>"
+          title="<%= gettext("Unknown") %>">
+          <span class="icon is-small">
+            <i class="fas fa-question"></i>
           </span>
         </button>
       </div>

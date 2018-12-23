@@ -2,20 +2,30 @@ defmodule BlessdWeb.MeetingOccurrenceController do
   use BlessdWeb, :controller
 
   alias Blessd.Observance
+  alias Blessd.Memberships
+  alias Blessd.Shared
 
   def show(conn, %{"id" => id} = params) do
     with user = conn.assigns.current_user,
          filter = params["filter"],
+         search = params["search"],
          {:ok, occurrence} <- Observance.find_occurrence(id, user),
          {:ok, stats} <- Observance.attendance_stats(occurrence, user),
-         {:ok, people} <- Observance.list_people(user, occurrence: occurrence, filter: filter) do
+         {:ok, people} <-
+           Observance.list_people(user, occurrence: occurrence, filter: filter, search: search),
+         {:ok, person} <- Memberships.new_person(user),
+         {:ok, changeset} <- Memberships.change_person(person, user),
+         {:ok, fields} <- Shared.list_custom_fields("person", user) do
       render(
         conn,
         "show.html",
         occurrence: occurrence,
         people: people,
         stats: stats,
-        filter: filter
+        filter: filter,
+        changeset: changeset,
+        fields: fields,
+        search: search
       )
     end
   end

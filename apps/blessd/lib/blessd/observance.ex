@@ -207,28 +207,16 @@ defmodule Blessd.Observance do
   def list_people(user, opts \\ [])
 
   def list_people(user, opts) when is_list(opts) do
-    list_people(user, Enum.into(opts, %{occurrence: nil, filter: nil}))
+    list_people(user, Enum.into(opts, %{occurrence: nil, filter: nil, search: nil}))
   end
 
-  def list_people(user, %{occurrence: occurrence, filter: filter}) do
+  def list_people(user, %{occurrence: occurrence, filter: filter, search: search}) do
     with {:ok, query} <- Shared.authorize(Person, user) do
       query
       |> Person.preload()
       |> Person.apply_filter(filter, occurrence)
+      |> Person.search(search)
       |> Person.order()
-      |> Repo.list()
-    end
-  end
-
-  @doc """
-  Search for people and preload their attendants.
-  """
-  def search_people(query_str, current_user) do
-    with {:ok, query} <- Shared.authorize(Person, current_user) do
-      query
-      |> Person.preload()
-      |> Person.order()
-      |> Person.search(query_str)
       |> Repo.list()
     end
   end
@@ -265,7 +253,7 @@ defmodule Blessd.Observance do
       present: present,
       absent: absent,
       first_time: visitors,
-      not_first_time: present - visitors,
+      recurrent: present - visitors,
       total: total,
       unknown: unknown,
       missing: unknown + absent

@@ -1,6 +1,7 @@
 defmodule BlessdWeb.PersonController do
   use BlessdWeb, :controller
 
+  alias Blessd.Observance
   alias Blessd.Memberships
   alias Blessd.Shared
 
@@ -18,6 +19,25 @@ defmodule BlessdWeb.PersonController do
          {:ok, changeset} <- Memberships.change_person(person, user),
          {:ok, fields} <- Shared.list_custom_fields("person", user) do
       render(conn, "new.html", changeset: changeset, fields: fields)
+    end
+  end
+
+  def create(conn, %{"meeting_occurrence_id" => occurrence_id, "person" => person_params}) do
+    with user = conn.assigns.current_user,
+         {:ok, person} <- Memberships.create_person(person_params, user),
+         {:ok, occurrence} <- Observance.find_occurrence(occurrence_id, user) do
+      conn
+      |> put_flash(:info, gettext("Visitor successfully created."))
+      |> redirect(
+        to:
+          Routes.meeting_occurrence_path(
+            conn,
+            :index,
+            user.church.slug,
+            occurrence,
+            search: person.name
+          )
+      )
     end
   end
 

@@ -1,17 +1,17 @@
 import Mousetrap from "mousetrap"
 import BlessdSocket from "../socket"
 
-export default class AttendanceView {
+export default class MeetingOccurrenceView {
   constructor() {
     this.socket = new BlessdSocket();
-    this.channel = this.socket.channel("attendance:lobby", {});
+    this.channel = this.socket.channel("meeting_occurrence:lobby", {});
     this.searchEl = document.querySelector(".js-search");
     this.nameEl = document.getElementById("person_name");
     this.tableEl = document.querySelector(".js-people");
     this.tableBodyEl = this.tableEl.querySelector(".js-people-body");
   }
 
-  index() {
+  show() {
     this.socket.connect();
     this.channel.join()
       .receive("ok", _ => {
@@ -173,7 +173,7 @@ export default class AttendanceView {
       .nextElementSibling;
     const nextButton = nextControl ?
       nextControl.querySelector(".person-button") :
-      tr.querySelector(".is-unknown");
+      tr.querySelector(".person-button:first-child");
 
     return this.updateState(tr, occurrenceId, this.getStateFromButton(nextButton));
   }

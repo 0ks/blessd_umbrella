@@ -6,18 +6,56 @@
   ) %>
 </h1>
 
-<div class="columns">
-  <div class="column is-one-third is-offset-one-third">
-    <%= link gettext("Attendance"),
-      to: Routes.meeting_occurrence_attendance_path(
-        @conn,
-        :index,
-        @current_user.church.slug,
-        @occurrence
-      ),
-      class: "button is-fullwidth is-large" %>
+<div class="field has-addons">
+  <div class="control has-icons-left is-fullwidth">
+    <input class="input js-search"
+      type="text"
+      placeholder="<%= gettext("Search") %>"
+      value="<%= @search %>"
+      autofocus>
+    <span class="icon is-small is-left">
+      <i class="fas fa-search"></i>
+    </span>
+  </div>
+  <div class="control">
+    <%= link gettext("Add person"), to: "#", class: "js-modal-button button is-primary", data_modal_id: "person_modal" %>
   </div>
 </div>
+
+<%= form_for @changeset,
+  Routes.meeting_occurrence_person_path(
+    @conn,
+    :create,
+    @current_user.church.slug,
+    @occurrence
+  ),
+  [class: "modal js-modal #{if has_errors?(@changeset), do: "is-active"}", id: "person_modal"],
+  fn f -> %>
+  <div class="modal-background js-close-modal"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title"><%= gettext("Add person") %></p>
+    </header>
+    <section class="modal-card-body">
+      <%= render PersonView, "basic_fields.html", f: f %>
+
+      <%= render PersonView,
+        "custom_fields.html",
+        f: f,
+        fields: @fields,
+        conn: @conn,
+        current_user: @current_user %>
+    </section>
+
+    <footer class="modal-card-foot">
+      <div class="buttons">
+        <%= submit gettext("Submit"), class: "button is-primary" %>
+        <%= link gettext("Back"), to: "#", class: "js-close-modal button" %>
+      </div>
+    </footer>
+  </div>
+  <button class="modal-close is-large js-close-modal" aria-label="close"></button>
+<% end %>
 
 <div class="columns occurrence-stats">
   <div class="column has-text-centered">
@@ -55,13 +93,13 @@
                 :show,
                 @current_user.church.slug,
                 @occurrence,
-                filter: :first_time
+                filter: :recurrent
               ),
               class: "button is-fullwidth is-block #{
-                if @filter == "first_time", do: "is-info"
+                if @filter == "recurrent", do: "is-info"
               }" do %>
-              <h1 class="title"><%= @stats.first_time %></h1>
-              <h2 class="subtitle"><%= gettext("First time") %></h2>
+              <h1 class="title"><%= @stats.recurrent %></h1>
+              <h2 class="subtitle"><%= gettext("Recurrent") %></h2>
             <% end %>
           </div>
           <div class="column has-text-centered">
@@ -70,13 +108,13 @@
                 :show,
                 @current_user.church.slug,
                 @occurrence,
-                filter: :not_first_time
+                filter: :first_time
               ),
               class: "button is-fullwidth is-block #{
-                if @filter == "not_first_time", do: "is-info"
+                if @filter == "first_time", do: "is-info"
               }" do %>
-              <h1 class="title"><%= @stats.not_first_time %></h1>
-              <h2 class="subtitle"><%= gettext("Not first time") %></h2>
+              <h1 class="title"><%= @stats.first_time %></h1>
+              <h2 class="subtitle"><%= gettext("First time") %></h2>
             <% end %>
           </div>
         </div>
@@ -133,37 +171,23 @@
   </div>
 </div>
 
-<h2 class="subtitle has-text-centered">
-  <%= filter_title(@filter) %>
-</h2>
-
-<table class="table">
+<table class="table js-people">
   <thead>
     <tr>
-      <%= if show_state(@filter) do %>
-        <th><%= gettext("State") %></th>
-      <% end %>
+      <th class="attendant-present-column"><%= gettext("Presence") %></th>
       <th><%= gettext("Name") %></th>
       <th><%= gettext("Email") %></th>
     </tr>
   </thead>
-  <tbody>
-<%= for person <- @people do %>
-    <tr>
-      <%= if show_state(@filter) do %>
-        <% state = Person.state(person, @occurrence) %>
-        <td class="<%= state_class(state) %>">
-          <i class="fas <%= state_icon(state)  %>"></i>
-          <%= humanize(state) %>
-        </td>
-      <% end %>
-      <td><%= person.name %></td>
-      <td><%= person.email %></td>
-    </tr>
-<% end %>
+  <tbody class="js-people-body" data-occurrence-id="<%= @occurrence.id %>">
+    <%= render "table_body.html", people: @people, occurrence: @occurrence %>
   </tbody>
 </table>
 
-<div class="buttons">
-  <%= link gettext("Back"), to: Routes.meeting_path(@conn, :index, @current_user.church.slug), class: "button" %>
+<div class="field is-grouped">
+  <div class="control">
+    <%= link gettext("Back"),
+      to: Routes.meeting_path(@conn, :index, @current_user.church.slug),
+      class: "button" %>
+  </div>
 </div>

@@ -44,6 +44,8 @@ defmodule Blessd.Observance.Person do
     end
   end
 
+  def search(query, nil), do: query
+
   def search(query, query_str) do
     query_str = "%#{query_str}%"
 
@@ -74,7 +76,7 @@ defmodule Blessd.Observance.Person do
     |> where([attendants: a], a.present == true and a.first_time_visitor == true)
   end
 
-  def apply_filter(query, "not_first_time", occ) do
+  def apply_filter(query, "recurrent", occ) do
     query
     |> by_occurrence(occ)
     |> where([attendants: a], a.present == true and a.first_time_visitor == false)
