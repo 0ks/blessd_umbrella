@@ -23,14 +23,13 @@ defmodule Blessd.Observance.Attendant do
   @doc false
   def changeset(attendant, attrs) do
     attendant
-    |> cast(attrs, [:meeting_occurrence_id, :person_id, :present])
+    |> cast(attrs, [:meeting_occurrence_id, :person_id, :present, :first_time_visitor])
     |> basic_validations()
   end
 
-  @doc false
-  def first_time_visitor_changeset(attendant, first_time_visitor) do
-    attendant
-    |> change(%{first_time_visitor: first_time_visitor})
+  defp basic_validations(changeset) do
+    changeset
+    |> validate_required([:meeting_occurrence_id, :person_id, :present])
     |> validate_first_time_visitor()
   end
 
@@ -42,14 +41,7 @@ defmodule Blessd.Observance.Attendant do
     end
   end
 
-  defp basic_validations(changeset) do
-    validate_required(changeset, [
-      :meeting_occurrence_id,
-      :person_id,
-      :present
-    ])
-  end
-
+  @doc false
   def order(query) do
     if has_named_binding?(query, :person) do
       order_by(query, [a, person: p], p.name)
@@ -58,6 +50,7 @@ defmodule Blessd.Observance.Attendant do
     end
   end
 
+  @doc false
   def preload(query) do
     query
     |> join(:inner, [a], p in assoc(a, :person), as: :person)

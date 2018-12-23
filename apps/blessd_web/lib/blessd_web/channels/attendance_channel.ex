@@ -97,38 +97,6 @@ defmodule BlessdWeb.AttendanceChannel do
     end
   end
 
-  def handle_in(
-        "toggle_first_time_visitor",
-        %{"person_id" => person_id, "meeting_occurrence_id" => occurrence_id},
-        socket
-      ) do
-    with user = socket.assigns.current_user,
-         {:ok, occurrence} <- Observance.find_occurrence(occurrence_id, user),
-         {:ok, person} <-
-           Observance.toggle_first_time_visitor(
-             person_id,
-             occurrence_id,
-             user
-           ) do
-      html =
-        View.render_to_string(AttendanceView, "table_row.html",
-          person: person,
-          occurrence: occurrence
-        )
-
-      {:reply, {:ok, %{table_row: html}}, socket}
-    else
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:reply, {:error, errors_from_changeset(changeset)}, socket}
-
-      {:error, :unauthorized} ->
-        {:reply, {:error, %{message: "Unauthorized user"}}, socket}
-
-      {:error, :unconfirmed} ->
-        {:reply, {:error, %{message: "Unconfirmed user"}}, socket}
-    end
-  end
-
   defp errors_from_changeset(%Ecto.Changeset{errors: errors}) do
     errors
     |> Stream.map(fn {field, {msg, _}} -> {field, msg} end)

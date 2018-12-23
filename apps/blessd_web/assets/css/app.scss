@@ -16,6 +16,8 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 
 @import "~pikaday/scss/pikaday";
 
+@import "utilities";
+
 @import "elements";
 @import "components";
 
@@ -25,4 +27,5 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 
 @import "views/attendance";
 @import "views/meeting";
+@import "views/meeting_occurrence";
 @import "views/session";

@@ -2,8 +2,8 @@
     <div class="field has-addons">
       <div class="control">
         <button
-          class="button is-small js-person-button js-person-unknown
-                 <%= if Person.state(@person, @occurrence) == :unknown, do: "is-warning" %>"
+          class="button is-small person-button is-unknown
+                 <%= if Person.state(@person, @occurrence) == :unknown, do: "is-active" %>"
           title="<%= gettext("Unknown") %>">
           <span class="icon is-small">
             <i class="fas fa-question"></i>
@@ -12,36 +12,36 @@
       </div>
       <div class="control">
         <button
-          class="button is-small js-person-button js-person-present
-                 <%= if Person.state(@person, @occurrence) == :present, do: "is-success" %>"
+          class="button is-small person-button is-present
+                 <%= if Person.state(@person, @occurrence) == :present, do: "is-active" %>"
           title="<%= gettext("Present") %>">
           <span class="icon is-small">
             <i class="fas fa-check"></i>
           </span>
         </button>
       </div>
-      <div class="control">
-        <button
-          class="button is-small js-person-button js-person-absent
-                 <%= if Person.state(@person, @occurrence) == :absent, do: "is-danger" %>"
-          title="<%= gettext("Absent") %>">
-          <span class="icon is-small">
-            <i class="fas fa-times"></i>
-          </span>
-        </button>
-      </div>
       <%= if Observance.can_be_first_time_visitor?(@person, @occurrence) do %>
         <div class="control">
           <button
-            class="button is-small js-person-first-time
-            <%= if Person.first_time_visitor?(@person, @occurrence), do: "is-danger" %>"
-            title="<%= gettext("First time visitor?") %>">
+            class="button is-small person-button is-first-time
+                   <%= if Person.state(@person, @occurrence) == :first_time, do: "is-active" %>"
+            title="<%= gettext("First time visitor") %>">
             <span class="icon is-small">
               <i class="fas fa-heart"></i>
             </span>
           </button>
         </div>
       <% end %>
+      <div class="control">
+        <button
+          class="button is-small person-button is-absent
+                 <%= if Person.state(@person, @occurrence) == :absent, do: "is-active" %>"
+          title="<%= gettext("Absent") %>">
+          <span class="icon is-small">
+            <i class="fas fa-times"></i>
+          </span>
+        </button>
+      </div>
     </div>
   </td>
   <td><%= @person.name %></td>

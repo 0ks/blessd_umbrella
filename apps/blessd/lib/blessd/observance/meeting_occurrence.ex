@@ -31,4 +31,17 @@ defmodule Blessd.Observance.MeetingOccurrence do
 
   @doc false
   def order(query), do: order_by(query, [o], desc: o.date)
+
+  @doc false
+  def apply_filter(query, []), do: query
+
+  def apply_filter(query, [{:date, date} | tail]) do
+    query
+    |> where([o], o.date == ^date)
+    |> apply_filter(tail)
+  end
+
+  def apply_filter(query, [_ | tail]) do
+    apply_filter(query, tail)
+  end
 end

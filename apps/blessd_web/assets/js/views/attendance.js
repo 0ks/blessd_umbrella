@@ -26,9 +26,10 @@ export default class AttendanceView {
   }
 
   getStateFromButton(button) {
-    if (button.classList.contains("js-person-unknown")) return "unknown";
-    if (button.classList.contains("js-person-present")) return "present";
-    if (button.classList.contains("js-person-absent")) return "absent";
+    if (button.classList.contains("is-unknown")) return "unknown";
+    if (button.classList.contains("is-present")) return "present";
+    if (button.classList.contains("is-first-time")) return "first_time";
+    if (button.classList.contains("is-absent")) return "absent";
     return;
   }
 
@@ -38,17 +39,6 @@ export default class AttendanceView {
         person_id: row.getAttribute("data-id"),
         meeting_occurrence_id: occurrenceId,
         state: state
-      })
-      .receive("ok", resp => row.innerHTML = resp.table_row)
-      .receive("error", reason => console.error("Unable to update attendant state", reason))
-      .receive("timeout", _ => console.error("Networking issue..."));
-  }
-
-  toggleFirstTimeVisitor(row, occurrenceId) {
-    this.channel
-      .push("toggle_first_time_visitor", {
-        person_id: row.getAttribute("data-id"),
-        meeting_occurrence_id: occurrenceId
       })
       .receive("ok", resp => row.innerHTML = resp.table_row)
       .receive("error", reason => console.error("Unable to update attendant state", reason))
@@ -155,20 +145,12 @@ export default class AttendanceView {
     this.tableBodyEl.addEventListener("click", event => {
       const row = this.parentsQuerySelector(event.target, "js-person");
 
-      const parentButton = this.parentsQuerySelector(event.target, "js-person-button");
+      const parentButton = this.parentsQuerySelector(event.target, "person-button");
       if (parentButton) {
         return this.updateState(
           row,
           this.tableBodyEl.getAttribute("data-occurrence-id"),
           this.getStateFromButton(parentButton)
-        );
-      }
-
-      const firstTime = this.parentsQuerySelector(event.target, "js-person-first-time");
-      if (firstTime) {
-        return this.toggleFirstTimeVisitor(
-          row,
-          this.tableBodyEl.getAttribute("data-occurrence-id")
         );
       }
 
@@ -185,34 +167,14 @@ export default class AttendanceView {
   }
 
   toggleRow(tr, occurrenceId) {
-    const unknown = tr.querySelector(".js-person-unknown");
-    const present = tr.querySelector(".js-person-present");
-    const absent = tr.querySelector(".js-person-absent");
+    const nextControl = tr
+      .querySelector(".is-active")
+      .parentElement
+      .nextElementSibling;
+    const nextButton = nextControl ?
+      nextControl.querySelector(".person-button") :
+      tr.querySelector(".is-unknown");
 
-    if (unknown.classList.contains("is-warning")) {
-      return this.updateState(
-        tr,
-        occurrenceId,
-        "present"
-      );
-    }
-
-    if (present.classList.contains("is-success")) {
-      return this.updateState(
-        tr,
-        occurrenceId,
-        "absent"
-      );
-    }
-
-    if (absent.classList.contains("is-danger")) {
-      return this.updateState(
-        tr,
-        occurrenceId,
-        "unknown"
-      );
-    }
-
-    return;
+    return this.updateState(tr, occurrenceId, this.getStateFromButton(nextButton));
   }
 }

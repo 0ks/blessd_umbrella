@@ -1,0 +1,26 @@
+.occurrence-stats {
+  .columns {
+    margin-top: 0;
+  }
+
+  .button {
+    height: 90px;
+    padding: 12px 0.75em;
+  }
+}
+
+.person-state-unknown {
+  color: darken($yellow, 20%);
+}
+
+.person-state-present {
+  color: darken($green, 10%);
+}
+
+.person-state-first_time {
+  color: darken($pink, 10%);
+}
+
+.person-state-absent {
+  color: darken($red, 15%);
+}

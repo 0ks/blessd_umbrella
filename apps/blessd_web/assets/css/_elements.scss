@@ -50,3 +50,15 @@
 .is-fullwidth {
   width: 100%;
 }
+
+.button.is-info {
+  .title, .subtitle {
+    color: white;
+  }
+}
+
+.button.is-fancy {
+  background-color: $pink;
+  border-color: transparent;
+  color: $white;
+}

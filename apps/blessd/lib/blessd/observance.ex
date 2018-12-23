@@ -111,6 +111,24 @@ defmodule Blessd.Observance do
   end
 
   @doc """
+  List meeting occurrences.
+  """
+  def list_meeting_occurrences(user, opts \\ [])
+
+  def list_meeting_occurrences(user, opts) when is_list(opts) do
+    list_meeting_occurrences(user, Enum.into(opts, %{filter: []}))
+  end
+
+  def list_meeting_occurrences(user, %{filter: filter}) do
+    with {:ok, query} <- Shared.authorize(MeetingOccurrence, user) do
+      query
+      |> MeetingOccurrence.preload()
+      |> MeetingOccurrence.apply_filter(filter)
+      |> Repo.list()
+    end
+  end
+
+  @doc """
   Gets a single meeting occurrence.
   """
   def find_occurrence(id, current_user) do
@@ -186,10 +204,17 @@ defmodule Blessd.Observance do
   @doc """
   Returns the list of people with their attendants preloaded.
   """
-  def list_people(current_user) do
-    with {:ok, query} <- Shared.authorize(Person, current_user) do
+  def list_people(user, opts \\ [])
+
+  def list_people(user, opts) when is_list(opts) do
+    list_people(user, Enum.into(opts, %{occurrence: nil, filter: nil}))
+  end
+
+  def list_people(user, %{occurrence: occurrence, filter: filter}) do
+    with {:ok, query} <- Shared.authorize(Person, user) do
       query
       |> Person.preload()
+      |> Person.apply_filter(filter, occurrence)
       |> Person.order()
       |> Repo.list()
     end
@@ -220,6 +245,68 @@ defmodule Blessd.Observance do
   end
 
   @doc """
+  Returns the stats from the given occurence attendance.
+  """
+  def attendance_stats(%MeetingOccurrence{} = occ, user) do
+    with {:ok, pq} <- Shared.authorize(Person, user),
+         {:ok, aq} <- Shared.authorize(Attendant, user) do
+      {:ok, attendance_stats(occ, pq, aq)}
+    end
+  end
+
+  defp attendance_stats(%MeetingOccurrence{} = occ, pq, aq) do
+    total = count_people(pq, occ.date)
+    present = count_present(aq, true)
+    absent = count_present(aq, false)
+    visitors = count_visitors(aq)
+    attendants = count_attendants(aq, occ)
+    unknown = total - attendants
+
+    %{
+      present: present,
+      absent: absent,
+      first_time: visitors,
+      not_first_time: present - visitors,
+      total: total,
+      attendants: attendants,
+      unknown: unknown,
+      missing: unknown + absent
+    }
+  end
+
+  defp count_people(query, date) do
+    {:ok, end_of_day} = NaiveDateTime.new(date, ~T[23:59:59])
+
+    query
+    |> where([p], p.inserted_at <= ^end_of_day)
+    |> select([p], count(p.id))
+    |> Repo.one()
+  end
+
+  defp count_present(query, present) do
+    query
+    |> join(:left, [a], p in assoc(a, :person))
+    |> where([a, p], a.present == ^present)
+    |> select([a, p], count(a.id))
+    |> Repo.one()
+  end
+
+  defp count_visitors(query) do
+    query
+    |> join(:left, [a], p in assoc(a, :person))
+    |> where([a, p], a.first_time_visitor == true)
+    |> select([a, p], count(a.id))
+    |> Repo.one()
+  end
+
+  defp count_attendants(query, %MeetingOccurrence{id: id}) do
+    query
+    |> where([a], a.meeting_occurrence_id == ^id)
+    |> select([a], count(a.id))
+    |> Repo.one()
+  end
+
+  @doc """
   Updates the state of the given attendant, and returns its person.
   """
   def update_attendant_state(person_id, occurrence_id, "unknown", current_user) do
@@ -236,35 +323,27 @@ defmodule Blessd.Observance do
   end
 
   def update_attendant_state(person_id, occurrence_id, state, current_user) do
+    params = %{
+      person_id: person_id,
+      meeting_occurrence_id: occurrence_id,
+      present: state in ["present", "first_time"],
+      first_time_visitor: state == "first_time"
+    }
+
     case Repo.find_by(Attendant, person_id: person_id, meeting_occurrence_id: occurrence_id) do
       {:ok, attendant} ->
         with {:ok, meeting} <- Shared.authorize(attendant, current_user),
-             changeset = Attendant.changeset(meeting, %{present: state == "present"}),
+             changeset = Attendant.changeset(meeting, params),
              {:ok, _} <- Repo.update(changeset) do
           find_person(person_id, current_user)
         end
 
       {:error, :not_found} ->
         with {:ok, attendant} <- new_attendant(current_user),
-             changeset =
-               Attendant.changeset(attendant, %{
-                 person_id: person_id,
-                 meeting_occurrence_id: occurrence_id,
-                 present: state == "present"
-               }),
+             changeset = Attendant.changeset(attendant, params),
              {:ok, _} <- Repo.insert(changeset) do
           find_person(person_id, current_user)
         end
-    end
-  end
-
-  def toggle_first_time_visitor(person_id, occurrence_id, current_user) do
-    with {:ok, attendant} <-
-           Repo.find_by(Attendant, person_id: person_id, meeting_occurrence_id: occurrence_id),
-         changeset =
-           Attendant.first_time_visitor_changeset(attendant, !attendant.first_time_visitor),
-         {:ok, _} <- Repo.update(changeset) do
-      find_person(person_id, current_user)
     end
   end
 
@@ -280,27 +359,23 @@ defmodule Blessd.Observance do
   """
   def can_be_first_time_visitor?(
         %Person{id: person_id},
-        %MeetingOccurrence{meeting_id: meeting_id, id: occurrence_id}
+        %MeetingOccurrence{meeting_id: meeting_id, id: occurrence_id, date: date}
       ) do
-    case Repo.find_by(Attendant, person_id: person_id, meeting_occurrence_id: occurrence_id) do
-      {:ok, %{id: attendant_id}} ->
-        first_attendant_id =
-          Attendant
-          |> join(:left, [a], p in assoc(a, :person))
-          |> join(:left, [a, p], o in assoc(a, :meeting_occurrence))
-          |> where(
-            [a, p, o],
-            a.present == true and o.meeting_id == ^meeting_id and p.id == ^person_id
-          )
-          |> order_by([a, p, o], o.date)
-          |> limit(1)
-          |> select([a, p, o], a.id)
-          |> Repo.one()
-
-        attendant_id == first_attendant_id
-
-      {:error, :not_found} ->
-        false
+    Attendant
+    |> join(:left, [a], p in assoc(a, :person))
+    |> join(:left, [a, p], o in assoc(a, :meeting_occurrence))
+    |> where(
+      [a, p, o],
+      a.present == true and o.meeting_id == ^meeting_id and p.id == ^person_id and
+        (o.date <= ^date or a.first_time_visitor == true)
+    )
+    |> order_by([a, p, o], o.date)
+    |> select([a, p, o], o.id)
+    |> Repo.all()
+    |> case do
+      [] -> true
+      [^occurrence_id] -> true
+      _ -> false
     end
   end
 end

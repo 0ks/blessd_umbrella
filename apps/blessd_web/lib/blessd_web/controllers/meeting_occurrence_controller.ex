@@ -3,6 +3,23 @@ defmodule BlessdWeb.MeetingOccurrenceController do
 
   alias Blessd.Observance
 
+  def show(conn, %{"id" => id} = params) do
+    with user = conn.assigns.current_user,
+         filter = params["filter"],
+         {:ok, occurrence} <- Observance.find_occurrence(id, user),
+         {:ok, stats} <- Observance.attendance_stats(occurrence, user),
+         {:ok, people} <- Observance.list_people(user, occurrence: occurrence, filter: filter) do
+      render(
+        conn,
+        "show.html",
+        occurrence: occurrence,
+        people: people,
+        stats: stats,
+        filter: filter
+      )
+    end
+  end
+
   def new(conn, %{"meeting_id" => meeting_id}) do
     with user = conn.assigns.current_user,
          {:ok, meeting} <- Observance.find_meeting(meeting_id, user),

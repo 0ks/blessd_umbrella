@@ -1,0 +1,156 @@
+<h1 class="title has-text-centered">
+  <%= gettext(
+    "%{meeting} on %{date}",
+    meeting: @occurrence.meeting.name,
+    date: humanize(@occurrence.date)
+  ) %>
+</h1>
+
+<div class="columns occurrence-stats">
+  <div class="column has-text-centered">
+    <%= link to: Routes.meeting_occurrence_path(
+        @conn,
+        :show,
+        @current_user.church.slug,
+        @occurrence
+      ),
+      class: "button is-fullwidth is-block #{
+        if @filter == nil, do: "is-info"
+      }" do %>
+      <h1 class="title"><%= @stats.total %></h1>
+      <h2 class="subtitle"><%= gettext("Total") %></h2>
+    <% end %>
+    <div class="columns">
+      <div class="column has-text-centered">
+        <%= link to: Routes.meeting_occurrence_path(
+            @conn,
+            :show,
+            @current_user.church.slug,
+            @occurrence,
+            filter: :present
+          ),
+          class: "button is-fullwidth is-block #{
+            if @filter == "present", do: "is-info"
+          }" do %>
+          <h1 class="title"><%= @stats.present %></h1>
+          <h2 class="subtitle"><%= gettext("Present") %></h2>
+        <% end %>
+        <div class="columns">
+          <div class="column has-text-centered">
+            <%= link to: Routes.meeting_occurrence_path(
+                @conn,
+                :show,
+                @current_user.church.slug,
+                @occurrence,
+                filter: :first_time
+              ),
+              class: "button is-fullwidth is-block #{
+                if @filter == "first_time", do: "is-info"
+              }" do %>
+              <h1 class="title"><%= @stats.first_time %></h1>
+              <h2 class="subtitle"><%= gettext("First time") %></h2>
+            <% end %>
+          </div>
+          <div class="column has-text-centered">
+            <%= link to: Routes.meeting_occurrence_path(
+                @conn,
+                :show,
+                @current_user.church.slug,
+                @occurrence,
+                filter: :not_first_time
+              ),
+              class: "button is-fullwidth is-block #{
+                if @filter == "not_first_time", do: "is-info"
+              }" do %>
+              <h1 class="title"><%= @stats.not_first_time %></h1>
+              <h2 class="subtitle"><%= gettext("Not first time") %></h2>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="column has-text-centered">
+        <%= link to: Routes.meeting_occurrence_path(
+            @conn,
+            :show,
+            @current_user.church.slug,
+            @occurrence,
+            filter: :missing
+          ),
+          class: "button is-fullwidth is-block #{
+            if @filter == "missing", do: "is-info"
+          }" do %>
+          <h1 class="title"><%= @stats.missing %></h1>
+          <h2 class="subtitle"><%= gettext("Missing") %></h2>
+        <% end %>
+
+        <div class="columns">
+          <div class="column has-text-centered">
+            <%= link to: Routes.meeting_occurrence_path(
+                @conn,
+                :show,
+                @current_user.church.slug,
+                @occurrence,
+                filter: :absent
+              ),
+              class: "button is-fullwidth is-block #{
+                if @filter == "absent", do: "is-info"
+              }" do %>
+              <h1 class="title"><%= @stats.absent %></h1>
+              <h2 class="subtitle"><%= gettext("Absent") %></h2>
+            <% end %>
+          </div>
+          <div class="column has-text-centered">
+            <%= link to: Routes.meeting_occurrence_path(
+                @conn,
+                :show,
+                @current_user.church.slug,
+                @occurrence,
+                filter: :unknown
+              ),
+              class: "button is-fullwidth is-block #{
+                if @filter == "unknown", do: "is-info"
+              }" do %>
+              <h1 class="title"><%= @stats.unknown %></h1>
+              <h2 class="subtitle"><%= gettext("Unknown") %></h2>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 class="subtitle has-text-centered">
+  <%= filter_title(@filter) %>
+</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <%= if show_state(@filter) do %>
+        <th><%= gettext("State") %></th>
+      <% end %>
+      <th><%= gettext("Name") %></th>
+      <th><%= gettext("Email") %></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for person <- @people do %>
+    <tr>
+      <%= if show_state(@filter) do %>
+        <% state = Person.state(person, @occurrence) %>
+        <td class="<%= state_class(state) %>">
+          <i class="fas <%= state_icon(state)  %>"></i>
+          <%= humanize(state) %>
+        </td>
+      <% end %>
+      <td><%= person.name %></td>
+      <td><%= person.email %></td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<div class="buttons">
+  <%= link gettext("Attendance"), to: Routes.meeting_occurrence_attendance_path(@conn, :index, @current_user.church.slug, @occurrence), class: "button" %>
+</div>
