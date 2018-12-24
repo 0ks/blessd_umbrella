@@ -10,10 +10,10 @@ defmodule BlessdWeb.MeetingOccurrenceChannel do
     {:ok, socket}
   end
 
-  def handle_in("search", %{"meeting_occurrence_id" => occurrence_id, "query" => query}, socket) do
+  def handle_in("search", %{"meeting_occurrence_id" => occurrence_id, "query" => query, "filter" => filter}, socket) do
     with user = socket.assigns.current_user,
          {:ok, occurrence} <- Observance.find_occurrence(occurrence_id, user),
-         {:ok, people} <- Observance.list_people(user, search: query) do
+         {:ok, people} <- Observance.list_people(user, occurrence: occurrence, filter: filter, search: query) do
       html =
         View.render_to_string(MeetingOccurrenceView, "table_body.html",
           people: people,

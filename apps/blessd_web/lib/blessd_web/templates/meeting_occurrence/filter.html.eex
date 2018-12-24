@@ -1,0 +1,145 @@
+<%= if @filter do %>
+  <div class="panel-block">
+    <div class="columns is-gapless occurrence-stats is-fullwidth is-flex-mobile">
+      <div class="column has-text-centered">
+        <%= link to: Routes.meeting_occurrence_path(
+            @conn,
+            :show,
+            @current_user.church.slug,
+            @occurrence,
+            filter: :all
+          ),
+          class: "button occurrence-stats-top is-fullwidth is-block #{
+            if @filter == "all", do: "is-info"
+          }" do %>
+          <h1 class="subtitle"><%= @stats.total %></h1>
+          <p><%= gettext("Total") %></p>
+        <% end %>
+        <div class="columns is-gapless is-flex-mobile">
+          <div class="column has-text-centered">
+            <%= link to: Routes.meeting_occurrence_path(
+                @conn,
+                :show,
+                @current_user.church.slug,
+                @occurrence,
+                filter: :present
+              ),
+              class: "button occurrence-stats-middle-left is-fullwidth is-block #{
+                if @filter == "present", do: "is-info"
+              }" do %>
+              <h1 class="subtitle"><%= @stats.present %></h1>
+              <p><%= gettext("Present") %></p>
+            <% end %>
+            <div class="columns is-gapless is-flex-mobile">
+              <div class="column has-text-centered">
+                <%= link to: Routes.meeting_occurrence_path(
+                    @conn,
+                    :show,
+                    @current_user.church.slug,
+                    @occurrence,
+                    filter: :recurrent
+                  ),
+                  title: gettext("Recurrent"),
+                  class: "button occurrence-stats-bottom-left is-fullwidth is-block #{
+                    if @filter == "recurrent", do: "is-info"
+                  }" do %>
+                  <h1 class="subtitle"><%= @stats.recurrent %></h1>
+                  <i class="fas fa-check"></i>
+                <% end %>
+              </div>
+              <div class="column has-text-centered">
+                <%= link to: Routes.meeting_occurrence_path(
+                    @conn,
+                    :show,
+                    @current_user.church.slug,
+                    @occurrence,
+                    filter: :first_time
+                  ),
+                  title: gettext("First time"),
+                  class: "button occurrence-stats-bottom-center is-fullwidth is-block #{
+                    if @filter == "first_time", do: "is-info"
+                  }" do %>
+                  <h1 class="subtitle"><%= @stats.first_time %></h1>
+                  <i class="fas fa-heart"></i>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          <div class="column has-text-centered">
+            <%= link to: Routes.meeting_occurrence_path(
+                @conn,
+                :show,
+                @current_user.church.slug,
+                @occurrence,
+                filter: :missing
+              ),
+              class: "button occurrence-stats-middle-right is-fullwidth is-block #{
+                if @filter == "missing", do: "is-info"
+              }" do %>
+              <h1 class="subtitle"><%= @stats.missing %></h1>
+              <p><%= gettext("Missing") %></p>
+            <% end %>
+
+            <div class="columns is-gapless is-flex-mobile">
+              <div class="column has-text-centered">
+                <%= link to: Routes.meeting_occurrence_path(
+                    @conn,
+                    :show,
+                    @current_user.church.slug,
+                    @occurrence,
+                    filter: :absent
+                  ),
+                  title: gettext("Absent"),
+                  class: "button occurrence-stats-bottom-center is-fullwidth is-block #{
+                    if @filter == "absent", do: "is-info"
+                  }" do %>
+                  <h1 class="subtitle"><%= @stats.absent %></h1>
+                  <i class="fas fa-times"></i>
+                <% end %>
+              </div>
+              <div class="column has-text-centered">
+                <%= link to: Routes.meeting_occurrence_path(
+                    @conn,
+                    :show,
+                    @current_user.church.slug,
+                    @occurrence,
+                    filter: :unknown
+                  ),
+                  title: gettext("Unknown"),
+                  class: "button occurrence-stats-bottom-right is-fullwidth is-block #{
+                    if @filter == "unknown", do: "is-info"
+                  }" do %>
+                  <h1 class="subtitle"><%= @stats.unknown %></h1>
+                  <i class="fas fa-question"></i>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-block">
+    <%= link gettext("Close filter"),
+      to: Routes.meeting_occurrence_path(
+        @conn,
+        :show,
+        @current_user.church.slug,
+        @occurrence
+      ),
+      class: "button is-fullwidth" %>
+  </div>
+<% else %>
+  <div class="panel-block">
+    <%= link gettext("Filter"),
+      to: Routes.meeting_occurrence_path(
+        @conn,
+        :show,
+        @current_user.church.slug,
+        @occurrence,
+        filter: :all
+      ),
+      class: "button is-fullwidth" %>
+  </div>
+<% end %>

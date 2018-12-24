@@ -27,7 +27,7 @@ export default class MeetingOccurrenceView {
 
   getStateFromButton(button) {
     if (button.classList.contains("is-unknown")) return "unknown";
-    if (button.classList.contains("is-present")) return "present";
+    if (button.classList.contains("is-recurrent")) return "recurrent";
     if (button.classList.contains("is-first-time")) return "first_time";
     if (button.classList.contains("is-absent")) return "absent";
     return;
@@ -53,13 +53,15 @@ export default class MeetingOccurrenceView {
     this.searchEl.addEventListener("keyup", event => {
       if (![13, 38, 40].includes(event.keyCode)) {
         const occurrenceId = this.tableBodyEl.getAttribute("data-occurrence-id");
+        const filter = document.querySelector(".js-sidebar").getAttribute("data-filter");
 
         this.nameEl.value = this.searchEl.value;
 
         this.channel
           .push("search", {
             meeting_occurrence_id: occurrenceId,
-            query: this.searchEl.value
+            query: this.searchEl.value,
+            filter: filter
           })
           .receive("ok", resp => {
             this.tableBodyEl.innerHTML = resp.table_body;

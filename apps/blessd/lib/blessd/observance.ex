@@ -312,7 +312,7 @@ defmodule Blessd.Observance do
     params = %{
       person_id: person_id,
       meeting_occurrence_id: occurrence_id,
-      present: state in ["present", "first_time"],
+      present: state in ["recurrent", "first_time"],
       first_time_visitor: state == "first_time"
     }
 

@@ -26,7 +26,7 @@
               </div>
             </div>
             <footer class="card-footer">
-              <%= link gettext("Details"),
+              <%= link gettext("Attendance"),
                 to: Routes.meeting_occurrence_path(
                   @conn,
                   :show,

@@ -38,7 +38,7 @@ defmodule Blessd.Observance.Person do
       attendant ->
         case {attendant.present, attendant.first_time_visitor} do
           {true, true} -> :first_time
-          {true, false} -> :present
+          {true, false} -> :recurrent
           {false, false} -> :absent
         end
     end
@@ -63,6 +63,7 @@ defmodule Blessd.Observance.Person do
   end
 
   def apply_filter(query, nil, _), do: query
+  def apply_filter(query, "all", _), do: query
 
   def apply_filter(query, "present", occ) do
     query
