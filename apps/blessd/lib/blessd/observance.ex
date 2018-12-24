@@ -244,9 +244,9 @@ defmodule Blessd.Observance do
 
   defp attendance_stats(%MeetingOccurrence{} = occ, pq, aq) do
     total = count_people(pq, occ.date)
-    present = count_present(aq, true)
-    absent = count_present(aq, false)
-    visitors = count_visitors(aq)
+    present = count_present(aq, occ, true)
+    absent = count_present(aq, occ, false)
+    visitors = count_visitors(aq, occ)
     unknown = count_unknown(pq, occ)
 
     %{
@@ -276,19 +276,18 @@ defmodule Blessd.Observance do
     |> Repo.one()
   end
 
-  defp count_present(query, present) do
+  defp count_present(query, %MeetingOccurrence{id: occ_id}, present) do
     query
     |> join(:left, [a], p in assoc(a, :person))
-    |> where([a, p], a.present == ^present)
+    |> where([a, p], a.present == ^present and a.meeting_occurrence_id == ^occ_id)
     |> select([a, p], count(a.id))
     |> Repo.one()
   end
 
-  defp count_visitors(query) do
+  defp count_visitors(query, %MeetingOccurrence{id: occ_id}) do
     query
-    |> join(:left, [a], p in assoc(a, :person))
-    |> where([a, p], a.first_time_visitor == true)
-    |> select([a, p], count(a.id))
+    |> where([a], a.first_time_visitor == true and a.meeting_occurrence_id == ^occ_id)
+    |> select([a], count(a.id))
     |> Repo.one()
   end
 
