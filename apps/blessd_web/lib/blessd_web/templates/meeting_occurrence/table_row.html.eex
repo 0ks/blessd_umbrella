@@ -1,0 +1,49 @@
+<td class="person-state-column">
+  <div class="field has-addons">
+    <div class="control">
+      <button
+        class="button is-small person-button is-recurrent
+               <%= if @person.state == "recurrent", do: "is-active" %>"
+        title="<%= gettext("Recurrent") %>">
+        <span class="icon is-small">
+          <i class="fas fa-check"></i>
+        </span>
+      </button>
+    </div>
+    <%= unless @person.already_visited do %>
+      <div class="control">
+        <button
+          class="button is-small person-button is-first-time
+                 <%= if @person.state == "first_time", do: "is-active" %>"
+          title="<%= gettext("First time visitor") %>">
+          <span class="icon is-small">
+            <i class="fas fa-heart"></i>
+          </span>
+        </button>
+      </div>
+    <% end %>
+    <div class="control">
+      <button
+        class="button is-small person-button is-absent
+               <%= if @person.state == "absent", do: "is-active" %>"
+        title="<%= gettext("Absent") %>">
+        <span class="icon is-small">
+          <i class="fas fa-times"></i>
+        </span>
+      </button>
+    </div>
+    <div class="control">
+      <button
+        class="button is-small person-button is-unknown
+               <%= if @person.state == "unknown", do: "is-active" %>"
+        title="<%= gettext("Unknown") %>">
+        <span class="icon is-small">
+          <i class="fas fa-question"></i>
+        </span>
+      </button>
+    </div>
+  </div>
+</td>
+<td><%= @person.name %></td>
+<td><%= @person.email %></td>
+

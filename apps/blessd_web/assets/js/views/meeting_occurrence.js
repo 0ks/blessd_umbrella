@@ -1,17 +1,17 @@
 import Mousetrap from "mousetrap"
 import BlessdSocket from "../socket"
 
-export default class AttendanceView {
+export default class MeetingOccurrenceView {
   constructor() {
     this.socket = new BlessdSocket();
-    this.channel = this.socket.channel("attendance:lobby", {});
+    this.channel = this.socket.channel("meeting_occurrence:lobby", {});
     this.searchEl = document.querySelector(".js-search");
     this.nameEl = document.getElementById("person_name");
     this.tableEl = document.querySelector(".js-people");
     this.tableBodyEl = this.tableEl.querySelector(".js-people-body");
   }
 
-  index() {
+  show() {
     this.socket.connect();
     this.channel.join()
       .receive("ok", _ => {
@@ -26,9 +26,10 @@ export default class AttendanceView {
   }
 
   getStateFromButton(button) {
-    if (button.classList.contains("js-person-unknown")) return "unknown";
-    if (button.classList.contains("js-person-present")) return "present";
-    if (button.classList.contains("js-person-absent")) return "absent";
+    if (button.classList.contains("is-unknown")) return "unknown";
+    if (button.classList.contains("is-recurrent")) return "recurrent";
+    if (button.classList.contains("is-first-time")) return "first_time";
+    if (button.classList.contains("is-absent")) return "absent";
     return;
   }
 
@@ -44,17 +45,6 @@ export default class AttendanceView {
       .receive("timeout", _ => console.error("Networking issue..."));
   }
 
-  toggleFirstTimeVisitor(row, occurrenceId) {
-    this.channel
-      .push("toggle_first_time_visitor", {
-        person_id: row.getAttribute("data-id"),
-        meeting_occurrence_id: occurrenceId
-      })
-      .receive("ok", resp => row.innerHTML = resp.table_row)
-      .receive("error", reason => console.error("Unable to update attendant state", reason))
-      .receive("timeout", _ => console.error("Networking issue..."));
-  }
-
   addSearchListener() {
     this.searchEl.addEventListener("keydown", event => {
       if ([13, 38, 40].includes(event.keyCode)) event.preventDefault();
@@ -63,13 +53,15 @@ export default class AttendanceView {
     this.searchEl.addEventListener("keyup", event => {
       if (![13, 38, 40].includes(event.keyCode)) {
         const occurrenceId = this.tableBodyEl.getAttribute("data-occurrence-id");
+        const filter = document.querySelector(".js-sidebar").getAttribute("data-filter");
 
         this.nameEl.value = this.searchEl.value;
 
         this.channel
           .push("search", {
             meeting_occurrence_id: occurrenceId,
-            query: this.searchEl.value
+            query: this.searchEl.value,
+            filter: filter
           })
           .receive("ok", resp => {
             this.tableBodyEl.innerHTML = resp.table_body;
@@ -155,20 +147,12 @@ export default class AttendanceView {
     this.tableBodyEl.addEventListener("click", event => {
       const row = this.parentsQuerySelector(event.target, "js-person");
 
-      const parentButton = this.parentsQuerySelector(event.target, "js-person-button");
+      const parentButton = this.parentsQuerySelector(event.target, "person-button");
       if (parentButton) {
         return this.updateState(
           row,
           this.tableBodyEl.getAttribute("data-occurrence-id"),
           this.getStateFromButton(parentButton)
-        );
-      }
-
-      const firstTime = this.parentsQuerySelector(event.target, "js-person-first-time");
-      if (firstTime) {
-        return this.toggleFirstTimeVisitor(
-          row,
-          this.tableBodyEl.getAttribute("data-occurrence-id")
         );
       }
 
@@ -185,34 +169,14 @@ export default class AttendanceView {
   }
 
   toggleRow(tr, occurrenceId) {
-    const unknown = tr.querySelector(".js-person-unknown");
-    const present = tr.querySelector(".js-person-present");
-    const absent = tr.querySelector(".js-person-absent");
+    const nextControl = tr
+      .querySelector(".is-active")
+      .parentElement
+      .nextElementSibling;
+    const nextButton = nextControl ?
+      nextControl.querySelector(".person-button") :
+      tr.querySelector(".person-button:first-child");
 
-    if (unknown.classList.contains("is-warning")) {
-      return this.updateState(
-        tr,
-        occurrenceId,
-        "present"
-      );
-    }
-
-    if (present.classList.contains("is-success")) {
-      return this.updateState(
-        tr,
-        occurrenceId,
-        "absent"
-      );
-    }
-
-    if (absent.classList.contains("is-danger")) {
-      return this.updateState(
-        tr,
-        occurrenceId,
-        "unknown"
-      );
-    }
-
-    return;
+    return this.updateState(tr, occurrenceId, this.getStateFromButton(nextButton));
   }
 }

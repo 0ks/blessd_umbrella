@@ -1,0 +1,69 @@
+.person-state-column {
+  width: 130px;
+}
+
+.person-button.is-active {
+  &.is-unknown { @extend .is-warning }
+  &.is-recurrent { @extend .is-success }
+  &.is-first-time { @extend .is-fancy }
+  &.is-absent { @extend .is-danger }
+}
+
+.occurrence-stats {
+  .button {
+    height: 80px;
+    padding: 12px 0.75rem;
+  }
+
+  .subtitle {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.occurrence-stats-top {
+  border-radius: 4px 4px 0 0;
+}
+
+.occurrence-stats-middle-left {
+  border-top-color: transparent;
+  border-radius: 0;
+}
+
+.occurrence-stats-middle-right {
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-radius: 0;
+}
+
+.occurrence-stats-bottom-center {
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-radius: 0;
+}
+
+.occurrence-stats-bottom-left {
+  border-top-color: transparent;
+  border-radius: 0 0 0 4px;
+}
+
+.occurrence-stats-bottom-right {
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-radius: 0 0 4px 0;
+}
+
+.person-state-unknown {
+  color: darken($yellow, 20%);
+}
+
+.person-state-recurrent {
+  color: darken($green, 10%);
+}
+
+.person-state-first_time {
+  color: darken($pink, 10%);
+}
+
+.person-state-absent {
+  color: darken($red, 15%);
+}

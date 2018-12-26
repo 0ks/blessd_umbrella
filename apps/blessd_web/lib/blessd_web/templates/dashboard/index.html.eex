@@ -5,6 +5,39 @@
 <%= if show_any_card?(@resources) do %>
   <div class="columns is-multiline">
     <div class="column is-one-third">
+      <%= if show_card?(:todays_meetings, @resources) do %>
+        <%= for {occurrence, stats} <- @resources.todays_meetings do %>
+          <div class="card">
+            <header class="card-header">
+              <p class="card-header-title">
+                <%= gettext("%{meeting} today!", meeting: occurrence.meeting.name) %>
+              </p>
+            </header>
+            <div class="card-content">
+              <div class="columns">
+                <div class="column has-text-centered">
+                  <h1 class="title"><%= stats.present %></h1>
+                  <h2 class="subtitle"><%= gettext("Present") %></h2>
+                </div>
+                <div class="column has-text-centered">
+                  <h1 class="title"><%= stats.missing %></h1>
+                  <h2 class="subtitle"><%= gettext("Missing") %></h2>
+                </div>
+              </div>
+            </div>
+            <footer class="card-footer">
+              <%= link gettext("Attendance"),
+                to: Routes.meeting_occurrence_path(
+                  @conn,
+                  :show,
+                  @current_user.church.slug,
+                  occurrence
+                ),
+                class: "card-footer-item" %>
+            </footer>
+          </div>
+        <% end %>
+      <% end %>
       <%= if show_card?(:confirmation, @resources) do %>
         <div class="card">
           <header class="card-header">

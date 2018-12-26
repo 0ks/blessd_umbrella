@@ -53,8 +53,10 @@ defmodule BlessdWeb.Router do
         as: :occurrence
     end
 
-    resources "/meeting_occurrences", MeetingOccurrenceController, only: [:edit, :update, :delete] do
+    resources "/meeting_occurrences", MeetingOccurrenceController,
+      only: [:show, :edit, :update, :delete] do
       resources "/attendance", AttendanceController, only: [:index, :create]
+      resources "/person", PersonController, only: [:create]
     end
 
     scope "/:resource" do

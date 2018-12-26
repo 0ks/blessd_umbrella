@@ -21,7 +21,7 @@ import "./file";
 import "./modal";
 import "./message";
 
-import AttendanceView from "./views/attendance";
+import MeetingOccurrenceView from "./views/meeting_occurrence";
 import CustomFieldView from "./views/custom_field";
 import PersonView from "./views/person";
 import SessionView from "./views/session";
@@ -29,7 +29,7 @@ import SessionView from "./views/session";
 window.views = {
   Elixir: {
     BlessdWeb: {
-      AttendanceView: AttendanceView,
+      MeetingOccurrenceView: MeetingOccurrenceView,
       CustomFieldView: CustomFieldView,
       PersonView: PersonView,
       SessionView: SessionView

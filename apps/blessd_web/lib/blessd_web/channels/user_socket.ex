@@ -4,8 +4,8 @@ defmodule BlessdWeb.UserSocket do
   alias Blessd.Shared
 
   ## Channels
-  channel("attendance:*", BlessdWeb.AttendanceChannel)
   channel("custom_field:*", BlessdWeb.CustomFieldChannel)
+  channel("meeting_occurrence:*", BlessdWeb.MeetingOccurrenceChannel)
 
   def connect(%{"token" => token}, socket) do
     case Phoenix.Token.verify(socket, "user socket", token, max_age: 1_209_600) do

@@ -57,9 +57,9 @@
               <div class="control">
                 <%= link gettext("Attendance"),
                   class: "button is-small",
-                  to: Routes.meeting_occurrence_attendance_path(
+                  to: Routes.meeting_occurrence_path(
                     @conn,
-                    :index,
+                    :show,
                     @current_user.church.slug,
                     occurrence
                   ) %>

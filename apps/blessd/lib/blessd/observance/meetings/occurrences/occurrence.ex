@@ -1,12 +1,11 @@
-defmodule Blessd.Observance.MeetingOccurrence do
+defmodule Blessd.Observance.Meetings.Occurrences.Occurrence do
   use Ecto.Schema
 
   import Ecto.Changeset
-  import Ecto.Query
 
   alias Blessd.Shared.Churches.Church
-  alias Blessd.Observance.Attendant
-  alias Blessd.Observance.Meeting
+  alias Blessd.Observance.Meetings.Attendants.Attendant
+  alias Blessd.Observance.Meetings.Meeting
 
   schema "meeting_occurrences" do
     belongs_to(:church, Church)
@@ -25,10 +24,4 @@ defmodule Blessd.Observance.MeetingOccurrence do
     |> cast(attrs, [:date])
     |> validate_required([:meeting_id, :date])
   end
-
-  @doc false
-  def preload(query), do: preload(query, [o], [:meeting])
-
-  @doc false
-  def order(query), do: order_by(query, [o], desc: o.date)
 end
