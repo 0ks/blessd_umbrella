@@ -71,6 +71,11 @@
           <% end %>
         </div>
       </div>
+      <div class="panel-block">
+        <%= link gettext("Back"),
+          to: Routes.meeting_path(@conn, :index, @current_user.church.slug),
+          class: "button is-fullwidth" %>
+      </div>
     </div>
   </div>
   <div class="column is-two-thirds">
@@ -89,10 +94,3 @@
   </div>
 </div>
 
-<div class="field is-grouped">
-  <div class="control">
-    <%= link gettext("Back"),
-      to: Routes.meeting_path(@conn, :index, @current_user.church.slug),
-      class: "button" %>
-  </div>
-</div>

@@ -7,7 +7,7 @@ defmodule BlessdWeb.DashboardController do
     user = conn.assigns.current_user
 
     with {:ok, todays_meetings} <-
-           Observance.list_meeting_occurrences(user, filter: [date: Date.utc_today()]) do
+           Observance.list_occurrences(user, filter: [date: Date.utc_today()]) do
       meetings_and_stats =
         todays_meetings
         |> Stream.map(&{&1, Observance.attendance_stats(&1, user)})

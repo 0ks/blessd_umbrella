@@ -3,18 +3,18 @@
     <div class="control">
       <button
         class="button is-small person-button is-recurrent
-               <%= if Person.state(@person, @occurrence) == :recurrent, do: "is-active" %>"
+               <%= if @person.state == "recurrent", do: "is-active" %>"
         title="<%= gettext("Recurrent") %>">
         <span class="icon is-small">
           <i class="fas fa-check"></i>
         </span>
       </button>
     </div>
-    <%= if Observance.can_be_first_time_visitor?(@person, @occurrence) do %>
+    <%= unless @person.already_visited do %>
       <div class="control">
         <button
           class="button is-small person-button is-first-time
-                 <%= if Person.state(@person, @occurrence) == :first_time, do: "is-active" %>"
+                 <%= if @person.state == "first_time", do: "is-active" %>"
           title="<%= gettext("First time visitor") %>">
           <span class="icon is-small">
             <i class="fas fa-heart"></i>
@@ -25,7 +25,7 @@
     <div class="control">
       <button
         class="button is-small person-button is-absent
-               <%= if Person.state(@person, @occurrence) == :absent, do: "is-active" %>"
+               <%= if @person.state == "absent", do: "is-active" %>"
         title="<%= gettext("Absent") %>">
         <span class="icon is-small">
           <i class="fas fa-times"></i>
@@ -35,7 +35,7 @@
     <div class="control">
       <button
         class="button is-small person-button is-unknown
-               <%= if Person.state(@person, @occurrence) == :unknown, do: "is-active" %>"
+               <%= if @person.state == "unknown", do: "is-active" %>"
         title="<%= gettext("Unknown") %>">
         <span class="icon is-small">
           <i class="fas fa-question"></i>

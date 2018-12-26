@@ -10,9 +10,7 @@ defmodule BlessdWeb.MeetingController do
   end
 
   def new(conn, _params) do
-    with user = conn.assigns.current_user,
-         {:ok, meeting} <- Observance.new_meeting(user),
-         {:ok, changeset} <- Observance.change_meeting(meeting, user) do
+    with {:ok, changeset} <- Observance.new_meeting_changeset(conn.assigns.current_user) do
       render(conn, "new.html", changeset: changeset)
     end
   end
@@ -24,42 +22,33 @@ defmodule BlessdWeb.MeetingController do
       |> put_flash(:info, gettext("Meeting created successfully."))
       |> redirect(to: Routes.meeting_path(conn, :index, user.church.slug))
     else
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
-
-      {:error, reason} ->
-        {:error, reason}
+      {:error, %Ecto.Changeset{} = changeset} -> render(conn, "new.html", changeset: changeset)
+      {:error, reason} -> {:error, reason}
     end
   end
 
   def edit(conn, %{"id" => id}) do
     with user = conn.assigns.current_user,
-         {:ok, meeting} <- Observance.find_meeting(id, user),
-         {:ok, changeset} <- Observance.change_meeting(meeting, user) do
+         {:ok, changeset} <- Observance.edit_meeting_changeset(id, user) do
       render(conn, "edit.html", changeset: changeset)
     end
   end
 
   def update(conn, %{"id" => id, "meeting" => meeting_params}) do
     with user = conn.assigns.current_user,
-         {:ok, meeting} <- Observance.find_meeting(id, user),
-         {:ok, _meeting} <- Observance.update_meeting(meeting, meeting_params, user) do
+         {:ok, _meeting} <- Observance.update_meeting(id, meeting_params, user) do
       conn
       |> put_flash(:info, gettext("Meeting updated successfully."))
       |> redirect(to: Routes.meeting_path(conn, :index, user.church.slug))
     else
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", changeset: changeset)
-
-      {:error, reason} ->
-        {:error, reason}
+      {:error, %Ecto.Changeset{} = changeset} -> render(conn, "edit.html", changeset: changeset)
+      {:error, reason} -> {:error, reason}
     end
   end
 
   def delete(conn, %{"id" => id}) do
     with user = conn.assigns.current_user,
-         {:ok, meeting} <- Observance.find_meeting(id, user),
-         {:ok, _meeting} = Observance.delete_meeting(meeting, user) do
+         {:ok, _meeting} = Observance.delete_meeting(id, user) do
       conn
       |> put_flash(:info, gettext("Meeting deleted successfully."))
       |> redirect(to: Routes.meeting_path(conn, :index, user.church.slug))

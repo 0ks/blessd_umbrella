@@ -42,7 +42,7 @@ defmodule BlessdWeb.MeetingOccurrenceControllerTest do
         conn
         |> authenticate(user)
         |> post(Routes.meeting_occurrence_path(conn, :create, user.church.slug, meeting),
-          meeting_occurrence: @create_attrs
+          occurrence: @create_attrs
         )
 
       assert redirected_to(conn) == Routes.meeting_path(conn, :index, user.church.slug)
@@ -56,7 +56,7 @@ defmodule BlessdWeb.MeetingOccurrenceControllerTest do
         conn
         |> authenticate(user)
         |> post(Routes.meeting_occurrence_path(conn, :create, user.church.slug, meeting),
-          meeting_occurrence: @invalid_attrs
+          occurrence: @invalid_attrs
         )
 
       assert html_response(conn, 200) =~ "New Meeting Occurrence"
@@ -88,7 +88,7 @@ defmodule BlessdWeb.MeetingOccurrenceControllerTest do
         conn
         |> authenticate(user)
         |> put(Routes.meeting_occurrence_path(conn, :update, user.church.slug, occurrence),
-          meeting_occurrence: @update_attrs
+          occurrence: @update_attrs
         )
 
       assert redirected_to(resp) == Routes.meeting_path(conn, :index, user.church.slug)
@@ -110,7 +110,7 @@ defmodule BlessdWeb.MeetingOccurrenceControllerTest do
         conn
         |> authenticate(user)
         |> put(Routes.meeting_occurrence_path(conn, :update, user.church.slug, occurrence),
-          meeting_occurrence: @invalid_attrs
+          occurrence: @invalid_attrs
         )
 
       assert html_response(conn, 200) =~ "Edit Meeting Occurrence"
