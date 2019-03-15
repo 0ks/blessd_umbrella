@@ -28,6 +28,16 @@
         <%= error_tag f, :slug %>
       </div>
 
+      <div class="field">
+        <%= label f, :timezone, class: "label" %>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <%= select f, :timezone, Timex.timezones(), prompt: gettext("Timezone") %>
+          </div>
+        </div>
+        <%= error_tag f, :timezone %>
+      </div>
+
       <div class="buttons">
         <%= submit gettext("Submit"), class: "button is-primary" %>
         <%= link gettext("Delete"),

@@ -87,11 +87,11 @@ defmodule Blessd.Observance.Meetings.Occurrences do
   end
 
   @doc false
-  def build(current_user, meeting_id \\ nil, date \\ Date.utc_today()) do
+  def build(current_user, meeting_id \\ nil, date \\ nil) do
     %Occurrence{
       church_id: current_user.church.id,
       meeting_id: meeting_id,
-      date: date
+      date: date || Blessd.Date.today(current_user)
     }
   end
 
