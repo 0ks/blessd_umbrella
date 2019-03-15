@@ -9,6 +9,21 @@ defmodule BlessdWeb.MeetingController do
     end
   end
 
+  def show(conn, %{"id" => id} = params) do
+    tab = params["tab"]
+    user = conn.assigns.current_user
+    with {:ok, meeting} <- Observance.find_meeting(id, user),
+         {:ok, missed_people} <- load_missed_people(id, user, tab) do
+      render(conn, "show.html", tab: tab, meeting: meeting, missed_people: missed_people)
+    end
+  end
+
+  defp load_missed_people(id, user, "missed_people") do
+    Observance.list_people(user, filter: "missed", date: Date.utc_today(), meeting_id: id)
+  end
+
+  defp load_missed_people(_, _, _), do: {:ok, []}
+
   def new(conn, _params) do
     with {:ok, changeset} <- Observance.new_meeting_changeset(conn.assigns.current_user) do
       render(conn, "new.html", changeset: changeset)

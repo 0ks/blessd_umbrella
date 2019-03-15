@@ -1,0 +1,22 @@
+.missed-meeting-select {
+  margin-bottom: 1rem;
+}
+
+.missed-meeting-table {
+  margin-bottom: -8px;
+}
+
+.missed-meeting-person-name {
+  max-width: 0rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.missed-meeting-person-quantity {
+  width: 1rem;
+}
+
+.today-meeting-select-content {
+  padding-bottom: 0;
+}

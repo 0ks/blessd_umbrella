@@ -11,15 +11,14 @@ defmodule Blessd.Observance.Meetings.Occurrences do
   alias Blessd.Shared
 
   @doc false
-  def list(user, opts) when is_list(opts) do
-    list(user, Enum.into(opts, %{filter: []}))
-  end
+  def list(user, opts) do
+    opts = Keyword.merge([filter: []], opts)
 
-  def list(user, %{filter: filter}) do
     with {:ok, query} <- Shared.authorize(Occurrence, user) do
       query
       |> preload()
-      |> apply_filter(filter)
+      |> apply_filter(opts[:filter])
+      |> order()
       |> Repo.list()
     end
   end
@@ -96,10 +95,20 @@ defmodule Blessd.Observance.Meetings.Occurrences do
   end
 
   @doc false
-  def preload(query), do: preload(query, [o], [:meeting])
+  def preload(query) do
+    query
+    |> join(:inner, [o], m in assoc(o, :meeting), as: :meeting)
+    |> preload([o, meeting: m], [meeting: m])
+  end
 
   @doc false
-  def order(query), do: order_by(query, [o], desc: o.date)
+  def order(query) do
+    if has_named_binding?(query, :meeting) do
+      order_by(query, [o, meeting: m], asc: m.name, desc: o.date)
+    else
+      order_by(query, [o], desc: o.date)
+    end
+  end
 
   @doc false
   def apply_filter(query, []), do: query

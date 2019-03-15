@@ -72,6 +72,11 @@
         </div>
       </div>
       <div class="panel-block">
+        <%= link gettext("Meeting details"),
+          to: Routes.meeting_path(@conn, :show, @current_user.church.slug, @occurrence.meeting_id),
+          class: "button is-fullwidth" %>
+      </div>
+      <div class="panel-block">
         <%= link gettext("Back"),
           to: Routes.meeting_path(@conn, :index, @current_user.church.slug),
           class: "button is-fullwidth" %>
@@ -88,7 +93,7 @@
         </tr>
       </thead>
       <tbody class="js-people-body" data-occurrence-id="<%= @occurrence.id %>">
-        <%= render "table_body.html", people: @people, occurrence: @occurrence %>
+        <%= render "attendants_table_body.html", people: @people, occurrence: @occurrence %>
       </tbody>
     </table>
   </div>

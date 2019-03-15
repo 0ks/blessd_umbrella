@@ -1,0 +1,61 @@
+<h1 class="title has-text-centered"><%= @meeting.name %></h1>
+
+<div class="tabs is-centered">
+  <ul>
+    <li class="<%= if @tab == nil, do: "is-active" %>">
+      <%= link gettext("Occurrences"),
+        to: Routes.meeting_path(@conn, :show, @current_user.church.slug, @meeting.id) %>
+    </li>
+    <li class="<%= if @tab == "missed_people", do: "is-active" %>">
+      <%= link gettext("Missing people"),
+        to: Routes.meeting_path(
+          @conn,
+          :show,
+          @current_user.church.slug,
+          @meeting.id,
+          tab: "missed_people"
+        ) %>
+    </li>
+  </ul>
+</div>
+
+<%= case @tab do %>
+  <% "missed_people" -> %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th><%= gettext("Person") %></th>
+          <th><%= gettext("Missed") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for person <- @missed_people do %>
+          <tr>
+            <td><%= person.name %></td>
+            <td><%= person.missed %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  <% nil -> %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th><%= gettext("Date") %></th>
+
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render MeetingOccurrenceView, "table_body.html",
+          occurrences: @meeting.occurrences,
+          conn: @conn,
+          current_user: @current_user %>
+      </tbody>
+    </table>
+<% end %>
+
+<%= link gettext("Back"),
+  to: Routes.meeting_path(@conn, :index, @current_user.church.slug),
+  class: "button" %>

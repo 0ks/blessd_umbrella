@@ -13,6 +13,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~bulma/sass/components/modal";
 @import "~bulma/sass/components/navbar";
 @import "~bulma/sass/components/panel";
+@import "~bulma/sass/components/tabs";
 @import "~bulma/sass/layout/hero";
 
 @import "~pikaday/scss/pikaday";
@@ -26,6 +27,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "container";
 @import "dropdown";
 
+@import "views/dashboard";
 @import "views/meeting";
 @import "views/meeting_occurrence";
 @import "views/session";

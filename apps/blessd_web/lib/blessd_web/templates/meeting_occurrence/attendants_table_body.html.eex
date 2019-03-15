@@ -1,0 +1,5 @@
+<%= for person <- @people do %>
+  <tr class="js-person" data-id="<%= person.id %>">
+    <%= render "attendants_table_row.html", person: person, occurrence: @occurrence %>
+  </tr>
+<% end %>

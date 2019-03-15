@@ -11,7 +11,7 @@ defmodule Blessd.Observance do
   @doc """
   Returns the list of meetings.
   """
-  def list_meetings(current_user), do: Meetings.list(current_user)
+  def list_meetings(current_user, opts \\ []), do: Meetings.list(current_user, opts)
 
   @doc """
   Gets a single meeting.

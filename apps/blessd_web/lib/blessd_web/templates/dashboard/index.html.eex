@@ -4,41 +4,8 @@
 
 <%= if show_any_card?(@resources) do %>
   <div class="columns is-multiline">
-    <div class="column is-one-third">
-      <%= if show_card?(:todays_meetings, @resources) do %>
-        <%= for {occurrence, stats} <- @resources.todays_meetings do %>
-          <div class="card">
-            <header class="card-header">
-              <p class="card-header-title">
-                <%= gettext("%{meeting} today!", meeting: occurrence.meeting.name) %>
-              </p>
-            </header>
-            <div class="card-content">
-              <div class="columns">
-                <div class="column has-text-centered">
-                  <h1 class="title"><%= stats.present %></h1>
-                  <h2 class="subtitle"><%= gettext("Present") %></h2>
-                </div>
-                <div class="column has-text-centered">
-                  <h1 class="title"><%= stats.missing %></h1>
-                  <h2 class="subtitle"><%= gettext("Missing") %></h2>
-                </div>
-              </div>
-            </div>
-            <footer class="card-footer">
-              <%= link gettext("Attendance"),
-                to: Routes.meeting_occurrence_path(
-                  @conn,
-                  :show,
-                  @current_user.church.slug,
-                  occurrence
-                ),
-                class: "card-footer-item" %>
-            </footer>
-          </div>
-        <% end %>
-      <% end %>
-      <%= if show_card?(:confirmation, @resources) do %>
+    <%= if show_card?(:confirmation, @resources) do %>
+      <div class="column is-one-third">
         <div class="card">
           <header class="card-header">
             <p class="card-header-title">
@@ -70,8 +37,101 @@
               class: "card-footer-item" %>
           </footer>
         </div>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
+
+    <%= if show_card?(:todays_meetings, @resources) do %>
+      <div class="column is-one-third">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              <%= gettext("Today's meetings") %>
+            </p>
+          </header>
+          <div class="card-content today-meeting-select-content">
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select class="js-today-meeting-select">
+                  <%= for {occurrence, _} <- @resources.todays_meetings do %>
+                    <option value="<%= occurrence.id %>">
+                      <%= occurrence.meeting.name %>
+                    </option>
+                  <% end %>
+                </select>
+              </div>
+            </div>
+          </div>
+          <%= for {occurrence, stats} <- @resources.todays_meetings do %>
+            <div class="js-today-meeting-occurrence is-hidden" data-id="<%= occurrence.id %>">
+              <div class="card-content">
+                <div class="columns">
+                  <div class="column has-text-centered">
+                    <h1 class="title"><%= stats.present %></h1>
+                    <h2 class="subtitle"><%= gettext("Present") %></h2>
+                  </div>
+                  <div class="column has-text-centered">
+                    <h1 class="title"><%= stats.missing %></h1>
+                    <h2 class="subtitle"><%= gettext("Missing") %></h2>
+                  </div>
+                </div>
+              </div>
+              <footer class="card-footer">
+                <%= link gettext("Details"),
+                  to: Routes.meeting_occurrence_path(
+                    @conn,
+                    :show,
+                    @current_user.church.slug,
+                    occurrence
+                  ),
+                  class: "card-footer-item" %>
+              </footer>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= if show_card?(:most_missed, @resources) do %>
+      <div class="column is-one-third">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              <%= gettext("Most missed people") %>
+            </p>
+          </header>
+          <div class="card-content">
+            <% path = Routes.dashboard_path(@conn, :index, @current_user.church.slug) %>
+            <%= form_for @conn, path, [method: :get, class: "js-missed-meeting-form"], fn f -> %>
+              <div class="control missed-meeting-select">
+                <div class="select is-fullwidth">
+                  <%= select f, :missed_meeting_id, @resources.meetings,
+                    class: "js-missed-meeting-select" %>
+                </div>
+              </div>
+            <% end %>
+            <table class="table missed-meeting-table">
+              <%= for person <- @resources.most_missed do %>
+                <tr>
+                  <td class="missed-meeting-person-name"><%= person.name %></td>
+                  <td class="missed-meeting-person-quantity"><%= person.missed %></td>
+                </li>
+              <% end %>
+            </table>
+          </div>
+          <footer class="card-footer">
+            <%= link gettext("Details"),
+              to: Routes.meeting_path(
+                @conn,
+                :show,
+                @current_user.church.slug,
+                @resources.missed_meeting_id,
+                tab: "missed_people"
+              ),
+              class: "card-footer-item" %>
+          </footer>
+        </div>
+      </div>
+    <% end %>
   </div>
 <% else %>
   <div class="hero is-large">
