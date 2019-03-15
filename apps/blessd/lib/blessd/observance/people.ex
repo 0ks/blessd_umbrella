@@ -41,6 +41,7 @@ defmodule Blessd.Observance.People do
            |> apply_limit(filter, limit)
            |> Repo.list() do
       missing = missing(date, meeting_id, filter)
+
       people =
         people
         |> populate_virtual_fields(occurrence, missing)
@@ -144,14 +145,14 @@ defmodule Blessd.Observance.People do
     |> join(:full, [p], a in assoc(p, :attendants), as: :attendants)
     |> where(
       [p, attendants: a],
-        (fragment(
-           "NOT EXISTS(?)",
-           fragment(
-             "SELECT * FROM attendants AS a WHERE a.occurrence_id = ? AND a.person_id = ?",
-             ^occurrence_id,
-             p.id
-           )
-         ) or (a.occurrence_id == ^occurrence_id and a.present == false))
+      fragment(
+        "NOT EXISTS(?)",
+        fragment(
+          "SELECT * FROM attendants AS a WHERE a.occurrence_id = ? AND a.person_id = ?",
+          ^occurrence_id,
+          p.id
+        )
+      ) or (a.occurrence_id == ^occurrence_id and a.present == false)
     )
     |> select([p, attendants: a], p.id)
     |> Repo.all()

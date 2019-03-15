@@ -11,7 +11,7 @@ defmodule BlessdWeb.DashboardController do
            skip_unconfirmed(fn ->
              Observance.list_meetings(user, for_select: true)
            end),
-         missed_meeting_id = params["missed_meeting_id"]  || first_id(meetings),
+         missed_meeting_id = params["missed_meeting_id"] || first_id(meetings),
          {:ok, most_missed} <-
            skip_unconfirmed(fn ->
              Observance.list_people(
@@ -37,7 +37,7 @@ defmodule BlessdWeb.DashboardController do
   defp first_id([]), do: nil
   defp first_id([{_, id} | _]), do: id
 
-  defp todays_meetings(user ) do
+  defp todays_meetings(user) do
     with {:ok, occurrences} <-
            skip_unconfirmed(fn ->
              Observance.list_occurrences(user, filter: [date: Date.utc_today()])

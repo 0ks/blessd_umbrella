@@ -12,6 +12,7 @@ defmodule BlessdWeb.MeetingController do
   def show(conn, %{"id" => id} = params) do
     tab = params["tab"]
     user = conn.assigns.current_user
+
     with {:ok, meeting} <- Observance.find_meeting(id, user),
          {:ok, missed_people} <- load_missed_people(id, user, tab) do
       render(conn, "show.html", tab: tab, meeting: meeting, missed_people: missed_people)

@@ -98,7 +98,7 @@ defmodule Blessd.Observance.Meetings.Occurrences do
   def preload(query) do
     query
     |> join(:inner, [o], m in assoc(o, :meeting), as: :meeting)
-    |> preload([o, meeting: m], [meeting: m])
+    |> preload([o, meeting: m], meeting: m)
   end
 
   @doc false
