@@ -6,10 +6,11 @@ defmodule BlessdWeb.LanguagePlug do
   def call(conn, _opts) do
     valid_languages = Shared.languages()
 
-    fallback = case conn.assigns[:current_user] do
-      nil -> Shared.default_language()
-      user -> user.church.language
-    end
+    fallback =
+      case conn.assigns[:current_user] do
+        nil -> Shared.default_language()
+        user -> user.church.language
+      end
 
     language =
       conn
@@ -23,4 +24,3 @@ defmodule BlessdWeb.LanguagePlug do
     conn
   end
 end
-
