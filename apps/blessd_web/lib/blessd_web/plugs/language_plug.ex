@@ -1,6 +1,4 @@
 defmodule BlessdWeb.LanguagePlug do
-  import Plug.Conn
-
   alias Blessd.Shared
 
   def init(opts), do: opts

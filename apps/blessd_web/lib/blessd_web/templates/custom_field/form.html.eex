@@ -2,7 +2,7 @@
   <%= error_alert(f) %>
 
   <div class="field">
-    <%= label f, :name, class: "label" %>
+    <%= label f, :name, gettext("Name"), class: "label" %>
     <div class="control">
       <%= text_input f, :name %>
     </div>
@@ -10,7 +10,7 @@
   </div>
 
   <div class="field">
-    <%= label f, :type, class: "label" %>
+    <%= label f, :type, gettext("Type"), class: "label" %>
     <div class="control">
       <%= select f, :type, type_options() %>
     </div>

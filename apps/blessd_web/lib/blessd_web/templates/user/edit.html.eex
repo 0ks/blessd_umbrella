@@ -14,7 +14,7 @@
       <%= error_alert(f) %>
 
       <div class="field">
-        <%= label f, :name, class: "label" %>
+        <%= label f, :name, gettext("Name"), class: "label" %>
         <div class="control">
           <%= text_input f, :name %>
         </div>
@@ -22,7 +22,7 @@
       </div>
 
       <div class="field">
-        <%= label f, :email, class: "label" %>
+        <%= label f, :email, gettext("Email"), class: "label" %>
         <div class="control">
           <%= text_input f, :email %>
         </div>

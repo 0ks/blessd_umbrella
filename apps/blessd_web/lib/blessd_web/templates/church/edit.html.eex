@@ -13,7 +13,7 @@
       <%= error_alert(f) %>
 
       <div class="field">
-        <%= label f, :name, class: "label" %>
+        <%= label f, :name, gettext("Name"), class: "label" %>
         <div class="control">
           <%= text_input f, :name %>
         </div>
@@ -21,7 +21,7 @@
       </div>
 
       <div class="field">
-        <%= label f, :slug, class: "label" %>
+        <%= label f, :slug, gettext("URL"), class: "label" %>
         <div class="control">
           <%= text_input f, :slug %>
         </div>
@@ -37,9 +37,9 @@
       </div>
 
       <div class="field">
-        <%= label f, :language, class: "label" %>
+        <%= label f, :language, gettext("Language"), class: "label" %>
         <div class="control">
-          <%= select f, :language, SharedView.languages_for_select(), input: [prompt: gettext("Church Language")] %>
+          <%= select f, :language, SharedView.languages_for_select() %>
         </div>
         <%= error_tag f, :language %>
       </div>
