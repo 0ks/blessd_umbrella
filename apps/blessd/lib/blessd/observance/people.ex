@@ -10,12 +10,27 @@ defmodule Blessd.Observance.People do
   alias Blessd.Repo
   alias Blessd.Shared
 
+  @default_list_opts %{
+    filter: nil,
+    order: nil,
+    search: nil,
+    occurrence: nil,
+    date: nil,
+    meeting_id: nil,
+    limit: nil
+  }
+
   @doc false
   def list(user, opts) when is_list(opts) do
-    list(user, Enum.into(opts, %{occurrence: nil, filter: nil, search: nil}))
-  end
+    %{
+      filter: filter,
+      search: search,
+      occurrence: occurrence,
+      date: date,
+      meeting_id: meeting_id,
+      limit: limit
+    } = Enum.into(opts, @default_list_opts)
 
-  def list(user, %{occurrence: occurrence, filter: filter, search: search}) do
     with {:ok, query} <- Shared.authorize(Person, user),
          {:ok, people} <-
            query
@@ -23,8 +38,17 @@ defmodule Blessd.Observance.People do
            |> apply_filter(filter, occurrence)
            |> search(search)
            |> order()
+           |> apply_limit(filter, limit)
            |> Repo.list() do
-      {:ok, populate_virtual_fields(people, occurrence)}
+      missing = missing(date, meeting_id, filter)
+
+      people =
+        people
+        |> populate_virtual_fields(occurrence, missing)
+        |> order_by_virtual_fields(filter)
+        |> limit_by_virtual_fields(filter, limit)
+
+      {:ok, people}
     end
   end
 
@@ -40,19 +64,36 @@ defmodule Blessd.Observance.People do
     end
   end
 
-  defp populate_virtual_fields(people, nil), do: people
+  defp populate_virtual_fields(people, occurrence, missing \\ %{})
 
-  defp populate_virtual_fields(people, occurrence) when is_list(people) do
-    Enum.map(people, &populate_virtual_fields(&1, occurrence))
+  defp populate_virtual_fields(people, occurrence, missing) when is_list(people) do
+    Enum.map(people, &populate_virtual_fields(&1, occurrence, missing))
   end
 
-  defp populate_virtual_fields(person, occurrence) do
+  defp populate_virtual_fields(person, occurrence, missing) do
     %{
       person
       | state: state(person, occurrence),
-        already_visited: already_visited?(person, occurrence)
+        already_visited: already_visited?(person, occurrence),
+        missed: Map.get(missing, person.id, 0)
     }
   end
+
+  defp order_by_virtual_fields(people, "missed") do
+    Enum.sort_by(people, & &1.missed, &>=/2)
+  end
+
+  defp order_by_virtual_fields(people, _), do: people
+
+  defp limit_by_virtual_fields(people, _, nil), do: people
+
+  defp limit_by_virtual_fields(people, "missed", limit) do
+    Enum.take(people, limit)
+  end
+
+  defp limit_by_virtual_fields(people, _, _), do: people
+
+  defp state(_, nil), do: nil
 
   defp state(%Person{attendants: attendants}, %Occurrence{id: occurrence_id}) do
     case Enum.find(attendants, &(&1.occurrence_id == occurrence_id)) do
@@ -68,6 +109,8 @@ defmodule Blessd.Observance.People do
     end
   end
 
+  defp already_visited?(_, nil), do: nil
+
   defp already_visited?(%Person{attendants: attendants}, occurrence) do
     Enum.count(attendants, &already_visited?(&1, occurrence)) > 0
   end
@@ -76,6 +119,43 @@ defmodule Blessd.Observance.People do
     attendant.present and attendant.occurrence_id != oid and
       attendant.occurrence.meeting_id == mid and
       (attendant.occurrence.date <= date or attendant.first_time_visitor)
+  end
+
+  defp missing(date, meeting_id, _) when nil in [date, meeting_id], do: %{}
+
+  defp missing(date, meeting_id, "missed") do
+    occurrence_ids =
+      Occurrence
+      |> where([o], o.date <= ^date and o.meeting_id == ^meeting_id)
+      |> select([o], o.id)
+      |> Repo.all()
+
+    # TODO there is N + 1 queries here, one for each occurrence of that meeting
+    occurrence_ids
+    |> Stream.flat_map(&missing/1)
+    |> Enum.reduce(%{}, fn id, result ->
+      Map.update(result, id, 1, &(&1 + 1))
+    end)
+  end
+
+  defp missing(_, _, _), do: %{}
+
+  defp missing(occurrence_id) do
+    Person
+    |> join(:full, [p], a in assoc(p, :attendants), as: :attendants)
+    |> where(
+      [p, attendants: a],
+      fragment(
+        "NOT EXISTS(?)",
+        fragment(
+          "SELECT * FROM attendants AS a WHERE a.occurrence_id = ? AND a.person_id = ?",
+          ^occurrence_id,
+          p.id
+        )
+      ) or (a.occurrence_id == ^occurrence_id and a.present == false)
+    )
+    |> select([p, attendants: a], p.id)
+    |> Repo.all()
   end
 
   @doc false
@@ -111,6 +191,11 @@ defmodule Blessd.Observance.People do
   def by_occurrence(query, %Occurrence{id: occurrence_id}) do
     where(query, [attendants: a], a.occurrence_id == ^occurrence_id)
   end
+
+  @doc false
+  def apply_limit(query, _, nil), do: query
+  def apply_limit(query, "missed", _), do: query
+  def apply_limit(query, _, limit), do: limit(query, ^limit)
 
   @doc false
   def apply_filter(query, "present", occ) do

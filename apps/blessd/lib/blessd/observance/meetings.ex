@@ -14,18 +14,31 @@ defmodule Blessd.Observance.Meetings do
   alias Ecto.Multi
 
   @doc false
-  def list(current_user) do
+  def list(current_user, opts) do
     with {:ok, query} <- Shared.authorize(Meeting, current_user) do
       query
-      |> preload()
+      |> apply_opts(opts)
+      |> apply_preload(opts)
       |> order()
       |> Repo.list()
     end
   end
 
+  defp apply_opts(query, []), do: query
+
+  defp apply_opts(query, [{:for_select, true} | rest]) do
+    query
+    |> select([m], {m.name, m.id})
+    |> apply_opts(rest)
+  end
+
   @doc false
   def find(id, current_user) do
-    with {:ok, query} <- Shared.authorize(Meeting, current_user), do: Repo.find(query, id)
+    with {:ok, query} <- Shared.authorize(Meeting, current_user) do
+      query
+      |> apply_preload()
+      |> Repo.find(id)
+    end
   end
 
   @doc false
@@ -104,12 +117,16 @@ defmodule Blessd.Observance.Meetings do
   end
 
   @doc false
-  def preload(query) do
-    occurrences_query = Occurrences.order(Occurrence)
+  def apply_preload(query, opts \\ []) do
+    if {:for_select, true} in opts do
+      query
+    else
+      occurrences_query = Occurrences.order(Occurrence)
 
-    preload(query, [s], occurrences: ^occurrences_query)
+      preload(query, [s], occurrences: ^occurrences_query)
+    end
   end
 
   @doc false
-  def order(query), do: order_by(query, [s], desc: s.name)
+  def order(query), do: order_by(query, [s], asc: s.name)
 end
