@@ -31,11 +31,17 @@
       <div class="field">
         <%= label f, :timezone, class: "label" %>
         <div class="control">
-          <div class="select is-fullwidth">
-            <%= select f, :timezone, Timex.timezones(), prompt: gettext("Timezone") %>
-          </div>
+          <%= select f, :timezone, Timex.timezones(), input: [prompt: gettext("Timezone")] %>
         </div>
         <%= error_tag f, :timezone %>
+      </div>
+
+      <div class="field">
+        <%= label f, :language, class: "label" %>
+        <div class="control">
+          <%= select f, :language, SharedView.languages_for_select(), input: [prompt: gettext("Church Language")] %>
+        </div>
+        <%= error_tag f, :language %>
       </div>
 
       <div class="buttons">

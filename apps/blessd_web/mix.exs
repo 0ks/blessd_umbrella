@@ -56,7 +56,8 @@ defmodule BlessdWeb.Mixfile do
       {:phoenix_pubsub, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:excoveralls, "~> 0.10.6", only: [:dev, :test]},
-      {:timex, "~> 3.4"}
+      {:timex, "~> 3.4"},
+      {:plug_accept_language, "~> 0.1.0"}
     ]
   end
 

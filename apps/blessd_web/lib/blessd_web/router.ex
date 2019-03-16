@@ -13,10 +13,16 @@ defmodule BlessdWeb.Router do
     plug BlessdWeb.AuthenticationPlug
   end
 
-  forward "/sent_emails", Bamboo.SentEmailViewerPlug
+  pipeline :language do
+    plug BlessdWeb.LanguagePlug
+  end
+
+  if Mix.env() == :dev do
+    forward "/sent_emails", Bamboo.SentEmailViewerPlug
+  end
 
   scope "/", BlessdWeb do
-    pipe_through :browser
+    pipe_through [:browser, :language]
 
     get "/", PageController, :index
 
@@ -27,7 +33,7 @@ defmodule BlessdWeb.Router do
   end
 
   scope "/:church_slug", BlessdWeb do
-    pipe_through :browser
+    pipe_through [:browser, :language]
 
     resources "/confirmation", ConfirmationController, only: [:show]
     resources "/invitation", InvitationController, only: [:edit, :update]
@@ -35,7 +41,7 @@ defmodule BlessdWeb.Router do
   end
 
   scope "/:church_slug", BlessdWeb do
-    pipe_through [:browser, :authenticated]
+    pipe_through [:browser, :authenticated, :language]
 
     get "/", DashboardController, :index
 

@@ -16,6 +16,7 @@ defmodule Blessd.Shared do
   alias Blessd.Shared.Churches.Church
   alias Blessd.Shared.CustomData
   alias Blessd.Shared.Fields
+  alias Blessd.Shared.Languages
   alias Blessd.Shared.Users
   alias Blessd.Shared.Users.User
 
@@ -60,4 +61,14 @@ defmodule Blessd.Shared do
   Returns the custom field name
   """
   def custom_field_name(field), do: Fields.name(field)
+
+  @doc """
+  Returns the valid languages
+  """
+  def languages, do: Languages.list()
+
+  @doc """
+  Returns the default language
+  """
+  def default_language, do: Languages.default()
 end

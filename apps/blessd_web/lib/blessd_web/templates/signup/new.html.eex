@@ -35,9 +35,17 @@
 
         <div class="field">
           <div class="control has-icons-left">
-            <div class="select is-fullwidth">
-              <%= select ff, :timezone, Timex.timezones(), prompt: gettext("Timezone") %>
-            </div>
+            <%= select ff, :language, SharedView.languages_for_select(), input: [prompt: gettext("Church Language")] %>
+            <span class="icon is-left">
+              <i class="fas fa-language"></i>
+            </span>
+          </div>
+          <%= error_tag ff, :language %>
+        </div>
+
+        <div class="field">
+          <div class="control has-icons-left">
+            <%= select ff, :timezone, Timex.timezones(), input: [prompt: gettext("Timezone")] %>
             <span class="icon is-left">
               <i class="fas fa-clock"></i>
             </span>

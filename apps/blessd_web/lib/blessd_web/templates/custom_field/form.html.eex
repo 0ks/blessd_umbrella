@@ -12,9 +12,7 @@
   <div class="field">
     <%= label f, :type, class: "label" %>
     <div class="control">
-      <div class="select is-fullwidth">
-        <%= select f, :type, type_options() %>
-      </div>
+      <%= select f, :type, type_options() %>
     </div>
     <%= error_tag f, :type %>
   </div>
