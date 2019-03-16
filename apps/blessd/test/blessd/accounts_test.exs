@@ -23,6 +23,12 @@ defmodule Blessd.AccountsTest do
       assert found.name == church.name
       assert found.slug == church.slug
 
+      church = convert_struct!(church, Church)
+      assert {:ok, found} = church.id |> to_string() |> Accounts.find_church(current_user)
+
+      assert found.name == church.name
+      assert found.slug == church.slug
+
       assert {:ok, found} = Accounts.find_church(church.slug, current_user)
 
       assert found.name == church.name
@@ -78,6 +84,61 @@ defmodule Blessd.AccountsTest do
 
       church = convert_struct!(church, Church)
       assert {:ok, %Ecto.Changeset{}} = Accounts.change_church(church, current_user)
+    end
+  end
+
+  describe "users" do
+    alias Blessd.Accounts.User
+
+    @update_attrs %{name: "some updated name", email: "some@updated.email"}
+    @invalid_attrs %{name: nil, email: nil}
+
+    test "list_users/0 returns all users" do
+      user = signup()
+      assert {:ok, [found]} = Accounts.list_users(user)
+      assert found.name == user.name
+    end
+
+    test "find_user/1 returns the user with given id" do
+      user = signup()
+      assert {:ok, found} = Accounts.find_user(user.id, user)
+      assert found.name == user.name
+    end
+
+    test "update_user/2 with valid data updates the user" do
+      user = signup()
+      acc_user = convert_struct!(user, User)
+      assert {:ok, %User{} = user} = Accounts.update_user(acc_user, @update_attrs, user)
+      assert user.name == "some updated name"
+    end
+
+    test "update_user/2 with invalid data returns error changeset" do
+      user = signup()
+      acc_user = convert_struct!(user, User)
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(acc_user, @invalid_attrs, user)
+      assert {:ok, found} = Accounts.find_user(user.id, user)
+      assert found.name == user.name
+    end
+
+    test "delete_user/1 deletes the user" do
+      user = signup()
+      acc_user = convert_struct!(user, User)
+      assert {:ok, %User{}} = Accounts.delete_user(acc_user, user)
+      assert {:error, :not_found} == Accounts.find_user(acc_user.id, user)
+    end
+
+    test "change_user/1 returns a changeset to change a user" do
+      user = signup()
+      acc_user = convert_struct!(user, User)
+      assert {:ok, %Ecto.Changeset{}} = Accounts.change_user(acc_user, user)
+    end
+
+    test "authorized?/3 returns if a given action is authorized" do
+      user = signup()
+      acc_user = convert_struct!(user, User)
+      assert Accounts.authorized?(acc_user, :change, user) == true
+      assert Accounts.authorized?(User, :list, user) == true
+      assert Accounts.authorized?(%User{}, :list, user) == false
     end
   end
 end

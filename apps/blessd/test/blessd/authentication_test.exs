@@ -48,4 +48,8 @@ defmodule Blessd.AuthenticationTest do
                church_slug: church.slug
              })
   end
+
+  test "new_session returns a changeset to a new session" do
+    assert %Ecto.Changeset{} = Authentication.new_session()
+  end
 end

@@ -8,8 +8,8 @@ defmodule Blessd.Invitation.Accept do
   alias Blessd.Invitation.User
 
   embedded_schema do
-    belongs_to(:user, User)
-    belongs_to(:credential, Credential)
+    belongs_to(:user, User, on_replace: :update)
+    belongs_to(:credential, Credential, on_replace: :update)
   end
 
   @doc false

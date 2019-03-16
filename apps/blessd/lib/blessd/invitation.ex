@@ -78,11 +78,7 @@ defmodule Blessd.Invitation do
   def change_accept(accept), do: {:ok, Accept.changeset(accept, %{})}
 
   def new_user(current_user) do
-    authorize(
-      %User{church_id: current_user.church_id, church: current_user.church},
-      :new,
-      current_user
-    )
+    authorize(%User{church_id: current_user.church_id}, :new, current_user)
   end
 
   def change_user(user, current_user) do

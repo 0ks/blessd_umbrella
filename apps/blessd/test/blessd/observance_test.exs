@@ -208,6 +208,14 @@ defmodule Blessd.ObservanceTest do
              }
     end
 
+    test "list_people/2 lists the people" do
+      user = signup()
+      {:ok, _} = Memberships.create_person(%{name: "John", is_member: false}, user)
+      assert {:ok, [found]} = Observance.list_people(user)
+
+      assert found.name == "John"
+    end
+
     test "update_attendant_state/2 updates the attendant state" do
       user = signup()
       %{occurrences: [occurrence]} = meeting_fixture(user)
@@ -268,6 +276,21 @@ defmodule Blessd.ObservanceTest do
                recurrent: 1,
                total: 0,
                unknown: 0
+             }
+
+      assert {:ok, _} =
+               Observance.update_attendant_state(person.id, occurrence.id, "unknown", user)
+
+      assert {:ok, stats} = Observance.attendance_stats(occurrence, user)
+
+      assert stats == %{
+               absent: 0,
+               first_time: 0,
+               missing: 1,
+               present: 0,
+               recurrent: 0,
+               total: 0,
+               unknown: 1
              }
     end
   end
