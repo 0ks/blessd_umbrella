@@ -34,7 +34,19 @@ defmodule Blessd.SignupTest do
     assert Comeonin.Bcrypt.checkpw("password", credential.token)
   end
 
+  test "register/1 returns error for duplicated registers" do
+    assert {:ok, %User{}} = Signup.register(@valid_attrs)
+    assert {:error, %Ecto.Changeset{}} = Signup.register(@valid_attrs)
+  end
+
   test "register/1 with invalid data returns error changeset" do
     assert {:error, %Ecto.Changeset{}} = Signup.register(@invalid_attrs)
+  end
+
+  test "new_registration/0 returns a changeset for a new signup" do
+    assert %Ecto.Changeset{data: data} = Signup.new_registration()
+    assert data.church == %Church{}
+    assert data.user == %User{}
+    assert data.credential == %Credential{source: "password"}
   end
 end

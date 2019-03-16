@@ -22,8 +22,9 @@ defmodule Blessd.Shared.CustomData do
         {key, _} when is_atom(key) -> types[key] != nil
         {"field" <> id, _} -> String.to_integer(id) in field_ids
       end)
-      |> Stream.map(fn {key, value} ->
-        {String.to_existing_atom(key), value}
+      |> Stream.map(fn
+        {key, value} when is_binary(key) -> {String.to_existing_atom(key), value}
+        {key, value} when is_atom(key) -> {key, value}
       end)
       |> Enum.into(%{})
 
