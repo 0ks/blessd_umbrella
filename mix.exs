@@ -5,7 +5,14 @@ defmodule Blessd.Umbrella.Mixfile do
     [
       apps_path: "apps",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -22,6 +29,9 @@ defmodule Blessd.Umbrella.Mixfile do
   # Dependencies listed here are available only for this project
   # and cannot be accessed from applications inside the apps folder
   defp deps do
-    [{:distillery, "~> 2.0", runtime: false}]
+    [
+      {:excoveralls, "~> 0.10.6", only: [:dev, :test]},
+      {:distillery, "~> 2.0", runtime: false}
+    ]
   end
 end
