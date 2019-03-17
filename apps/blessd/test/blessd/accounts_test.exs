@@ -89,6 +89,7 @@ defmodule Blessd.AccountsTest do
 
   describe "users" do
     alias Blessd.Accounts.User
+    alias Blessd.Shared.Users.User, as: SharedUser
 
     @update_attrs %{name: "some updated name", email: "some@updated.email"}
     @invalid_attrs %{name: nil, email: nil}
@@ -139,6 +140,17 @@ defmodule Blessd.AccountsTest do
       assert Accounts.authorized?(acc_user, :change, user) == true
       assert Accounts.authorized?(User, :list, user) == true
       assert Accounts.authorized?(%User{}, :list, user) == false
+    end
+
+    test "invitation_pending? returns if the users has an inviation pending" do
+      assert User.invitation_pending?(%User{invitation_token: nil}) == false
+      assert User.invitation_pending?(%User{invitation_token: "blablabla"}) == true
+    end
+
+    test "invitation_expired? returns if the users has an inviation expired" do
+      assert User.invitation_expired?(%User{invitation_token: nil}) == false
+      assert User.invitation_expired?(%User{invitation_token: SharedUser.generate_token(60)}) == false
+      assert User.invitation_expired?(%User{invitation_token: SharedUser.generate_token(-1)}) == true
     end
   end
 end

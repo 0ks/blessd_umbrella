@@ -46,4 +46,3 @@ defmodule BlessdWeb.CustomFieldChannelTest do
     assert_reply ref, :error, %{message: "Unauthorized user"}
   end
 end
-

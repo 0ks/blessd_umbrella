@@ -32,20 +32,24 @@ defmodule BlessdWeb.MeetingOccurrenceChannelTest do
       |> socket("meeting_occurrence:lobby", %{current_user: user})
       |> subscribe_and_join(MeetingOccurrenceChannel, "meeting_occurrence:lobby")
 
-    ref = push(
-      socket,
-      "search",
-      %{"meeting_occurrence_id" => occurrence.id, "query" => "jo", "filter" => nil}
-    )
+    ref =
+      push(
+        socket,
+        "search",
+        %{"meeting_occurrence_id" => occurrence.id, "query" => "jo", "filter" => nil}
+      )
+
     assert_reply ref, :ok, %{table_body: table_body}
     assert table_body =~ "John"
     refute table_body =~ "Mary"
 
-    ref = push(
-      socket,
-      "search",
-      %{"meeting_occurrence_id" => occurrence.id, "query" => "ma", "filter" => nil}
-    )
+    ref =
+      push(
+        socket,
+        "search",
+        %{"meeting_occurrence_id" => occurrence.id, "query" => "ma", "filter" => nil}
+      )
+
     assert_reply ref, :ok, %{table_body: table_body}
     refute table_body =~ "John"
     assert table_body =~ "Mary"
@@ -61,11 +65,16 @@ defmodule BlessdWeb.MeetingOccurrenceChannelTest do
       |> socket("meeting_occurrence:lobby", %{current_user: user})
       |> subscribe_and_join(MeetingOccurrenceChannel, "meeting_occurrence:lobby")
 
-    ref = push(
-      socket,
-      "create",
-      %{"meeting_occurrence_id" => occurrence.id, "person" => %{"name" => "Beth", "is_member" => false}}
-    )
+    ref =
+      push(
+        socket,
+        "create",
+        %{
+          "meeting_occurrence_id" => occurrence.id,
+          "person" => %{"name" => "Beth", "is_member" => false}
+        }
+      )
+
     assert_reply ref, :ok, %{table_body: table_body}
     assert table_body =~ "Beth"
   end
@@ -82,13 +91,18 @@ defmodule BlessdWeb.MeetingOccurrenceChannelTest do
       |> socket("meeting_occurrence:lobby", %{current_user: user})
       |> subscribe_and_join(MeetingOccurrenceChannel, "meeting_occurrence:lobby")
 
-    ref = push(
-      socket,
-      "update_state",
-      %{"meeting_occurrence_id" => occurrence.id, "person_id" => person.id, "state" => "recurrent"}
-    )
+    ref =
+      push(
+        socket,
+        "update_state",
+        %{
+          "meeting_occurrence_id" => occurrence.id,
+          "person_id" => person.id,
+          "state" => "recurrent"
+        }
+      )
+
     assert_reply ref, :ok, %{table_row: table_row}
     assert table_row =~ "is-recurrent\n               is-active"
   end
 end
-

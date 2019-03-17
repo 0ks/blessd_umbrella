@@ -20,7 +20,7 @@ defmodule BlessdWeb.MeetingOccurrenceChannel do
          {:ok, people} <-
            Observance.list_people(user, occurrence: occurrence, filter: filter, search: query) do
       html =
-        View.render_to_string(MeetingOccurrenceView, "table_body.html",
+        View.render_to_string(MeetingOccurrenceView, "attendants_table_body.html",
           people: people,
           occurrence: occurrence
         )
@@ -42,7 +42,7 @@ defmodule BlessdWeb.MeetingOccurrenceChannel do
          {:ok, occurrence} <- Observance.find_occurrence(occurrence_id, user),
          {:ok, people} <- Observance.list_people(user, search: person.name) do
       html =
-        View.render_to_string(MeetingOccurrenceView, "table_body.html",
+        View.render_to_string(MeetingOccurrenceView, "attendants_table_body.html",
           people: people,
           occurrence: occurrence
         )
@@ -69,7 +69,7 @@ defmodule BlessdWeb.MeetingOccurrenceChannel do
              user
            ) do
       html =
-        View.render_to_string(MeetingOccurrenceView, "table_row.html",
+        View.render_to_string(MeetingOccurrenceView, "attendants_table_row.html",
           person: person,
           occurrence: occurrence
         )
