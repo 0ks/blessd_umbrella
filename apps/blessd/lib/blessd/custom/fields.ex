@@ -91,10 +91,15 @@ defmodule Blessd.Custom.Fields do
   end
 
   defp validate_reorder(ids, fields) do
-    if Enum.map(fields, & &1.id) -- ids == [] do
+    field_ids =
+      fields
+      |> Stream.map(& &1.id)
+      |> Enum.sort()
+
+    if Enum.sort(ids) == field_ids do
       :ok
     else
-      {:error, :invalid_field_list}
+      {:error, :unauthorized}
     end
   end
 

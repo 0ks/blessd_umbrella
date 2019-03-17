@@ -27,14 +27,8 @@ defmodule BlessdWeb.MeetingOccurrenceChannel do
 
       {:reply, {:ok, %{table_body: html}}, socket}
     else
-      {:error, :not_found} ->
-        {:reply, {:error, %{message: "Occurrence not found"}}, socket}
-
-      {:error, :unauthorized} ->
-        {:reply, {:error, %{message: "Unauthorized user"}}, socket}
-
-      {:error, :unconfirmed} ->
-        {:reply, {:error, %{message: "Unconfirmed user"}}, socket}
+      {:error, reason} ->
+        {:reply, {:error, error_response(reason)}, socket}
     end
   end
 
@@ -55,17 +49,8 @@ defmodule BlessdWeb.MeetingOccurrenceChannel do
 
       {:reply, {:ok, %{table_body: html}}, socket}
     else
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:reply, {:error, errors_from_changeset(changeset)}, socket}
-
-      {:error, :not_found} ->
-        {:reply, {:error, %{message: "Occurrence not found"}}, socket}
-
-      {:error, :unauthorized} ->
-        {:reply, {:error, %{message: "Unauthorized user"}}, socket}
-
-      {:error, :unconfirmed} ->
-        {:reply, {:error, %{message: "Unconfirmed user"}}, socket}
+      {:error, reason} ->
+        {:reply, {:error, error_response(reason)}, socket}
     end
   end
 
@@ -91,19 +76,15 @@ defmodule BlessdWeb.MeetingOccurrenceChannel do
 
       {:reply, {:ok, %{table_row: html}}, socket}
     else
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:reply, {:error, errors_from_changeset(changeset)}, socket}
-
-      {:error, :not_found} ->
-        {:reply, {:error, %{message: "Occurrence not found"}}, socket}
-
-      {:error, :unauthorized} ->
-        {:reply, {:error, %{message: "Unauthorized user"}}, socket}
-
-      {:error, :unconfirmed} ->
-        {:reply, {:error, %{message: "Unconfirmed user"}}, socket}
+      {:error, reason} ->
+        {:reply, {:error, error_response(reason)}, socket}
     end
   end
+
+  defp error_response(%Ecto.Changeset{} = changeset), do: errors_from_changeset(changeset)
+  defp error_response(:not_found), do: %{message: "Occurrence not found"}
+  defp error_response(:unauthorized), do: %{message: "Unauthorized user"}
+  defp error_response(:unconfirmed), do: %{message: "Unconfirmed user"}
 
   defp errors_from_changeset(%Ecto.Changeset{errors: errors}) do
     errors
