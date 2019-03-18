@@ -9,7 +9,7 @@ defmodule BlessdWeb.PersonControllerTest do
   @invalid_attrs %{email: nil, name: nil, is_member: nil}
 
   @signup_attrs %{
-    "church" => %{name: "Test Church", slug: "test_church"},
+    "church" => %{name: "Test Church", slug: "test_church", timezone: "UTC"},
     "user" => %{name: "Test User", email: "test_user@mail.com"},
     "credential" => %{source: "password", token: "password"}
   }

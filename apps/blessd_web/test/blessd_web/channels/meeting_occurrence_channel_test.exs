@@ -20,7 +20,7 @@ defmodule BlessdWeb.MeetingOccurrenceChannelTest do
   end
 
   @signup_attrs %{
-    "church" => %{name: "Another Church", slug: "another_church"},
+    "church" => %{name: "Another Church", slug: "another_church", timezone: "UTC"},
     "user" => %{name: "Test User", email: "test_user@mail.com"},
     "credential" => %{source: "password", token: "password"}
   }
