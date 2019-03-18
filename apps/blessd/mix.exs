@@ -48,7 +48,7 @@ defmodule Blessd.Mixfile do
       {:csv, "~> 2.1"},
       {:ecto_sql, "~> 3.0"},
       {:jason, "~> 1.1"},
-      {:timex, "~> 3.0"}
+      {:timex, "~> 3.0"},
       {:excoveralls, "~> 0.10.6", only: [:dev, :test]},
       {:postgrex, ">= 0.0.0"}
     ]

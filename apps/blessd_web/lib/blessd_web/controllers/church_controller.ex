@@ -17,7 +17,7 @@ defmodule BlessdWeb.ChurchController do
          {:ok, church} <- Accounts.update_church(church, church_params, current_user) do
       conn
       |> put_flash(:info, gettext("Church updated successfully."))
-      |> redirect(to: Routes.church_path(conn, :edit, church))
+      |> redirect(to: Routes.church_path(conn, :edit, church.slug))
     else
       {:error, %Ecto.Changeset{} = changeset} -> render(conn, "edit.html", changeset: changeset)
       {:error, reason} -> {:error, reason}

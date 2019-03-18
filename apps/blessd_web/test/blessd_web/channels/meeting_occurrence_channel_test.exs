@@ -19,6 +19,12 @@ defmodule BlessdWeb.MeetingOccurrenceChannelTest do
     meeting
   end
 
+  @signup_attrs %{
+    "church" => %{name: "Another Church", slug: "another_church"},
+    "user" => %{name: "Test User", email: "test_user@mail.com"},
+    "credential" => %{source: "password", token: "password"}
+  }
+
   test "search searchs for people on occurrence" do
     user = signup()
 
@@ -53,6 +59,21 @@ defmodule BlessdWeb.MeetingOccurrenceChannelTest do
     assert_reply ref, :ok, %{table_body: table_body}
     refute table_body =~ "John"
     assert table_body =~ "Mary"
+
+    user2 = signup(@signup_attrs)
+
+    {:ok, _, socket} =
+      UserSocket
+      |> socket("meeting_occurrence:lobby", %{current_user: user2})
+      |> subscribe_and_join(MeetingOccurrenceChannel, "meeting_occurrence:lobby")
+
+    ref =
+      push(
+        socket,
+        "search",
+        %{"meeting_occurrence_id" => occurrence.id, "query" => "ma", "filter" => nil}
+      )
+    assert_reply ref, :error, %{message: "Occurrence not found"}
   end
 
   test "create creates a new person" do
@@ -77,6 +98,18 @@ defmodule BlessdWeb.MeetingOccurrenceChannelTest do
 
     assert_reply ref, :ok, %{table_body: table_body}
     assert table_body =~ "Beth"
+
+    ref =
+      push(
+        socket,
+        "create",
+        %{
+          "meeting_occurrence_id" => occurrence.id,
+          "person" => %{}
+        }
+      )
+
+    assert_reply ref, :error, %{name: "can't be blank"}
   end
 
   test "update_state updates the state of a given person" do

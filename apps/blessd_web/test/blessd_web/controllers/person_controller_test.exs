@@ -2,10 +2,17 @@ defmodule BlessdWeb.PersonControllerTest do
   use BlessdWeb.ConnCase
 
   alias Blessd.Memberships
+  alias Blessd.Signup
 
   @create_attrs %{email: "some@email.com", name: "some name", is_member: true}
   @update_attrs %{email: "updated@email.com", name: "some updated name", is_member: false}
   @invalid_attrs %{email: nil, name: nil, is_member: nil}
+
+  @signup_attrs %{
+    "church" => %{name: "Test Church", slug: "test_church"},
+    "user" => %{name: "Test User", email: "test_user@mail.com"},
+    "credential" => %{source: "password", token: "password"}
+  }
 
   def fixture(:person, user) do
     {:ok, person} = Memberships.create_person(@create_attrs, user)
@@ -22,6 +29,21 @@ defmodule BlessdWeb.PersonControllerTest do
         |> get(Routes.person_path(conn, :index, user.church.slug))
 
       assert html_response(conn, 200) =~ "Listing People"
+    end
+
+    test "redirects to dashboard when uncofirmed", %{conn: conn} do
+      {:ok, user} = Signup.register(@signup_attrs)
+
+      conn =
+        conn
+        |> authenticate(user)
+        |> get(Routes.person_path(conn, :index, user.church.slug))
+
+      assert redirected_to(conn) == Routes.dashboard_path(conn, :index, user.church.slug)
+      assert get_flash(conn, :error) == """
+      You must confirm your email first. Please check your inbox,
+      request another email or change to a correct email address.
+      """
     end
   end
 
