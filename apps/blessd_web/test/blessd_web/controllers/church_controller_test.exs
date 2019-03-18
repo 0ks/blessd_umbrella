@@ -73,4 +73,3 @@ defmodule BlessdWeb.ChurchControllerTest do
     end
   end
 end
-

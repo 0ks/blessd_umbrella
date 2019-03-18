@@ -1,5 +1,6 @@
 defmodule BlessdWeb.ChurchRecoveryControllerTest do
   use BlessdWeb.ConnCase
+  use Bamboo.Test
 
   alias Blessd.ChurchRecovery
 
@@ -26,6 +27,7 @@ defmodule BlessdWeb.ChurchRecoveryControllerTest do
         |> post(Routes.church_recovery_path(conn, :create), user: %{email: user.email})
 
       assert redirected_to(conn) == "/"
+      assert_email_delivered_with(subject: "Recover your Blessd church")
     end
 
     test "renders errors when data is invalid", %{conn: conn} do

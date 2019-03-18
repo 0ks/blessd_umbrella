@@ -1,7 +1,7 @@
-defmodule Blessd.Accounts.Church do
+defmodule Blessd.Accounts.Churches.Church do
   use Ecto.Schema
 
-  alias Blessd.Accounts.Church
+  alias Blessd.Accounts.Churches.Church
   alias Blessd.Shared.Churches.Church, as: SharedChurch
 
   schema "churches" do

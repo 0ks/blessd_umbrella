@@ -1,10 +1,10 @@
-defmodule Blessd.Accounts.User do
+defmodule Blessd.Accounts.Users.User do
   use Ecto.Schema
 
   import Blessd.Shared.Users.User
   import Ecto.Query
 
-  alias Blessd.Accounts.User
+  alias Blessd.Accounts.Users.User
   alias Blessd.Shared.Churches.Church
 
   schema "users" do

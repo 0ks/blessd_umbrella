@@ -73,6 +73,7 @@ defmodule BlessdWeb.MeetingOccurrenceChannelTest do
         "search",
         %{"meeting_occurrence_id" => occurrence.id, "query" => "ma", "filter" => nil}
       )
+
     assert_reply ref, :error, %{message: "Occurrence not found"}
   end
 

@@ -2,6 +2,7 @@ defmodule BlessdWeb.MeetingOccurrenceControllerTest do
   use BlessdWeb.ConnCase
 
   alias Blessd.Observance
+  alias BlessdWeb.StringHelpers
 
   @meeting_attrs %{"name" => "some name", "occurrences" => %{"0" => %{date: ~D[2018-10-10]}}}
 
@@ -17,6 +18,20 @@ defmodule BlessdWeb.MeetingOccurrenceControllerTest do
   def fixture(:occurrence, meeting, user) do
     {:ok, meeting} = Observance.create_occurrence(meeting, @create_attrs, user)
     meeting
+  end
+
+  describe "show occurrence" do
+    test "renders details", %{conn: conn} do
+      user = signup()
+      %{occurrences: [occurrence], name: name} = fixture(:meeting, user)
+
+      conn =
+        conn
+        |> authenticate(user)
+        |> get(Routes.meeting_occurrence_path(conn, :show, user.church.slug, occurrence))
+
+      assert html_response(conn, 200) =~ "#{name} on #{StringHelpers.humanize(occurrence.date)}"
+    end
   end
 
   describe "new meeting" do

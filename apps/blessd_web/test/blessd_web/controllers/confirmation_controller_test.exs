@@ -20,7 +20,7 @@ defmodule BlessdWeb.ConfirmationControllerTest do
 
       assert redirected_to(conn) == Routes.dashboard_path(conn, :index, user.church.slug)
       assert get_flash(conn, :info) == "Confirmation email sent."
-      assert_email_delivered_with subject: "Welcome to Blessd - email confirmation"
+      assert_email_delivered_with(subject: "Welcome to Blessd - email confirmation")
     end
   end
 
@@ -56,7 +56,7 @@ defmodule BlessdWeb.ConfirmationControllerTest do
 
       User
       |> Repo.get(user.id)
-      |> change( %{confirmation_token: expired_token})
+      |> change(%{confirmation_token: expired_token})
       |> Repo.update!()
 
       resp =
@@ -64,7 +64,9 @@ defmodule BlessdWeb.ConfirmationControllerTest do
         |> get(Routes.confirmation_path(conn, :show, user.church.slug, expired_token))
 
       assert redirected_to(resp) == "/"
-      assert get_flash(resp, :error) == "The given confirmation token is invalid or expired,\nplease request another confirmation email.\n"
+
+      assert get_flash(resp, :error) ==
+               "The given confirmation token is invalid or expired,\nplease request another confirmation email.\n"
     end
   end
 end

@@ -221,7 +221,14 @@ defmodule Blessd.ObservanceTest do
 
       meeting = meeting_fixture(user)
 
-      assert {:ok, [f1]} = Observance.list_people(user, filter: "missed", meeting_id: meeting.id, date: Date.utc_today(), limit: 1)
+      assert {:ok, [f1]} =
+               Observance.list_people(user,
+                 filter: "missed",
+                 meeting_id: meeting.id,
+                 date: Date.utc_today(),
+                 limit: 1
+               )
+
       assert f1.name == p1.name
       assert f1.missed == 1
     end
@@ -231,12 +238,20 @@ defmodule Blessd.ObservanceTest do
       %{occurrences: [occurrence]} = meeting_fixture(user)
       {:ok, person} = Memberships.create_person(%{name: "John", is_member: false}, user)
 
-      assert {:ok, [found]} = Observance.list_people(user, filter: "unknown", occurrence: occurrence)
+      assert {:ok, [found]} =
+               Observance.list_people(user, filter: "unknown", occurrence: occurrence)
+
       assert found.id == person.id
-      assert {:ok, [found]} = Observance.list_people(user, filter: "missing", occurrence: occurrence)
+
+      assert {:ok, [found]} =
+               Observance.list_people(user, filter: "missing", occurrence: occurrence)
+
       assert found.id == person.id
       assert {:ok, []} = Observance.list_people(user, filter: "present", occurrence: occurrence)
-      assert {:ok, []} = Observance.list_people(user, filter: "first_time", occurrence: occurrence)
+
+      assert {:ok, []} =
+               Observance.list_people(user, filter: "first_time", occurrence: occurrence)
+
       assert {:ok, []} = Observance.list_people(user, filter: "recurrent", occurrence: occurrence)
       assert {:ok, []} = Observance.list_people(user, filter: "absent", occurrence: occurrence)
     end
@@ -257,9 +272,15 @@ defmodule Blessd.ObservanceTest do
                total: 0,
                unknown: 1
              }
-      assert {:ok, [found]} = Observance.list_people(user, filter: "unknown", occurrence: occurrence)
+
+      assert {:ok, [found]} =
+               Observance.list_people(user, filter: "unknown", occurrence: occurrence)
+
       assert found.id == person.id
-      assert {:ok, [found]} = Observance.list_people(user, filter: "missing", occurrence: occurrence)
+
+      assert {:ok, [found]} =
+               Observance.list_people(user, filter: "missing", occurrence: occurrence)
+
       assert found.id == person.id
 
       assert {:ok, _} =

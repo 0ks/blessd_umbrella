@@ -24,7 +24,7 @@ defmodule BlessdWeb.InvitationMailer do
     <h1><%= gettext("%{name} invited you to Blessd!", name: inviter.name) %></h1>
 
     <p>
-      <a href="<%= invitation_url(user) %>"><%= gettext("Click here") %></a>
+      <a href="<%= invitation_url(user, inviter.church) %>"><%= gettext("Click here") %></a>
 
       <%= gettext("to accept the invitation") %>
     </p>
@@ -32,7 +32,7 @@ defmodule BlessdWeb.InvitationMailer do
     <p>
       <%= gettext(
         "If the link does not work, copy this and paste on your localtion bar: %{url}",
-        url: invitation_url(user)
+        url: invitation_url(user, inviter.church)
       ) %>
     </p>
     """)
@@ -44,12 +44,12 @@ defmodule BlessdWeb.InvitationMailer do
 
     <%= gettext(
       "Here is your invitation link: %{url}",
-      url: invitation_url(user)
+      url: invitation_url(user, inviter.church)
     ) %>
     """)
   end
 
-  defp invitation_url(user) do
-    Routes.invitation_url(Endpoint, :edit, user.church.slug, user.invitation_token)
+  defp invitation_url(user, church) do
+    Routes.invitation_url(Endpoint, :edit, church.slug, user.invitation_token)
   end
 end

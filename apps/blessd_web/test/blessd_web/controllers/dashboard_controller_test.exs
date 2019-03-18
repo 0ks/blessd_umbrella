@@ -12,4 +12,3 @@ defmodule BlessdWeb.DashboardControllerTest do
     assert html_response(conn, 200) =~ "Keep in touch!"
   end
 end
-

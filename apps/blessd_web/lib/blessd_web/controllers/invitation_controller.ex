@@ -19,7 +19,7 @@ defmodule BlessdWeb.InvitationController do
          :ok = InvitationMailer.send(user, current_user) do
       conn
       |> put_flash(:info, gettext("User invited successfully."))
-      |> redirect(to: Routes.user_path(conn, :index, user.church))
+      |> redirect(to: Routes.user_path(conn, :index, current_user.church.slug))
     else
       {:error, %Ecto.Changeset{} = changeset} -> render(conn, "new.html", changeset: changeset)
       {:error, reason} -> {:error, reason}
@@ -27,15 +27,21 @@ defmodule BlessdWeb.InvitationController do
   end
 
   def create(conn, %{"token" => token}) do
-    with current_user = conn.assigns.current_user,
-         {:ok, user} <- Invitation.reinvite(token, current_user),
+    current_user = conn.assigns.current_user
+
+    with {:ok, user} <- Invitation.reinvite(token, current_user),
          :ok = InvitationMailer.send(user, current_user) do
       conn
       |> put_flash(:info, gettext("User invited successfully."))
-      |> redirect(to: Routes.user_path(conn, :index, user.church))
+      |> redirect(to: Routes.user_path(conn, :index, current_user.church.slug))
     else
-      {:error, %Ecto.Changeset{} = changeset} -> render(conn, "new.html", changeset: changeset)
-      {:error, reason} -> {:error, reason}
+      {:error, %Ecto.Changeset{}} ->
+        conn
+        |> put_flash(:error, gettext("Could not reinvite user."))
+        |> redirect(to: Routes.user_path(conn, :index, current_user.church.slug))
+
+      {:error, reason} ->
+        {:error, reason}
     end
   end
 
@@ -57,7 +63,7 @@ defmodule BlessdWeb.InvitationController do
       conn
       |> Session.put_user(user)
       |> put_flash(:info, gettext("Invitation accepted succesfully."))
-      |> redirect(to: Routes.dashboard_path(conn, :index, user.church))
+      |> redirect(to: Routes.dashboard_path(conn, :index, user.church.slug))
     else
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", changeset: changeset)

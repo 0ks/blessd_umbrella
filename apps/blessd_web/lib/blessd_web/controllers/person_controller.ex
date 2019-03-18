@@ -32,7 +32,7 @@ defmodule BlessdWeb.PersonController do
         to:
           Routes.meeting_occurrence_path(
             conn,
-            :index,
+            :show,
             user.church.slug,
             occurrence,
             search: person.name

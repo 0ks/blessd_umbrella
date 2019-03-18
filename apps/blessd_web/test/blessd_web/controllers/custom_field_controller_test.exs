@@ -45,9 +45,12 @@ defmodule BlessdWeb.CustomFieldControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> post(Routes.custom_field_path(conn, :create, user.church.slug, "person"), field: @create_attrs)
+        |> post(Routes.custom_field_path(conn, :create, user.church.slug, "person"),
+          field: @create_attrs
+        )
 
-      assert redirected_to(conn) =~ Routes.custom_field_path(conn, :index, user.church.slug, "person")
+      assert redirected_to(conn) =~
+               Routes.custom_field_path(conn, :index, user.church.slug, "person")
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -56,7 +59,9 @@ defmodule BlessdWeb.CustomFieldControllerTest do
       conn =
         conn
         |> authenticate(user)
-        |> post(Routes.custom_field_path(conn, :create, user.church.slug, "person"), field: @invalid_attrs)
+        |> post(Routes.custom_field_path(conn, :create, user.church.slug, "person"),
+          field: @invalid_attrs
+        )
 
       assert html_response(conn, 200) =~ "New Custom Field"
     end
@@ -88,7 +93,8 @@ defmodule BlessdWeb.CustomFieldControllerTest do
           field: @update_attrs
         )
 
-      assert redirected_to(resp) == Routes.custom_field_path(conn, :edit, user.church.slug, "person", custom_field)
+      assert redirected_to(resp) ==
+               Routes.custom_field_path(conn, :edit, user.church.slug, "person", custom_field)
 
       resp =
         conn
@@ -121,9 +127,12 @@ defmodule BlessdWeb.CustomFieldControllerTest do
       resp =
         conn
         |> authenticate(user)
-        |> delete(Routes.custom_field_path(conn, :delete, user.church.slug, "person", custom_field))
+        |> delete(
+          Routes.custom_field_path(conn, :delete, user.church.slug, "person", custom_field)
+        )
 
-      assert redirected_to(resp) == Routes.custom_field_path(conn, :index, user.church.slug, "person")
+      assert redirected_to(resp) ==
+               Routes.custom_field_path(conn, :index, user.church.slug, "person")
 
       resp =
         conn

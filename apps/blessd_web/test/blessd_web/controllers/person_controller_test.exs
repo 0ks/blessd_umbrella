@@ -40,10 +40,11 @@ defmodule BlessdWeb.PersonControllerTest do
         |> get(Routes.person_path(conn, :index, user.church.slug))
 
       assert redirected_to(conn) == Routes.dashboard_path(conn, :index, user.church.slug)
+
       assert get_flash(conn, :error) == """
-      You must confirm your email first. Please check your inbox,
-      request another email or change to a correct email address.
-      """
+             You must confirm your email first. Please check your inbox,
+             request another email or change to a correct email address.
+             """
     end
   end
 

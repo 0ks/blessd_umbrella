@@ -11,4 +11,3 @@ defmodule BlessdWeb.UserSocketTest do
     assert :error = connect(UserSocket, %{"token" => nil})
   end
 end
-
