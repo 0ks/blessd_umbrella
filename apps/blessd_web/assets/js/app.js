@@ -26,6 +26,7 @@ import MeetingOccurrenceView from "./views/meeting_occurrence";
 import CustomFieldView from "./views/custom_field";
 import PersonView from "./views/person";
 import SessionView from "./views/session";
+import SignupView from "./views/signup";
 
 window.views = {
   Elixir: {
@@ -34,7 +35,8 @@ window.views = {
       MeetingOccurrenceView: MeetingOccurrenceView,
       CustomFieldView: CustomFieldView,
       PersonView: PersonView,
-      SessionView: SessionView
+      SessionView: SessionView,
+      SignupView: SignupView
     }
   }
 };

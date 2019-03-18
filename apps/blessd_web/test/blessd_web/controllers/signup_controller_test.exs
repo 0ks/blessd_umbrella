@@ -2,12 +2,12 @@ defmodule BlessdWeb.SignupControllerTest do
   use BlessdWeb.ConnCase
 
   @create_attrs %{
-    "church" => %{name: "Signup Church", slug: "signup_church"},
+    "church" => %{name: "Signup Church", slug: "signup_church", timezone: "UTC"},
     "user" => %{name: "Signup User", email: "signup_user@mail.com"},
     "credential" => %{source: "password", token: "password"}
   }
   @invalid_attrs %{
-    "church" => %{name: nil, slug: nil},
+    "church" => %{name: nil, slug: nil, timezone: nil},
     "user" => %{name: nil, email: nil},
     "credential" => %{source: nil, token: nil}
   }

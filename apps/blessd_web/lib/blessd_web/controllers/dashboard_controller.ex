@@ -17,7 +17,7 @@ defmodule BlessdWeb.DashboardController do
              Observance.list_people(
                user,
                filter: "missed",
-               date: Date.utc_today(),
+               date: Blessd.Date.today(user),
                meeting_id: missed_meeting_id,
                limit: 2
              )
@@ -40,7 +40,7 @@ defmodule BlessdWeb.DashboardController do
   defp todays_meetings(user) do
     with {:ok, occurrences} <-
            skip_unconfirmed(fn ->
-             Observance.list_occurrences(user, filter: [date: Date.utc_today()])
+             Observance.list_occurrences(user, filter: [date: Blessd.Date.today(user)])
            end) do
       result =
         occurrences

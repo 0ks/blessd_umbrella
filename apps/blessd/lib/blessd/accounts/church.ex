@@ -7,6 +7,7 @@ defmodule Blessd.Accounts.Church do
   schema "churches" do
     field(:name, :string)
     field(:slug, :string)
+    field(:timezone, :string)
 
     timestamps()
   end

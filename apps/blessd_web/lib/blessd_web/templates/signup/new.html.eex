@@ -32,6 +32,18 @@
           </div>
           <%= error_tag ff, :slug %>
         </div>
+
+        <div class="field">
+          <div class="control has-icons-left">
+            <div class="select is-fullwidth">
+              <%= select ff, :timezone, Timex.timezones(), prompt: gettext("Timezone") %>
+            </div>
+            <span class="icon is-left">
+              <i class="fas fa-clock"></i>
+            </span>
+          </div>
+          <%= error_tag ff, :name %>
+        </div>
       <% end %>
 
       <%= inputs_for f, :user, fn ff -> %>
