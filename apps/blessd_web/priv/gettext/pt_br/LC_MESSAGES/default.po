@@ -12,155 +12,102 @@ msgstr ""
 "Plural-Forms: nplurals=2\n"
 
 #, elixir-format
-#: lib/blessd_web/templates/meeting/index.html.eex:35
-#: lib/blessd_web/templates/meeting/index.html.eex:35
-#: lib/blessd_web/templates/meeting/index.html.eex:80
-#: lib/blessd_web/templates/meeting/index.html.eex:80
-#: lib/blessd_web/templates/person/index.html.eex:30
+#: lib/blessd_web/templates/meeting/index.html.eex:45
+#: lib/blessd_web/templates/meeting_occurrence/table_body.html.eex:30
 #: lib/blessd_web/templates/person/index.html.eex:30
 #: lib/blessd_web/templates/user/index.html.eex:44
-#: lib/blessd_web/templates/user/index.html.eex:44
-#: lib/blessd_web/templates/user/index.html.eex:85
 #: lib/blessd_web/templates/user/index.html.eex:85
 msgid "Are you sure?"
 msgstr "Tem certeza?"
 
 #, elixir-format
-#: lib/blessd_web/templates/dashboard/index.html.eex:29
-#: lib/blessd_web/templates/dashboard/index.html.eex:29
-#: lib/blessd_web/templates/meeting/index.html.eex:58
-#: lib/blessd_web/templates/meeting/index.html.eex:58
+#: lib/blessd_web/templates/meeting_occurrence/table_body.html.eex:8
 msgid "Attendance"
 msgstr "Comparecimento"
 
 #, elixir-format
 #: lib/blessd_web/templates/church_recovery/new.html.eex:23
-#: lib/blessd_web/templates/church_recovery/new.html.eex:23
-#: lib/blessd_web/templates/invitation/new.html.eex:16
 #: lib/blessd_web/templates/invitation/new.html.eex:16
 #: lib/blessd_web/templates/meeting/form.html.eex:35
-#: lib/blessd_web/templates/meeting/form.html.eex:35
-#: lib/blessd_web/templates/meeting_occurrence/form.html.eex:14
+#: lib/blessd_web/templates/meeting/show.html.eex:59
 #: lib/blessd_web/templates/meeting_occurrence/form.html.eex:14
 #: lib/blessd_web/templates/meeting_occurrence/show.html.eex:66
-#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:66
-#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:75
-#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:75
-#: lib/blessd_web/templates/password_reset/new.html.eex:43
+#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:80
 #: lib/blessd_web/templates/password_reset/new.html.eex:43
 #: lib/blessd_web/templates/person/file_modal.html.eex:73
-#: lib/blessd_web/templates/person/file_modal.html.eex:73
 #: lib/blessd_web/templates/person/form.html.eex:15
-#: lib/blessd_web/templates/person/form.html.eex:15
-#: lib/blessd_web/templates/user/edit.html.eex:43
 #: lib/blessd_web/templates/user/edit.html.eex:43
 msgid "Back"
 msgstr "Voltar"
 
 #, elixir-format
-#: lib/blessd_web/templates/church/edit.html.eex:41
-#: lib/blessd_web/templates/church/edit.html.eex:41
+#: lib/blessd_web/templates/church/edit.html.eex:49
 #: lib/blessd_web/templates/custom_field/form.html.eex:53
-#: lib/blessd_web/templates/custom_field/form.html.eex:53
-#: lib/blessd_web/templates/meeting/index.html.eex:33
-#: lib/blessd_web/templates/meeting/index.html.eex:33
-#: lib/blessd_web/templates/meeting/index.html.eex:78
-#: lib/blessd_web/templates/meeting/index.html.eex:78
-#: lib/blessd_web/templates/person/index.html.eex:27
+#: lib/blessd_web/templates/meeting/index.html.eex:43
+#: lib/blessd_web/templates/meeting_occurrence/table_body.html.eex:28
 #: lib/blessd_web/templates/person/index.html.eex:27
 #: lib/blessd_web/templates/user/index.html.eex:36
-#: lib/blessd_web/templates/user/index.html.eex:36
-#: lib/blessd_web/templates/user/index.html.eex:82
 #: lib/blessd_web/templates/user/index.html.eex:82
 msgid "Delete"
 msgstr "Apagar"
 
 #, elixir-format
-#: lib/blessd_web/templates/meeting/index.html.eex:25
-#: lib/blessd_web/templates/meeting/index.html.eex:25
-#: lib/blessd_web/templates/meeting/index.html.eex:68
-#: lib/blessd_web/templates/meeting/index.html.eex:68
+#: lib/blessd_web/templates/meeting/index.html.eex:35
+#: lib/blessd_web/templates/meeting_occurrence/table_body.html.eex:18
 #: lib/blessd_web/templates/person/index.html.eex:22
-#: lib/blessd_web/templates/person/index.html.eex:22
-#: lib/blessd_web/templates/user/index.html.eex:31
 #: lib/blessd_web/templates/user/index.html.eex:31
 msgid "Edit"
 msgstr "Alterar"
 
 #, elixir-format
 #: lib/blessd_web/templates/person/edit.html.eex:1
-#: lib/blessd_web/templates/person/edit.html.eex:1
 msgid "Edit Person"
 msgstr "Alterando pessoa"
 
 #, elixir-format
 #: lib/blessd_web/templates/church_recovery/new.html.eex:10
-#: lib/blessd_web/templates/church_recovery/new.html.eex:10
 #: lib/blessd_web/templates/invitation/new.html.eex:7
-#: lib/blessd_web/templates/invitation/new.html.eex:7
-#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:87
-#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:87
-#: lib/blessd_web/templates/password_reset/new.html.eex:30
+#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:92
 #: lib/blessd_web/templates/password_reset/new.html.eex:30
 #: lib/blessd_web/templates/person/basic_fields.html.eex:10
-#: lib/blessd_web/templates/person/basic_fields.html.eex:10
-#: lib/blessd_web/templates/person/file_modal.html.eex:30
 #: lib/blessd_web/templates/person/file_modal.html.eex:30
 #: lib/blessd_web/templates/person/index.html.eex:7
-#: lib/blessd_web/templates/person/index.html.eex:7
-#: lib/blessd_web/templates/session/new.html.eex:85
 #: lib/blessd_web/templates/session/new.html.eex:85
 #: lib/blessd_web/templates/user/edit.html.eex:25
-#: lib/blessd_web/templates/user/edit.html.eex:25
-#: lib/blessd_web/templates/user/index.html.eex:16
 #: lib/blessd_web/templates/user/index.html.eex:16
 msgid "Email"
 msgstr "Email"
 
 #, elixir-format
 #: lib/blessd_web/templates/person/index.html.eex:8
-#: lib/blessd_web/templates/person/index.html.eex:8
 msgid "Is member"
 msgstr "É membro"
 
 #, elixir-format
-#: lib/blessd_web/templates/person/index.html.eex:1
 #: lib/blessd_web/templates/person/index.html.eex:1
 msgid "Listing People"
 msgstr "Listando Pessoas"
 
 #, elixir-format
 #: lib/blessd_web/templates/page/index.html.eex:9
-#: lib/blessd_web/templates/page/index.html.eex:9
 msgid "Manage your church to focus in the kingdom."
 msgstr "Gerencie sua igreja para focar no reino."
 
 #, elixir-format
 #: lib/blessd_web/templates/church/edit.html.eex:16
-#: lib/blessd_web/templates/church/edit.html.eex:16
-#: lib/blessd_web/templates/custom_field/form.html.eex:5
 #: lib/blessd_web/templates/custom_field/form.html.eex:5
 #: lib/blessd_web/templates/meeting/form.html.eex:6
-#: lib/blessd_web/templates/meeting/form.html.eex:6
-#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:86
-#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:86
-#: lib/blessd_web/templates/person/basic_fields.html.eex:2
+#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:91
 #: lib/blessd_web/templates/person/basic_fields.html.eex:2
 #: lib/blessd_web/templates/person/file_modal.html.eex:29
-#: lib/blessd_web/templates/person/file_modal.html.eex:29
-#: lib/blessd_web/templates/person/index.html.eex:6
 #: lib/blessd_web/templates/person/index.html.eex:6
 #: lib/blessd_web/templates/user/edit.html.eex:17
-#: lib/blessd_web/templates/user/edit.html.eex:17
-#: lib/blessd_web/templates/user/index.html.eex:15
 #: lib/blessd_web/templates/user/index.html.eex:15
 msgid "Name"
 msgstr "Nome"
 
 #, elixir-format
 #: lib/blessd_web/templates/person/index.html.eex:41
-#: lib/blessd_web/templates/person/index.html.eex:41
-#: lib/blessd_web/templates/person/new.html.eex:1
 #: lib/blessd_web/templates/person/new.html.eex:1
 msgid "New Person"
 msgstr "Nova Pessoa"
@@ -177,46 +124,31 @@ msgstr "Opa, algo deu errado! Por favor verifique os erros abaixo.\n"
 
 #, elixir-format
 #: lib/blessd_web/templates/layout/header.html.eex:31
-#: lib/blessd_web/templates/layout/header.html.eex:31
-#: lib/blessd_web/templates/shared/config_menu.html.eex:23
 #: lib/blessd_web/templates/shared/config_menu.html.eex:23
 msgid "People"
 msgstr "Pessoas"
 
 #, elixir-format
-#: lib/blessd_web/templates/dashboard/index.html.eex:20
-#: lib/blessd_web/templates/dashboard/index.html.eex:20
-#: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:31
+#: lib/blessd_web/templates/dashboard/index.html.eex:70
 #: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:31
 msgid "Present"
 msgstr "Presente"
 
 #, elixir-format
-#: lib/blessd_web/templates/church/edit.html.eex:40
-#: lib/blessd_web/templates/church/edit.html.eex:40
-#: lib/blessd_web/templates/custom_field/form.html.eex:48
+#: lib/blessd_web/templates/church/edit.html.eex:48
 #: lib/blessd_web/templates/custom_field/form.html.eex:48
 #: lib/blessd_web/templates/custom_field/form.html.eex:49
-#: lib/blessd_web/templates/custom_field/form.html.eex:49
-#: lib/blessd_web/templates/invitation/new.html.eex:15
 #: lib/blessd_web/templates/invitation/new.html.eex:15
 #: lib/blessd_web/templates/meeting/form.html.eex:34
-#: lib/blessd_web/templates/meeting/form.html.eex:34
-#: lib/blessd_web/templates/meeting_occurrence/form.html.eex:13
 #: lib/blessd_web/templates/meeting_occurrence/form.html.eex:13
 #: lib/blessd_web/templates/meeting_occurrence/show.html.eex:65
-#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:65
-#: lib/blessd_web/templates/person/file_modal.html.eex:72
 #: lib/blessd_web/templates/person/file_modal.html.eex:72
 #: lib/blessd_web/templates/person/form.html.eex:14
-#: lib/blessd_web/templates/person/form.html.eex:14
-#: lib/blessd_web/templates/user/edit.html.eex:33
 #: lib/blessd_web/templates/user/edit.html.eex:33
 msgid "Submit"
 msgstr "Enviar"
 
 #, elixir-format
-#: lib/blessd_web/templates/person/basic_fields.html.eex:21
 #: lib/blessd_web/templates/person/basic_fields.html.eex:21
 msgid "This is a church member"
 msgstr "Este é um membro da igreja"
@@ -233,93 +165,73 @@ msgstr "{0D}/{0M}/{YYYY}"
 
 #, elixir-format
 #: lib/blessd_web/templates/page/index.html.eex:5
-#: lib/blessd_web/templates/page/index.html.eex:5
 msgid "Be Blessd!"
 msgstr "Be Blessd!"
 
 #, elixir-format
-#: lib/blessd_web/templates/page/index.html.eex:8
 #: lib/blessd_web/templates/page/index.html.eex:8
 msgid "Simplify your community."
 msgstr "Simplifique sua comunidade."
 
 #, elixir-format
 #: lib/blessd_web/templates/person/file_modal.html.eex:60
-#: lib/blessd_web/templates/person/file_modal.html.eex:60
 msgid "Choose a file..."
 msgstr "Escolha um arquivo..."
 
 #, elixir-format
-#: lib/blessd_web/controllers/import_controller.ex:43
 #: lib/blessd_web/controllers/import_controller.ex:43
 msgid "Here is the list of errors:"
 msgstr "Aqui está a lista de erros:"
 
 #, elixir-format
 #: lib/blessd_web/templates/person/index.html.eex:42
-#: lib/blessd_web/templates/person/index.html.eex:42
 msgid "Import CSV"
 msgstr "Importar CSV"
 
 #, elixir-format
-#: lib/blessd_web/templates/person/file_modal.html.eex:64
 #: lib/blessd_web/templates/person/file_modal.html.eex:64
 msgid "None"
 msgstr "Nenhum"
 
 #, elixir-format
 #: lib/blessd_web/controllers/import_controller.ex:18
-#: lib/blessd_web/controllers/import_controller.ex:18
 msgid "People imported successfully."
 msgstr "Pessoas importadas com sucesso."
 
 #, elixir-format
-#: lib/blessd_web/controllers/person_controller.ex:49
 #: lib/blessd_web/controllers/person_controller.ex:49
 msgid "Person created successfully."
 msgstr "Pessoa criada com sucesso."
 
 #, elixir-format
 #: lib/blessd_web/controllers/person_controller.ex:95
-#: lib/blessd_web/controllers/person_controller.ex:95
 msgid "Person deleted successfully."
 msgstr "Pessoa removida com sucesso."
 
 #, elixir-format
-#: lib/blessd_web/controllers/person_controller.ex:77
 #: lib/blessd_web/controllers/person_controller.ex:77
 msgid "Person updated successfully."
 msgstr "Pessoa atualizada com sucesso."
 
 #, elixir-format
 #: lib/blessd_web/controllers/import_controller.ex:23
-#: lib/blessd_web/controllers/import_controller.ex:23
 msgid "Sorry! The file provided could not be imported."
 msgstr "Desculpe! O arquivo que você proveu não pôde ser importado."
 
 #, elixir-format
-#: lib/blessd_web/templates/person/file_modal.html.eex:8
 #: lib/blessd_web/templates/person/file_modal.html.eex:8
 msgid "Import people from CSV"
 msgstr "Importar pessoas de um CSV"
 
 #, elixir-format
 #: lib/blessd_web/templates/dashboard/index.html.eex:2
-#: lib/blessd_web/templates/dashboard/index.html.eex:2
 msgid "%{church} Dashboard"
 msgstr "Dashboard da(o) %{church}"
 
 #, elixir-format
 #: lib/blessd_web/templates/meeting_occurrence/show.html.eex:2
-#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:2
 msgid "%{meeting} on %{date}"
 msgstr "%{meeting} em %{date}"
-
-#, elixir-format
-#: lib/blessd_web/templates/dashboard/index.html.eex:13
-#: lib/blessd_web/templates/dashboard/index.html.eex:13
-msgid "%{meeting} today!"
-msgstr "%{meeting} hoje!"
 
 #, elixir-format
 #: lib/blessd_web/mailer/invitation_mailer.ex:24
@@ -328,143 +240,116 @@ msgid "%{name} invited you to Blessd!"
 msgstr "%{name} convidou você para o Blessd!"
 
 #, elixir-format
-#: lib/blessd_web/templates/meeting/index.html.eex:20
-#: lib/blessd_web/templates/meeting/index.html.eex:20
+#: lib/blessd_web/templates/meeting/index.html.eex:30
 msgid "..."
 msgstr "..."
 
 #, elixir-format
+#: lib/blessd_web/templates/meeting_occurrence/attendants_table_row.html.eex:29
 #: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:92
-#: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:92
-#: lib/blessd_web/templates/meeting_occurrence/table_row.html.eex:29
 #: lib/blessd_web/templates/meeting_occurrence/table_row.html.eex:29
 msgid "Absent"
 msgstr "Ausente"
 
 #, elixir-format
 #: lib/blessd_web/templates/invitation/edit.html.eex:39
-#: lib/blessd_web/templates/invitation/edit.html.eex:39
 msgid "Accept invitation"
 msgstr "Aceitar convite"
 
 #, elixir-format
 #: lib/blessd_web/templates/invitation/edit.html.eex:1
-#: lib/blessd_web/templates/invitation/edit.html.eex:1
-#: lib/blessd_web/templates/password_reset/edit.html.eex:1
-#: lib/blessd_web/templates/password_reset/edit.html.eex:1
 msgid "Accepting Invitation"
 msgstr "Aceitando Convite"
 
 #, elixir-format
-#: lib/blessd_web/templates/person/custom_fields.html.eex:21
 #: lib/blessd_web/templates/person/custom_fields.html.eex:21
 msgid "Add more fields..."
 msgstr "Adicionar mais campos..."
 
 #, elixir-format
 #: lib/blessd_web/templates/meeting_occurrence/show.html.eex:34
-#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:34
-#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:50
 #: lib/blessd_web/templates/meeting_occurrence/show.html.eex:50
 msgid "Add person"
 msgstr "Adicionar pessoa"
 
 #, elixir-format
 #: lib/blessd_web/templates/session/new.html.eex:36
-#: lib/blessd_web/templates/session/new.html.eex:36
 msgid "Another church"
 msgstr "Outra igreja"
 
 #, elixir-format
-#: lib/blessd_web/templates/custom_field/form.html.eex:50
 #: lib/blessd_web/templates/custom_field/form.html.eex:50
 msgid "Are you sure? Changing the field type or validations can make the current data invalid and you might even lose if forever."
 msgstr "Tem certeza? Alterar o tipo do campo ou as validações pode invalidar os dados atuais e você pode até perder eles pra sempre."
 
 #, elixir-format
 #: lib/blessd_web/templates/custom_field/form.html.eex:62
-#: lib/blessd_web/templates/custom_field/form.html.eex:62
 msgid "Are you sure? There is no way to recover this field in the future, as well as all the data set to it on the registers."
 msgstr "Tem certeza? Não há nenhum jeito de recuperar este campo no futuro, assim como todos os dados informados para ele nos registros."
 
 #, elixir-format
-#: lib/blessd_web/templates/church/edit.html.eex:44
-#: lib/blessd_web/templates/church/edit.html.eex:44
+#: lib/blessd_web/templates/church/edit.html.eex:52
 msgid "Are you sure? You will lose all your data!"
 msgstr "Tem certeza? Você irá perder todos os sues dados!"
 
 #, elixir-format
-#: lib/blessd_web/templates/person/file_modal.html.eex:27
 #: lib/blessd_web/templates/person/file_modal.html.eex:27
 msgid "Basic fields"
 msgstr "Campos básicos"
 
 #, elixir-format
 #: lib/blessd_web/templates/custom_field/form.html.eex:37
-#: lib/blessd_web/templates/custom_field/form.html.eex:37
 msgid "Careful"
 msgstr "Cuidado"
 
 #, elixir-format
-#: lib/blessd_web/templates/user/edit.html.eex:34
 #: lib/blessd_web/templates/user/edit.html.eex:34
 msgid "Change my password"
 msgstr "Alterar minha senha"
 
 #, elixir-format
 #: lib/blessd_web/templates/custom_field/form.html.eex:40
-#: lib/blessd_web/templates/custom_field/form.html.eex:40
 msgid "Changing the type or validations of fields can make the current\ndata invalid and you can lose it forever.\n"
 msgstr "Alterando o tipo ou validações dos campos pode invalidade os\ndados atuais e você pode perder eles para sempre.\n"
 
 #, elixir-format
-#: lib/blessd_web/templates/dashboard/index.html.eex:68
-#: lib/blessd_web/templates/dashboard/index.html.eex:68
+#: lib/blessd_web/templates/dashboard/index.html.eex:35
 msgid "Check email"
 msgstr "Verificar email"
 
 #, elixir-format
-#: lib/blessd_web/templates/session/new.html.eex:112
 #: lib/blessd_web/templates/session/new.html.eex:112
 msgid "Choose a church you're already logged in"
 msgstr "Escolha uma igreja que você já está logado"
 
 #, elixir-format
 #: lib/blessd_web/templates/church/edit.html.eex:1
-#: lib/blessd_web/templates/church/edit.html.eex:1
 msgid "Church Config"
 msgstr "Configurações da Igreja"
 
 #, elixir-format
 #: lib/blessd_web/templates/password_reset/new.html.eex:19
-#: lib/blessd_web/templates/password_reset/new.html.eex:19
 #: lib/blessd_web/templates/session/new.html.eex:74
-#: lib/blessd_web/templates/session/new.html.eex:74
-#: lib/blessd_web/templates/signup/new.html.eex:30
 #: lib/blessd_web/templates/signup/new.html.eex:30
 msgid "Church URL"
 msgstr "URL da igreja"
 
 #, elixir-format
 #: lib/blessd_web/templates/shared/config_menu.html.eex:13
-#: lib/blessd_web/templates/shared/config_menu.html.eex:13
 msgid "Church config"
 msgstr "Configurações da igreja"
 
 #, elixir-format
-#: lib/blessd_web/controllers/church_controller.ex:32
 #: lib/blessd_web/controllers/church_controller.ex:32
 msgid "Church deleted successfully."
 msgstr "Igreja atualizado com sucesso."
 
 #, elixir-format
 #: lib/blessd_web/templates/signup/new.html.eex:11
-#: lib/blessd_web/templates/signup/new.html.eex:11
 msgid "Church name"
 msgstr "Nome da igreja"
 
 #, elixir-format
-#: lib/blessd_web/controllers/church_controller.ex:19
 #: lib/blessd_web/controllers/church_controller.ex:19
 msgid "Church updated successfully."
 msgstr "Igreja atualizado com sucesso."
@@ -479,138 +364,114 @@ msgstr "Clique aqui"
 
 #, elixir-format
 #: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:124
-#: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:124
 msgid "Close filter"
 msgstr "Tirar filtro"
 
 #, elixir-format
 #: lib/blessd_web/templates/layout/header.html.eex:48
-#: lib/blessd_web/templates/layout/header.html.eex:48
 msgid "Config"
 msgstr "Configurações"
 
 #, elixir-format
-#: lib/blessd_web/templates/dashboard/index.html.eex:45
-#: lib/blessd_web/templates/dashboard/index.html.eex:45
+#: lib/blessd_web/templates/dashboard/index.html.eex:12
 msgid "Confirm your email"
 msgstr "Confirme seu email"
 
 #, elixir-format
-#: lib/blessd_web/controllers/confirmation_controller.ex:12
 #: lib/blessd_web/controllers/confirmation_controller.ex:12
 msgid "Confirmation email sent."
 msgstr "Email de confirmação enviado."
 
 #, elixir-format
 #: lib/blessd_web/templates/person/custom_fields.html.eex:1
-#: lib/blessd_web/templates/person/custom_fields.html.eex:1
 #: lib/blessd_web/templates/person/file_modal.html.eex:34
-#: lib/blessd_web/templates/person/file_modal.html.eex:34
-#: lib/blessd_web/templates/shared/config_menu.html.eex:19
 #: lib/blessd_web/templates/shared/config_menu.html.eex:19
 msgid "Custom fields"
 msgstr "Campos customizados"
 
 #, elixir-format
 #: lib/blessd_web/templates/layout/header.html.eex:26
-#: lib/blessd_web/templates/layout/header.html.eex:26
 msgid "Dashboard"
 msgstr "Dashboard"
 
 #, elixir-format
-#: lib/blessd_web/templates/person/file_modal.html.eex:47
 #: lib/blessd_web/templates/person/file_modal.html.eex:47
 msgid "Dates should be formated <code>YYYY-MM-DD</code>,\nand booleans should be <code>1</code> or <code>0</code>.\n"
 msgstr "Datas devem ter o formato <code>YYYY-MM-DD</code>,\ne booleanos devem ser <code>1</code> ou <code>0</code>.\n"
 
 #, elixir-format
 #: lib/blessd_web/templates/custom_field/edit.html.eex:1
-#: lib/blessd_web/templates/custom_field/edit.html.eex:1
 msgid "Edit Custom Field"
 msgstr "Atualizando Campo Customizado"
 
 #, elixir-format
-#: lib/blessd_web/templates/meeting/edit.html.eex:1
 #: lib/blessd_web/templates/meeting/edit.html.eex:1
 msgid "Edit Meeting"
 msgstr "Atualizando Reunião"
 
 #, elixir-format
 #: lib/blessd_web/templates/meeting_occurrence/edit.html.eex:1
-#: lib/blessd_web/templates/meeting_occurrence/edit.html.eex:1
 msgid "Edit Meeting Occurrence"
 msgstr "Atualizando Ocorrência de Reunião"
 
 #, elixir-format
-#: lib/blessd_web/controllers/confirmation_controller.ex:27
 #: lib/blessd_web/controllers/confirmation_controller.ex:27
 msgid "Email confirmed successfully."
 msgstr "Email confirmado com sucesso"
 
 #, elixir-format
 #: lib/blessd_web/templates/session/new.html.eex:20
-#: lib/blessd_web/templates/session/new.html.eex:20
 msgid "Email: %{email}"
 msgstr "Email: %{email}"
 
 #, elixir-format
-#: lib/blessd_web/controllers/custom_field_controller.ex:24
 #: lib/blessd_web/controllers/custom_field_controller.ex:24
 msgid "Field successfully created."
 msgstr "Campo criado com sucesso."
 
 #, elixir-format
 #: lib/blessd_web/controllers/custom_field_controller.ex:71
-#: lib/blessd_web/controllers/custom_field_controller.ex:71
 msgid "Field successfully deleted."
 msgstr "Campo apagado com sucesso."
 
 #, elixir-format
-#: lib/blessd_web/controllers/custom_field_controller.ex:51
 #: lib/blessd_web/controllers/custom_field_controller.ex:51
 msgid "Field successfully updated."
 msgstr "Campo atualizado com sucesso."
 
 #, elixir-format
 #: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:135
-#: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:135
 msgid "Filter"
 msgstr "Filtro"
 
 #, elixir-format
 #: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:58
-#: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:58
 msgid "First time"
 msgstr "Primeiro nome"
 
 #, elixir-format
-#: lib/blessd_web/templates/meeting_occurrence/table_row.html.eex:18
+#: lib/blessd_web/templates/meeting_occurrence/attendants_table_row.html.eex:18
 #: lib/blessd_web/templates/meeting_occurrence/table_row.html.eex:18
 msgid "First time visitor"
 msgstr "Visitante pela primeira vez"
 
 #, elixir-format
 #: lib/blessd_web/templates/church_recovery/new.html.eex:1
-#: lib/blessd_web/templates/church_recovery/new.html.eex:1
 msgid "Forgot my Church URL"
 msgstr "Esqueci a URL da minha igreja"
 
 #, elixir-format
-#: lib/blessd_web/templates/password_reset/new.html.eex:1
 #: lib/blessd_web/templates/password_reset/new.html.eex:1
 msgid "Forgot my Password"
 msgstr "Esqueci minha senha"
 
 #, elixir-format
 #: lib/blessd_web/templates/password_reset/new.html.eex:23
-#: lib/blessd_web/templates/password_reset/new.html.eex:23
-#: lib/blessd_web/templates/session/new.html.eex:78
 #: lib/blessd_web/templates/session/new.html.eex:78
 msgid "Forgot my church URL"
 msgstr "Esqueci a URL da minha igreja"
 
 #, elixir-format
-#: lib/blessd_web/templates/session/new.html.eex:101
 #: lib/blessd_web/templates/session/new.html.eex:101
 msgid "Forgot my password"
 msgstr "Esqueci minha senha"
@@ -629,14 +490,11 @@ msgstr "Esqueceu sua senha, %{name}?"
 
 #, elixir-format
 #: lib/blessd_web/templates/shared/config_menu.html.eex:3
-#: lib/blessd_web/templates/shared/config_menu.html.eex:3
 msgid "General"
 msgstr "Geral"
 
 #, elixir-format
 #: lib/blessd_web/templates/person/file_modal.html.eex:9
-#: lib/blessd_web/templates/person/file_modal.html.eex:9
-#: lib/blessd_web/templates/person/file_modal.html.eex:14
 #: lib/blessd_web/templates/person/file_modal.html.eex:14
 msgid "Help"
 msgstr "Ajuda"
@@ -670,347 +528,281 @@ msgid "If the link does not work, copy this and paste on your localtion bar: %{u
 msgstr "Se o link não funcionar, copie isto e cole na sua barra de localizaçnao: %{url}"
 
 #, elixir-format
-#: lib/blessd_web/templates/dashboard/index.html.eex:54
-#: lib/blessd_web/templates/dashboard/index.html.eex:54
+#: lib/blessd_web/templates/dashboard/index.html.eex:21
 msgid "If you can't find it, or it's expired, we will send a new one\nor check if the email address you gave us is correct.\n"
 msgstr "Se você não consegue encontrá-lo, ou está expirado, nós enviaremos\num novo ou verifique se o email que você nos deu está correto.\n"
 
 #, elixir-format
-#: lib/blessd_web/controllers/invitation_controller.ex:59
-#: lib/blessd_web/controllers/invitation_controller.ex:59
+#: lib/blessd_web/controllers/invitation_controller.ex:65
 msgid "Invitation accepted succesfully."
 msgstr "Convite aceito com sucesso."
 
 #, elixir-format
-#: lib/blessd_web/templates/user/index.html.eex:56
 #: lib/blessd_web/templates/user/index.html.eex:56
 msgid "Invitation expired"
 msgstr "Convite expirado"
 
 #, elixir-format
 #: lib/blessd_web/templates/user/index.html.eex:58
-#: lib/blessd_web/templates/user/index.html.eex:58
 msgid "Invitation pending"
 msgstr "Convite pendente"
 
 #, elixir-format
 #: lib/blessd_web/templates/invitation/new.html.eex:1
-#: lib/blessd_web/templates/invitation/new.html.eex:1
-#: lib/blessd_web/templates/user/index.html.eex:98
 #: lib/blessd_web/templates/user/index.html.eex:98
 msgid "Invite User"
 msgstr "Convidar Usuário"
 
 #, elixir-format
-#: lib/blessd_web/templates/dashboard/index.html.eex:81
-#: lib/blessd_web/templates/dashboard/index.html.eex:81
+#: lib/blessd_web/templates/dashboard/index.html.eex:141
 msgid "Keep in touch!"
 msgstr "Fique de olho!"
 
 #, elixir-format
-#: lib/blessd_web/templates/meeting/index.html.eex:1
 #: lib/blessd_web/templates/meeting/index.html.eex:1
 msgid "Listing Meetings"
 msgstr "Listando Reuniões"
 
 #, elixir-format
 #: lib/blessd_web/templates/user/index.html.eex:1
-#: lib/blessd_web/templates/user/index.html.eex:1
 msgid "Listing Users"
 msgstr "Listando Usuários"
 
 #, elixir-format
 #: lib/blessd_web/templates/user/index.html.eex:24
-#: lib/blessd_web/templates/user/index.html.eex:24
 msgid "Me"
 msgstr "Eu"
 
 #, elixir-format
-#: lib/blessd_web/controllers/meeting_controller.ex:22
-#: lib/blessd_web/controllers/meeting_controller.ex:22
+#: lib/blessd_web/controllers/meeting_controller.ex:38
 msgid "Meeting created successfully."
 msgstr "Reunião criado com sucesso."
 
 #, elixir-format
-#: lib/blessd_web/controllers/meeting_controller.ex:53
-#: lib/blessd_web/controllers/meeting_controller.ex:53
+#: lib/blessd_web/controllers/meeting_controller.ex:69
 msgid "Meeting deleted successfully."
 msgstr "Reunião removido com sucesso."
 
 #, elixir-format
-#: lib/blessd_web/controllers/meeting_controller.ex:41
-#: lib/blessd_web/controllers/meeting_controller.ex:41
+#: lib/blessd_web/controllers/meeting_controller.ex:57
 msgid "Meeting updated successfully."
 msgstr "Reunião atualizado com sucesso."
 
 #, elixir-format
-#: lib/blessd_web/templates/layout/header.html.eex:36
 #: lib/blessd_web/templates/layout/header.html.eex:36
 msgid "Meetings"
 msgstr "Reuniões"
 
 #, elixir-format
 #: lib/blessd_web/templates/church_recovery/edit.html.eex:14
-#: lib/blessd_web/templates/church_recovery/edit.html.eex:14
 msgid "Member since %{time}"
 msgstr "Membro desde %{time}"
 
 #, elixir-format
-#: lib/blessd_web/templates/dashboard/index.html.eex:24
-#: lib/blessd_web/templates/dashboard/index.html.eex:24
-#: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:80
+#: lib/blessd_web/templates/dashboard/index.html.eex:74
 #: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:80
 msgid "Missing"
 msgstr "Faltando"
 
 #, elixir-format
 #: lib/blessd_web/templates/custom_field/index.html.eex:1
-#: lib/blessd_web/templates/custom_field/index.html.eex:1
-#: lib/blessd_web/templates/custom_field/new.html.eex:1
 #: lib/blessd_web/templates/custom_field/new.html.eex:1
 msgid "New Custom Field"
 msgstr "Novo Campo Customizado"
 
 #, elixir-format
-#: lib/blessd_web/templates/meeting/index.html.eex:97
-#: lib/blessd_web/templates/meeting/index.html.eex:97
-#: lib/blessd_web/templates/meeting/new.html.eex:1
+#: lib/blessd_web/templates/meeting/index.html.eex:69
 #: lib/blessd_web/templates/meeting/new.html.eex:1
 msgid "New Meeting"
 msgstr "Nova Reunião"
 
 #, elixir-format
 #: lib/blessd_web/templates/meeting_occurrence/new.html.eex:1
-#: lib/blessd_web/templates/meeting_occurrence/new.html.eex:1
 msgid "New Meeting Occurrence"
 msgstr "Nova Ocorrência de Reunião"
 
 #, elixir-format
-#: lib/blessd_web/templates/meeting/index.html.eex:8
 #: lib/blessd_web/templates/meeting/index.html.eex:8
 msgid "New Occurrence"
 msgstr "Nova Ocorrência"
 
 #, elixir-format
 #: lib/blessd_web/templates/custom_field/list.html.eex:12
-#: lib/blessd_web/templates/custom_field/list.html.eex:12
 msgid "New field"
 msgstr "Novo campo"
 
 #, elixir-format
-#: lib/blessd_web/controllers/meeting_occurrence_controller.ex:47
 #: lib/blessd_web/controllers/meeting_occurrence_controller.ex:47
 msgid "Occurrence created successfully."
 msgstr "Ocorrência criado com sucesso."
 
 #, elixir-format
 #: lib/blessd_web/controllers/meeting_occurrence_controller.ex:84
-#: lib/blessd_web/controllers/meeting_occurrence_controller.ex:84
 msgid "Occurrence deleted successfully."
 msgstr "Ocorrência removido com sucesso."
 
 #, elixir-format
-#: lib/blessd_web/controllers/meeting_occurrence_controller.ex:69
 #: lib/blessd_web/controllers/meeting_occurrence_controller.ex:69
 msgid "Occurrence updated successfully."
 msgstr "Ocorrência atualizado com sucesso."
 
 #, elixir-format
 #: lib/blessd_web/templates/session/new.html.eex:24
-#: lib/blessd_web/templates/session/new.html.eex:24
 msgid "Open"
 msgstr "Abrir"
 
 #, elixir-format
-#: lib/blessd_web/templates/session/new.html.eex:95
 #: lib/blessd_web/templates/session/new.html.eex:95
 msgid "Password"
 msgstr "Senha"
 
 #, elixir-format
 #: lib/blessd_web/controllers/password_reset_controller.ex:63
-#: lib/blessd_web/controllers/password_reset_controller.ex:63
 msgid "Password reset succesfully."
 msgstr "Pessoa criada com sucesso."
 
 #, elixir-format
 #: lib/blessd_web/templates/shared/config_menu.html.eex:7
-#: lib/blessd_web/templates/shared/config_menu.html.eex:7
-#: lib/blessd_web/templates/user/edit.html.eex:1
 #: lib/blessd_web/templates/user/edit.html.eex:1
 msgid "Profile"
 msgstr "Perfil"
 
 #, elixir-format
+#: lib/blessd_web/templates/meeting_occurrence/attendants_table_row.html.eex:7
 #: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:42
-#: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:42
-#: lib/blessd_web/templates/meeting_occurrence/table_row.html.eex:7
 #: lib/blessd_web/templates/meeting_occurrence/table_row.html.eex:7
 msgid "Recurrent"
 msgstr "Recorrente"
 
 #, elixir-format
 #: lib/blessd_web/templates/layout/app.html.eex:36
-#: lib/blessd_web/templates/layout/app.html.eex:36
 msgid "Refresh"
 msgstr "Atualizar"
 
 #, elixir-format
-#: lib/blessd_web/templates/dashboard/index.html.eex:64
-#: lib/blessd_web/templates/dashboard/index.html.eex:64
+#: lib/blessd_web/templates/dashboard/index.html.eex:31
 msgid "Resend email"
 msgstr "Reenviar email"
 
 #, elixir-format
-#: lib/blessd_web/templates/user/index.html.eex:69
 #: lib/blessd_web/templates/user/index.html.eex:69
 msgid "Resend invitation"
 msgstr "Reenviar convite"
 
 #, elixir-format
 #: lib/blessd_web/templates/password_reset/edit.html.eex:27
-#: lib/blessd_web/templates/password_reset/edit.html.eex:27
 msgid "Reset password"
 msgstr "Resetar senha"
 
 #, elixir-format
-#: lib/blessd_web/mailer/church_recovery_mailer.ex:14
 #: lib/blessd_web/mailer/password_reset_mailer.ex:14
 msgid "Reset your Blessd password"
 msgstr "Resete a sua senha do Blessd"
 
 #, elixir-format
 #: lib/blessd_web/templates/meeting_occurrence/show.html.eex:17
-#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:17
 msgid "Search"
 msgstr "Procurar"
 
 #, elixir-format
 #: lib/blessd_web/templates/church_recovery/new.html.eex:20
-#: lib/blessd_web/templates/church_recovery/new.html.eex:20
-#: lib/blessd_web/templates/password_reset/new.html.eex:40
 #: lib/blessd_web/templates/password_reset/new.html.eex:40
 msgid "Send email"
 msgstr "Enviar email"
 
 #, elixir-format
 #: lib/blessd_web/templates/church_recovery/edit.html.eex:18
-#: lib/blessd_web/templates/church_recovery/edit.html.eex:18
-#: lib/blessd_web/templates/layout/header.html.eex:72
 #: lib/blessd_web/templates/layout/header.html.eex:72
 #: lib/blessd_web/templates/session/new.html.eex:1
-#: lib/blessd_web/templates/session/new.html.eex:1
 #: lib/blessd_web/templates/session/new.html.eex:45
-#: lib/blessd_web/templates/session/new.html.eex:45
-#: lib/blessd_web/templates/session/new.html.eex:107
 #: lib/blessd_web/templates/session/new.html.eex:107
 msgid "Sign in"
 msgstr "Entrar"
 
 #, elixir-format
 #: lib/blessd_web/templates/session/new.html.eex:41
-#: lib/blessd_web/templates/session/new.html.eex:41
 msgid "Sign in to an existing, or create a new one"
 msgstr "Entrar em uma existente, ou criar uma nova"
 
 #, elixir-format
-#: lib/blessd_web/templates/layout/header.html.eex:57
 #: lib/blessd_web/templates/layout/header.html.eex:57
 msgid "Sign out"
 msgstr "Sair"
 
 #, elixir-format
 #: lib/blessd_web/templates/layout/header.html.eex:68
-#: lib/blessd_web/templates/layout/header.html.eex:68
-#: lib/blessd_web/templates/session/new.html.eex:48
 #: lib/blessd_web/templates/session/new.html.eex:48
 #: lib/blessd_web/templates/signup/new.html.eex:1
-#: lib/blessd_web/templates/signup/new.html.eex:1
-#: lib/blessd_web/templates/signup/new.html.eex:84
-#: lib/blessd_web/templates/signup/new.html.eex:84
+#: lib/blessd_web/templates/signup/new.html.eex:94
 msgid "Sign up"
 msgstr "Registrar"
 
 #, elixir-format
-#: lib/blessd_web/templates/session/new.html.eex:19
 #: lib/blessd_web/templates/session/new.html.eex:19
 msgid "Signed in as %{name}"
 msgstr "Entrou como %{name}"
 
 #, elixir-format
 #: lib/blessd_web/controllers/signup_controller.ex:17
-#: lib/blessd_web/controllers/signup_controller.ex:17
 msgid "Signed up sucessfully"
 msgstr "Registrado com sucesso"
 
 #, elixir-format
-#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:85
-#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:85
+#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:90
 msgid "State"
 msgstr "Estado"
 
 #, elixir-format
-#: lib/blessd_web/templates/layout/header.html.eex:53
 #: lib/blessd_web/templates/layout/header.html.eex:53
 msgid "Switch church"
 msgstr "Trocar igreja"
 
 #, elixir-format
 #: lib/blessd_web/templates/person/file_modal.html.eex:19
-#: lib/blessd_web/templates/person/file_modal.html.eex:19
 msgid "The first line of the CSV should be the field name of\nthat position. Here are the field names we will be considering\nto import data:\n"
 msgstr "A primeira linha do CSV deve conter o nome do campo\nde cada posição. Aqui estão os nomes de campos nós vamos considerar\n para importar os dados:\n"
 
 #, elixir-format
-#: lib/blessd_web/controllers/confirmation_controller.ex:40
 #: lib/blessd_web/controllers/confirmation_controller.ex:40
 msgid "The given confirmation token does not refer to any user."
 msgstr "O token de confirmação informado não se refere a nenhum usuário."
 
 #, elixir-format
 #: lib/blessd_web/controllers/confirmation_controller.ex:44
-#: lib/blessd_web/controllers/confirmation_controller.ex:44
 msgid "The given confirmation token is invalid or expired,\nplease request another confirmation email.\n"
 msgstr "O token de confirmação informado é inválido ou está\nexpirado, por favor peça outro email de confirmação.\n"
 
 #, elixir-format
-#: lib/blessd_web/controllers/invitation_controller.ex:73
-#: lib/blessd_web/controllers/invitation_controller.ex:73
+#: lib/blessd_web/controllers/invitation_controller.ex:79
 msgid "The given invitation token does not refer to any user."
 msgstr "O token de convite informado não se refere a nenhum usuário."
 
 #, elixir-format
-#: lib/blessd_web/controllers/invitation_controller.ex:77
-#: lib/blessd_web/controllers/invitation_controller.ex:77
+#: lib/blessd_web/controllers/invitation_controller.ex:83
 msgid "The given invitation token is invalid or expired,\nplease request another invitation email.\n"
 msgstr "O token de convite informado é inválido ou está\nexpirado, por favor peça outro email de convite.\n"
 
 #, elixir-format
-#: lib/blessd_web/controllers/password_reset_controller.ex:77
 #: lib/blessd_web/controllers/password_reset_controller.ex:77
 msgid "The given password reset token does not refer to any user."
 msgstr "O token de reset de senha informado não se refere a nenhum usuário."
 
 #, elixir-format
 #: lib/blessd_web/controllers/password_reset_controller.ex:81
-#: lib/blessd_web/controllers/password_reset_controller.ex:81
 msgid "The given password reset token is invalid or expired, please request another email."
 msgstr "O token de reset de senha informado é inválido ou está\nexpirado, por favor peça outro email.\n"
 
 #, elixir-format
-#: lib/blessd_web/controllers/import_controller.ex:41
 #: lib/blessd_web/controllers/import_controller.ex:41
 msgid "The person of the line #%{line} could not be created."
 msgstr "A pessoa da linha #%{line} não pode ser criada."
 
 #, elixir-format
 #: lib/blessd_web/templates/church_recovery/edit.html.eex:1
-#: lib/blessd_web/templates/church_recovery/edit.html.eex:1
 msgid "These are your churches"
 msgstr "Estas são as suas igrejas"
 
 #, elixir-format
-#: lib/blessd_web/templates/custom_field/form.html.eex:27
 #: lib/blessd_web/templates/custom_field/form.html.eex:27
 msgid "This field is required"
 msgstr "Este campo é obrigatório"
@@ -1022,76 +814,63 @@ msgstr "Esta página só pode ser acessada enquanto logado."
 
 #, elixir-format
 #: lib/blessd_web/templates/layout/app.html.eex:30
-#: lib/blessd_web/templates/layout/app.html.eex:30
 msgid "This view must be always connected to the server to work properly.\nPlease refresh the page to reconnect.\n"
 msgstr "Esta página deve estar sempre conectada ao servidor para funcionar\ncorretamente. Por favor atualize-a para reconectar.\n"
 
 #, elixir-format
 #: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:16
-#: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:16
 msgid "Total"
 msgstr "Total"
 
 #, elixir-format
+#: lib/blessd_web/templates/meeting_occurrence/attendants_table_row.html.eex:39
 #: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:108
-#: lib/blessd_web/templates/meeting_occurrence/filter.html.eex:108
-#: lib/blessd_web/templates/meeting_occurrence/table_row.html.eex:39
 #: lib/blessd_web/templates/meeting_occurrence/table_row.html.eex:39
 msgid "Unknown"
 msgstr "Desconhecido"
 
 #, elixir-format
-#: lib/blessd_web/controllers/user_controller.ex:46
-#: lib/blessd_web/controllers/user_controller.ex:46
+#: lib/blessd_web/controllers/user_controller.ex:43
 msgid "User deleted successfully."
 msgstr "Pessoa removida com sucesso."
 
 #, elixir-format
 #: lib/blessd_web/controllers/invitation_controller.ex:21
-#: lib/blessd_web/controllers/invitation_controller.ex:21
-#: lib/blessd_web/controllers/invitation_controller.ex:34
-#: lib/blessd_web/controllers/invitation_controller.ex:34
+#: lib/blessd_web/controllers/invitation_controller.ex:35
 msgid "User invited successfully."
 msgstr "Usuário convidado com sucesso."
 
 #, elixir-format
-#: lib/blessd_web/controllers/user_controller.ex:27
-#: lib/blessd_web/controllers/user_controller.ex:27
+#: lib/blessd_web/controllers/user_controller.ex:25
 msgid "User updated successfully."
 msgstr "Pessoa atualizada com sucesso."
 
 #, elixir-format
-#: lib/blessd_web/templates/shared/config_menu.html.eex:10
 #: lib/blessd_web/templates/shared/config_menu.html.eex:10
 msgid "Users"
 msgstr "Usuários"
 
 #, elixir-format
 #: lib/blessd_web/templates/custom_field/form.html.eex:22
-#: lib/blessd_web/templates/custom_field/form.html.eex:22
 msgid "Validations"
 msgstr "Validações"
 
 #, elixir-format
 #: lib/blessd_web/controllers/person_controller.ex:30
-#: lib/blessd_web/controllers/person_controller.ex:30
 msgid "Visitor successfully created."
 msgstr "Visitante criado com sucesso."
 
 #, elixir-format
-#: lib/blessd_web/templates/dashboard/index.html.eex:51
-#: lib/blessd_web/templates/dashboard/index.html.eex:51
+#: lib/blessd_web/templates/dashboard/index.html.eex:18
 msgid "We sent you an email with the instructions on how to do it."
 msgstr "Nós te enviamos um email com as instruções de como fazer isso."
 
 #, elixir-format
 #: lib/blessd_web/controllers/church_recovery_controller.ex:48
-#: lib/blessd_web/controllers/church_recovery_controller.ex:48
 msgid "We sent you an email with the instructions to recover your church."
 msgstr "Nós te enviamos um email com as instruções de recuperar sua igreja."
 
 #, elixir-format
-#: lib/blessd_web/controllers/password_reset_controller.ex:41
 #: lib/blessd_web/controllers/password_reset_controller.ex:41
 msgid "We sent you an email with the instructions to reset your password."
 msgstr "Nós enviamos um email com as instruções para resetar sua senha."
@@ -1109,7 +888,6 @@ msgstr "Bem-vindo ao Blessd, %{name}"
 
 #, elixir-format
 #: lib/blessd_web/templates/layout/app.html.eex:27
-#: lib/blessd_web/templates/layout/app.html.eex:27
 msgid "You are disconnected from the server"
 msgstr "Você está desconectado do servidor"
 
@@ -1124,36 +902,29 @@ msgid "You were invited to Blessd"
 msgstr "Você foi convidado para o Blessd"
 
 #, elixir-format
-#: lib/blessd_web/templates/dashboard/index.html.eex:82
-#: lib/blessd_web/templates/dashboard/index.html.eex:82
+#: lib/blessd_web/templates/dashboard/index.html.eex:142
 msgid "You will find some useful info here in the future."
 msgstr "Você vai encontrar informações úteis aqui no futuro."
 
 #, elixir-format
-#: lib/blessd_web/templates/signup/new.html.eex:60
-#: lib/blessd_web/templates/signup/new.html.eex:60
+#: lib/blessd_web/templates/signup/new.html.eex:70
 msgid "Your email"
 msgstr "Seu email"
 
 #, elixir-format
 #: lib/blessd_web/templates/invitation/edit.html.eex:18
-#: lib/blessd_web/templates/invitation/edit.html.eex:18
-#: lib/blessd_web/templates/signup/new.html.eex:50
-#: lib/blessd_web/templates/signup/new.html.eex:50
+#: lib/blessd_web/templates/signup/new.html.eex:60
 msgid "Your name"
 msgstr "Seu nome"
 
 #, elixir-format
-#: lib/blessd_web/templates/password_reset/edit.html.eex:19
 #: lib/blessd_web/templates/password_reset/edit.html.eex:19
 msgid "Your new password"
 msgstr "Sua nova senha"
 
 #, elixir-format
 #: lib/blessd_web/templates/invitation/edit.html.eex:30
-#: lib/blessd_web/templates/invitation/edit.html.eex:30
-#: lib/blessd_web/templates/signup/new.html.eex:74
-#: lib/blessd_web/templates/signup/new.html.eex:74
+#: lib/blessd_web/templates/signup/new.html.eex:84
 msgid "Your password"
 msgstr "Sua senha"
 
@@ -1163,13 +934,11 @@ msgid "and you will be able to find it again"
 msgstr "e você vai conseguir encontrar ela novamente"
 
 #, elixir-format
-#: lib/blessd_web/templates/signup/new.html.eex:90
-#: lib/blessd_web/templates/signup/new.html.eex:90
+#: lib/blessd_web/templates/signup/new.html.eex:100
 msgid "sign in to an existing church"
 msgstr "logar em uma igreja já existente"
 
 #, elixir-format
-#: lib/blessd_web/templates/session/new.html.eex:117
 #: lib/blessd_web/templates/session/new.html.eex:117
 msgid "sign up for a new church"
 msgstr "registrar nova igreja"
@@ -1195,46 +964,102 @@ msgstr "para resetar ela"
 msgid "{0M}/{0D}/{YYYY} {h12}:{m}{am}"
 msgstr "{0D}/{0M}/{YYYY}"
 
-#, elixir-format, fuzzy
-#: lib/blessd_web/templates/signup/new.html.eex:38
+#, elixir-format
 #: lib/blessd_web/templates/signup/new.html.eex:38
 msgid "Church Language"
 msgstr "Nome da igreja"
 
 #, elixir-format
 #: lib/blessd_web/templates/meeting/form.html.eex:16
-#: lib/blessd_web/templates/meeting/form.html.eex:16
-#: lib/blessd_web/templates/meeting_occurrence/form.html.eex:5
+#: lib/blessd_web/templates/meeting/show.html.eex:45
 #: lib/blessd_web/templates/meeting_occurrence/form.html.eex:5
 msgid "Date"
 msgstr "Data"
 
 #, elixir-format
 #: lib/blessd_web/templates/meeting/form.html.eex:26
-#: lib/blessd_web/templates/meeting/form.html.eex:26
 msgid "Description"
 msgstr "Descrição"
 
 #, elixir-format
-#: lib/blessd_web/templates/church/edit.html.eex:32
-#: lib/blessd_web/templates/church/edit.html.eex:32
+#: lib/blessd_web/templates/church/edit.html.eex:40
 msgid "Language"
 msgstr "Linguagem"
 
-#, elixir-format, fuzzy
-#: lib/blessd_web/templates/person/file_modal.html.eex:31
+#, elixir-format
 #: lib/blessd_web/templates/person/file_modal.html.eex:31
 msgid "Person is member"
 msgstr "Usuário é membro"
 
 #, elixir-format
 #: lib/blessd_web/templates/custom_field/form.html.eex:13
-#: lib/blessd_web/templates/custom_field/form.html.eex:13
 msgid "Type"
 msgstr "Tipo"
 
 #, elixir-format
 #: lib/blessd_web/templates/church/edit.html.eex:24
-#: lib/blessd_web/templates/church/edit.html.eex:24
 msgid "URL"
 msgstr "URL"
+
+#, elixir-format
+#: lib/blessd_web/controllers/invitation_controller.ex:40
+msgid "Could not reinvite user."
+msgstr "Não foi possível reconvidar o usuário."
+
+#, elixir-format
+#: lib/blessd_web/templates/dashboard/index.html.eex:79
+#: lib/blessd_web/templates/dashboard/index.html.eex:122
+#: lib/blessd_web/templates/meeting/index.html.eex:18
+msgid "Details"
+msgstr "Detalhes"
+
+#, elixir-format
+#: lib/blessd_web/templates/meeting_occurrence/show.html.eex:75
+msgid "Meeting details"
+msgstr "Detalhes da reunião"
+
+#, elixir-format
+#: lib/blessd_web/templates/meeting/show.html.eex:28
+msgid "Missed"
+msgstr "Faltas"
+
+#, elixir-format, fuzzy
+#: lib/blessd_web/templates/meeting/show.html.eex:10
+msgid "Missing people"
+msgstr "Pessoas faltando"
+
+#, elixir-format
+#: lib/blessd_web/templates/dashboard/index.html.eex:99
+msgid "Most missed people"
+msgstr "Pessoas que mais faltaram"
+
+#, elixir-format, fuzzy
+#: lib/blessd_web/templates/meeting/show.html.eex:6
+msgid "Occurrences"
+msgstr "Nova Ocorrência"
+
+#, elixir-format, fuzzy
+#: lib/blessd_web/templates/meeting/show.html.eex:27
+msgid "Person"
+msgstr "Nova Pessoa"
+
+#, elixir-format
+#: lib/blessd_web/mailer/church_recovery_mailer.ex:14
+msgid "Recover your Blessd church"
+msgstr "Recupere a sua igreja no Blessd"
+
+#, elixir-format, fuzzy
+#: lib/blessd_web/templates/password_reset/edit.html.eex:1
+msgid "Reset your password"
+msgstr "Resetar senha"
+
+#, elixir-format
+#: lib/blessd_web/templates/church/edit.html.eex:34
+#: lib/blessd_web/templates/signup/new.html.eex:48
+msgid "Timezone"
+msgstr "Fuso horário"
+
+#, elixir-format
+#: lib/blessd_web/templates/dashboard/index.html.eex:48
+msgid "Today's meetings"
+msgstr "Reuniões de hoje"
