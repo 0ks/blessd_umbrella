@@ -44,8 +44,11 @@ defmodule Blessd.Invitation do
          {:ok, accept} <- new_accept(user, credential) do
       Multi.new()
       |> Multi.run(:accept, &validate_accept(&1, &2, accept, attrs))
-      |> Multi.update(:user, User.accept_changeset(user, attrs["user"]))
-      |> Multi.insert(:credential, Credential.changeset(credential, attrs["credential"]))
+      |> Multi.run(:user, &update_accept_user(&1, &2, user, attrs["user"]))
+      |> Multi.run(
+        :credential,
+        &insert_accept_credential(&1, &2, credential, attrs["credential"])
+      )
       |> Repo.transaction()
       |> case do
         {:ok, %{user: user}} ->
@@ -54,7 +57,7 @@ defmodule Blessd.Invitation do
         {:error, :accept, changeset, _} ->
           {:error, changeset}
 
-        {:error, assoc, child_changeset, %{invitation: changeset}} ->
+        {:error, assoc, child_changeset, %{accept: changeset}} ->
           changeset
           |> put_assoc(assoc, child_changeset)
           |> apply_action(:insert)
@@ -69,6 +72,18 @@ defmodule Blessd.Invitation do
     end
   end
 
+  defp update_accept_user(repo, _, user, attrs) do
+    user
+    |> User.accept_changeset(attrs)
+    |> repo.update()
+  end
+
+  defp insert_accept_credential(repo, _, credential, attrs) do
+    credential
+    |> Credential.changeset(attrs)
+    |> repo.insert()
+  end
+
   def new_accept(user) do
     with {:ok, credential} <- new_credential(user), do: new_accept(user, credential)
   end
@@ -78,11 +93,7 @@ defmodule Blessd.Invitation do
   def change_accept(accept), do: {:ok, Accept.changeset(accept, %{})}
 
   def new_user(current_user) do
-    authorize(
-      %User{church_id: current_user.church_id, church: current_user.church},
-      :new,
-      current_user
-    )
+    authorize(%User{church_id: current_user.church_id}, :new, current_user)
   end
 
   def change_user(user, current_user) do
@@ -91,7 +102,7 @@ defmodule Blessd.Invitation do
     end
   end
 
-  defp new_credential(user) do
+  def new_credential(user) do
     {:ok, %Credential{church_id: user.church_id, user_id: user.id, source: "password"}}
   end
 

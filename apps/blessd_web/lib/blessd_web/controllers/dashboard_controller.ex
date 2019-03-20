@@ -45,7 +45,7 @@ defmodule BlessdWeb.DashboardController do
       result =
         occurrences
         |> Stream.map(&{&1, Observance.attendance_stats(&1, user)})
-        |> Stream.map(fn {occ, {:ok, stats}} ->
+        |> Enum.map(fn {occ, {:ok, stats}} ->
           {occ, stats}
         end)
 

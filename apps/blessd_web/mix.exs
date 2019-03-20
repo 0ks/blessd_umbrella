@@ -14,7 +14,14 @@ defmodule BlessdWeb.Mixfile do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -48,6 +55,7 @@ defmodule BlessdWeb.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:phoenix_pubsub, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
+      {:excoveralls, "~> 0.10.6", only: [:dev, :test]},
       {:timex, "~> 3.4"}
     ]
   end

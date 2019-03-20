@@ -13,7 +13,14 @@ defmodule Blessd.Mixfile do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -41,8 +48,9 @@ defmodule Blessd.Mixfile do
       {:csv, "~> 2.1"},
       {:ecto_sql, "~> 3.0"},
       {:jason, "~> 1.1"},
-      {:postgrex, ">= 0.0.0"},
-      {:timex, "~> 3.0"}
+      {:timex, "~> 3.0"},
+      {:excoveralls, "~> 0.10.6", only: [:dev, :test]},
+      {:postgrex, ">= 0.0.0"}
     ]
   end
 

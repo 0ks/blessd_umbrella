@@ -52,9 +52,9 @@
         <tr>
           <td>
             <%= cond do %>
-              <% Accounts.User.invitation_expired?(user) -> %>
+              <% Accounts.Users.User.invitation_expired?(user) -> %>
                 <span class="tag is-danger"><%= gettext("Invitation expired") %></span>
-              <% Accounts.User.invitation_pending?(user) -> %>
+              <% Accounts.Users.User.invitation_pending?(user) -> %>
                 <span class="tag is-warning"><%= gettext("Invitation pending") %></span>
               <% true -> %>
                 <%= user.name %>
@@ -64,7 +64,7 @@
 
           <td>
             <div class="field has-addons is-pulled-right">
-              <%= if Accounts.User.invitation_pending?(user) do %>
+              <%= if Accounts.Users.User.invitation_pending?(user) do %>
                 <div class="control">
                   <%= link gettext("Resend invitation"),
                     to: Routes.invitation_path(
@@ -77,7 +77,7 @@
                     class: "button is-small" %>
                 </div>
               <% end %>
-              <%= if Accounts.authorized?(user, :delete, @current_user) do %>
+              <%= if Accounts.authorized_user?(user, :delete, @current_user) do %>
                 <div class="control">
                   <%= link gettext("Delete"),
                     to: Routes.user_path(@conn, :delete, @current_user.church.slug, user),

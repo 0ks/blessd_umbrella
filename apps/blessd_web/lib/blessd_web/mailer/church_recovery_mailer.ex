@@ -11,7 +11,7 @@ defmodule BlessdWeb.ChurchRecoveryMailer do
     new_email()
     |> to(credential.user.email)
     |> from("contact@blessd.app")
-    |> subject(gettext("Reset your Blessd password"))
+    |> subject(gettext("Recover your Blessd church"))
     |> html_body(email_html(credential))
     |> text_body(email_text(credential))
     |> Mailer.deliver_later()

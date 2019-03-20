@@ -30,7 +30,7 @@ defmodule Blessd.Shared.Fields do
   def by_resource(query, resource), do: where(query, [f], f.resource == ^resource)
 
   @doc false
-  def order(query), do: order_by(query, [f], [f.position, f.inserted_at])
+  def order(query), do: order_by(query, [f], [f.position, f.inserted_at, f.id])
 
   @doc false
   def name(%{id: id}), do: :"field#{id}"

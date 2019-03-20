@@ -13,10 +13,10 @@ defmodule BlessdWeb.CustomFieldChannel do
         {:reply, :ok, socket}
 
       {:error, :unauthorized} ->
-        {:reply, {:error, "Unauthorized user"}, socket}
+        {:reply, {:error, %{message: "Unauthorized user"}}, socket}
 
       {:error, :unconfirmed} ->
-        {:reply, {:error, "Unconfirmed user"}, socket}
+        {:reply, {:error, %{message: "Unconfirmed user"}}, socket}
     end
   end
 end

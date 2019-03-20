@@ -78,6 +78,7 @@ defmodule Blessd.DataCase do
       target_module
       |> struct!()
       |> Map.keys()
+      |> Enum.reject(&(&1 in ~w(__meta__ __struct__)a))
 
     map =
       struct
