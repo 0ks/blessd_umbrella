@@ -6,7 +6,12 @@ defmodule Blessd.AuthenticationTest do
   alias Blessd.Authentication.User
 
   @signup2_attrs %{
-    "church" => %{name: "Test Church 2", slug: "test_church2", language: "en", timezone: "America/Sao_Paulo"},
+    "church" => %{
+      name: "Test Church 2",
+      slug: "test_church2",
+      language: "en",
+      timezone: "America/Sao_Paulo"
+    },
     "user" => %{name: "Test User", email: "test_user@mail.com"},
     "credential" => %{source: "password", token: "password"}
   }
