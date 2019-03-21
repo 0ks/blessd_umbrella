@@ -2,7 +2,7 @@
   <%= error_alert(f) %>
 
   <div class="field">
-    <%= label f, :date, class: "label" %>
+    <%= label f, :date, gettext("Date"), class: "label" %>
     <div class="control">
       <%= date_input f, :date, class: "js-date", readonly: true %>
     </div>

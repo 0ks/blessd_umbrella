@@ -3,7 +3,7 @@
   <%= error_alert(f) %>
 
   <div class="field">
-    <%= label f, :name, class: "label" %>
+    <%= label f, :name, gettext("Name"), class: "label" %>
     <div class="control">
       <%= text_input f, :name %>
     </div>
@@ -13,7 +13,7 @@
   <%= if @action == :create do %>
     <%= inputs_for f, :occurrences, fn ff -> %>
       <div class="field">
-        <%= label ff, :date, class: "label" %>
+        <%= label ff, :date, gettext("Date"), class: "label" %>
         <div class="control">
           <%= date_input ff, :date, class: "js-date", readonly: true %>
         </div>
@@ -23,7 +23,7 @@
   <% end %>
 
   <div class="field">
-    <%= label f, :description, class: "label" %>
+    <%= label f, :description, gettext("Description"), class: "label" %>
     <div class="control">
       <%= textarea f, :description %>
     </div>

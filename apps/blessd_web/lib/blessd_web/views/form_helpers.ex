@@ -1,5 +1,6 @@
 defmodule BlessdWeb.FormHelpers do
   alias Phoenix.HTML.Form
+  alias Phoenix.HTML.Tag
   alias Blessd.Shared
   alias BlessdWeb.ErrorHelpers
 
@@ -22,13 +23,15 @@ defmodule BlessdWeb.FormHelpers do
     Form.textarea(form, field, handle_input_opts(form, field, "textarea", opts))
   end
 
+  def select(form, field, select_opts, opts \\ []) do
+    {input_opts, wrapper_opts} = Keyword.pop(opts, :input, [])
+    select = Form.select(form, field, select_opts, input_opts)
+    wrapper_opts = handle_input_opts(form, field, "select is-fullwidth", wrapper_opts)
+    Tag.content_tag(:div, select, wrapper_opts)
+  end
+
   defp handle_input_opts(form, field, default_class, opts) do
-    default_class =
-      if ErrorHelpers.has_errors?(form, field) do
-        "#{default_class} is-danger"
-      else
-        default_class
-      end
+    default_class = handle_default_class(form, field, default_class)
 
     old_class =
       opts
@@ -36,6 +39,14 @@ defmodule BlessdWeb.FormHelpers do
       |> Enum.join(" ")
 
     Keyword.put(opts, :class, "#{default_class} #{old_class}")
+  end
+
+  defp handle_default_class(form, field, default_class) do
+    if ErrorHelpers.has_errors?(form, field) do
+      "#{default_class} is-danger"
+    else
+      default_class
+    end
   end
 
   def custom_data_fields(form, func) do

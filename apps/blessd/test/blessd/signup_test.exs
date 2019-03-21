@@ -7,7 +7,7 @@ defmodule Blessd.SignupTest do
   alias Blessd.Signup.Credential
 
   @valid_attrs %{
-    "church" => %{name: "some name", slug: "some_slug", timezone: "UTC"},
+    "church" => %{name: "some name", slug: "some_slug", language: "en", timezone: "UTC"},
     "user" => %{name: "some name", email: "some@email"},
     "credential" => %{source: "password", token: "password"}
   }

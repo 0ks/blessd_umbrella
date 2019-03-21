@@ -53,7 +53,9 @@ defmodule BlessdWeb do
           text_input: 2,
           text_input: 3,
           textarea: 2,
-          textarea: 3
+          textarea: 3,
+          select: 3,
+          select: 4
         ]
 
       import BlessdWeb.ErrorHelpers

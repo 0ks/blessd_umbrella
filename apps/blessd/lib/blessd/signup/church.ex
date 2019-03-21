@@ -8,6 +8,7 @@ defmodule Blessd.Signup.Church do
     field(:name, :string)
     field(:slug, :string)
     field(:timezone, :string)
+    field(:language, :string)
 
     timestamps()
   end
