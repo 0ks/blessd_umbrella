@@ -256,6 +256,28 @@ defmodule Blessd.ObservanceTest do
       assert {:ok, []} = Observance.list_people(user, filter: "absent", occurrence: occurrence)
     end
 
+    test "already_visited person attribute is populated by list_people" do
+      user = signup()
+      meeting = %{occurrences: [occ1]} = meeting_fixture(user)
+      {:ok, occ2} = Observance.create_occurrence(meeting, %{date: ~D[2019-11-10]}, user)
+      {:ok, person} = Memberships.create_person(%{name: "John", is_member: false}, user)
+
+      assert {:ok, [found]} = Observance.list_people(user, occurrence: occ2)
+      assert found.already_visited == false
+
+      assert {:ok, _} =
+               Observance.update_attendant_state(person.id, occ1.id, "absent", user)
+
+      assert {:ok, [found]} = Observance.list_people(user, occurrence: occ2)
+      assert found.already_visited == false
+
+      assert {:ok, _} =
+               Observance.update_attendant_state(person.id, occ1.id, "recurrent", user)
+
+      assert {:ok, [found]} = Observance.list_people(user, occurrence: occ2)
+      assert found.already_visited == true
+    end
+
     test "update_attendant_state/2 updates the attendant state" do
       user = signup()
       %{occurrences: [occurrence]} = meeting_fixture(user)

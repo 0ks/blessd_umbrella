@@ -168,7 +168,7 @@ defmodule Blessd.Observance.People do
   def preload(query) do
     query
     |> join(:left, [p], a in assoc(p, :attendants), as: :attendants)
-    |> join(:left, [attendants: a], o in assoc(a, :occurrence))
+    |> join(:left, [attendants: a], o in assoc(a, :occurrence), as: :occurrence)
     |> preload([p, attendants: a, occurrence: o], attendants: {a, occurrence: o})
   end
 
