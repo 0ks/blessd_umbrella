@@ -28,7 +28,7 @@
             <ul>
               <li><code>name</code> - <%= gettext("Name") %></li>
               <li><code>email</code> - <%= gettext("Email") %></li>
-              <li><code>is_member</code> - <%= gettext("User is member") %></li>
+              <li><code>is_member</code> - <%= gettext("Person is member") %></li>
             </ul>
 
             <li><%= gettext("Custom fields") %></li>

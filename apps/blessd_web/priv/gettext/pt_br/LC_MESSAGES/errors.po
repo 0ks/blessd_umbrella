@@ -95,3 +95,6 @@ msgstr "deve ser maior ou igual a %{number}"
 
 msgid "must be equal to %{number}"
 msgstr "deve ser igual a %{number}"
+
+msgid "can only be true for people that are present"
+msgstr "só pode ser verdadeiro para pessoas que estão presentes"

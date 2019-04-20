@@ -6,7 +6,7 @@ defmodule Blessd.ConfirmationTest do
   alias Blessd.Confirmation.User
 
   @signup_attrs %{
-    "church" => %{name: "Test Church", slug: "test_church", timezone: "UTC"},
+    "church" => %{name: "Test Church", slug: "test_church", language: "en", timezone: "UTC"},
     "user" => %{name: "Test User", email: "test_user@mail.com"},
     "credential" => %{source: "password", token: "password"}
   }
