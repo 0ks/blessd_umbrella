@@ -265,14 +265,12 @@ defmodule Blessd.ObservanceTest do
       assert {:ok, [found]} = Observance.list_people(user, occurrence: occ2)
       assert found.already_visited == false
 
-      assert {:ok, _} =
-               Observance.update_attendant_state(person.id, occ1.id, "absent", user)
+      assert {:ok, _} = Observance.update_attendant_state(person.id, occ1.id, "absent", user)
 
       assert {:ok, [found]} = Observance.list_people(user, occurrence: occ2)
       assert found.already_visited == false
 
-      assert {:ok, _} =
-               Observance.update_attendant_state(person.id, occ1.id, "recurrent", user)
+      assert {:ok, _} = Observance.update_attendant_state(person.id, occ1.id, "recurrent", user)
 
       assert {:ok, [found]} = Observance.list_people(user, occurrence: occ2)
       assert found.already_visited == true
