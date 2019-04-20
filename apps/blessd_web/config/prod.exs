@@ -18,7 +18,7 @@ config :blessd_web, BlessdWeb.Endpoint,
   http: [port: {:system, "PORT"}],
   server: true,
   secret_key_base: "${SECRET_KEY_BASE}",
-  url: [host: "${URL_HOSTNAME}", port: "${URL_PORT}"],
+  url: [scheme: "${URL_SCHEME}", host: "${URL_HOSTNAME}", port: "${URL_PORT}"],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 config :blessd_web, BlessdWeb.Mailer,
